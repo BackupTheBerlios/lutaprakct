@@ -10,6 +10,7 @@
 
 class soundsystem{
 public:
+	int check(const char *musname);
 	bool initialize(int frequency, Uint16 format, int channels, int chunksize);
 	void play(std::string filename);
 	void shutdown();		
