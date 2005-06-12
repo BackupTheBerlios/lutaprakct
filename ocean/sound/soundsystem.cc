@@ -41,7 +41,7 @@ void soundsystem::play(std::string filename) {
 	sounds.push_back(s);	
 }
 }
-/*
+
 void soundsystem::shutdown() {
 	Mix_CloseAudio();
-} */
+} 
