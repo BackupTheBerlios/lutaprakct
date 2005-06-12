@@ -13,7 +13,7 @@ struct spriteFrame{
 
 class spriteBase{
   public:
-  int initialize(char *dir);
+  int initialize(char *filename);
 
   spriteFrame *anim;
   int built, numframes, w, h;
