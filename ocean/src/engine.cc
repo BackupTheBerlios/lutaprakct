@@ -2,6 +2,7 @@
 //#include "sound/sound.h"
 #include "engine.h"
 #include "util/drawfunctions.h"
+#include "modules/input/core/sdlinputcore.h"
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
 
@@ -31,14 +32,19 @@ void engine::clear(){
 	
 bool engine::initialize(){
 
+	std::cout << "Inicializando engine..." << std::endl;
 	video = new videosystem();
-	if (!video->initialize(videosystem::HWSURFACE | videosystem::DOUBLEBUF | videosystem::RES_800x600 | videosystem::BPP_8))
+	if (!video->initialize(videosystem::HWSURFACE | videosystem::RES_800x600 | videosystem::BPP_8))
 		return false;
 	video->setWindowTitle("Ocean");
 	
 //	som = new soundsystem();
 //	som->initialize(22050, AUDIO_S16, 2, 4096);
 //	som->play("Hydrate-Kenny_Beltrey.ogg");
+
+    manager.addEntity("vikings", 450, 50);
+
+	std::cout << "Engine inicializada com sucesso!" << std::endl;
 	return true;
 	
 }
@@ -50,7 +56,7 @@ void engine::shutdown(){
 
 void engine::draw(){
 	video->lock();
-
+    manager.draw();
 	video->unlock();
 }
 
@@ -61,62 +67,22 @@ void engine::main(){
 
 	while(!done){
 		draw();
-		doInput();
+		InputCore::getInstance().doInput();
 	}
 	
 }
 
-void engine::doInput(){
+void engine::handleEvent(const event &e){
+
+	switch (e.type) {
+      case E_APPCLOSE:
+        done = true;
+        break;
+    }
 	
-	fflush(stdout);
-	fflush(stdin);
-	SDL_Event event;
-	while( SDL_PollEvent( &event ) ){
-		
-		switch( event.type ){
-			case SDL_QUIT:
-				done = true;//exit = true;
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				switch(event.button.button){
-			    	case SDL_BUTTON_LEFT:
-			    	    std::cout << "x: " << event.button.x << std::endl;
-			    	    std::cout << "y: " << event.button.y << std::endl;
-			    	    if (!pressioned){
-			    	    	pressioned = true;
-			    	    	firstx = event.button.x;
-			    	    	firsty = event.button.y;
-			    	    }else{
-			    	    	pressioned = false;
-			    	    	secondx = event.button.x;
-			    	    	secondy = event.button.y;		
-			    	    	video->lock();
-			    	    	drawline(firstx, firsty, secondx, secondy, SDL_GetVideoSurface(), 254, 254, 254);	    	    	
-			    	    	video->unlock();
-			    	    	firstx = firsty =  0;
-                        	secondx = secondy = 0;
-			    	    }
-    			 		break;
-    				default:
-     					break;
-   				}
-   				break;
-  			case SDL_KEYDOWN:
-   				switch( event.key.keysym.sym ){
-
-     				case SDLK_ESCAPE:
-					       done = true;
-       					break;
-     				default:
-       					break;
-    			}
-   
-  			default:
-   				break;
-  			}
- 	}
-
+	
 }
+
 int main()
 {
 	engine eng;
