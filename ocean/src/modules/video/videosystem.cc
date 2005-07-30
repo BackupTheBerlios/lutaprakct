@@ -4,6 +4,7 @@
 
 bool videosystem::initialize(int flags){
 
+ std::cout << "inicializando video.." << std::endl;
  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0){
   std::cout << "Nao foi possivel inicializar o SDL!" << std::endl;
   return false;
@@ -61,6 +62,8 @@ bool videosystem::initialize(int flags){
 		std::cout << "Nao foi possivel inicializar o video." << std::endl;
 		return false;
 	}
+	
+	std::cout << "Video inicializado com sucesso!" << std::endl;
 	return true;
 }
 

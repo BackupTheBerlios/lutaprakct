@@ -4,6 +4,8 @@
 
 #include <SDL/SDL.h>
 
+#include "../../util/singleton.h"
+
 /** Essa classe Ã© responsÃ¡vel por inicializar o
   * video e o SDL. Tudo relacionado com o gerenciamento
   * da janela Ã© feito aqui.
@@ -50,5 +52,7 @@ private:
  SDL_Surface *screen;
  int height, width, bpp;
 };
+
+typedef singleton<videosystem> VideoSystem;
 
 #endif
