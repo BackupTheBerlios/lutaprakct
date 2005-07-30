@@ -1,19 +1,25 @@
 #include "sprite.h"
+#include <iostream>
 
-int sprite::initialize(spriteBase *base, SDL_Surface *screen)
-{
+int sprite::initialize(spriteBase *base, SDL_Surface *screen){
+	
   basesprite = base;
-  if(basesprite->built)
-  {
-    if(basesprite->numframes>1) animating=1;
+  lastupdate = 0;
+  if(basesprite->built){
+    if(basesprite->numframes>1){
+    	 animating=1;
+    	 frame = 0;
+    }
+    std::cout << "numero de frames: " << basesprite->numframes << std::endl;
     backreplacement = SDL_DisplayFormat(basesprite->anim[0].image);
   }
   screen = screen;
+  drawn = 0;
   return 0;
 }
 
-void sprite::clearBG()
-{
+void sprite::clearBG(){
+	
   if(drawn==1)
   {
     SDL_Rect dest;
@@ -21,12 +27,12 @@ void sprite::clearBG()
     dest.y = oldY;
     dest.w = basesprite->w;
     dest.h = basesprite->h;
-    SDL_BlitSurface(backreplacement, NULL, screen, &dest);
+    SDL_BlitSurface(backreplacement, NULL, SDL_GetVideoSurface(), &dest);
   }
 }
 
-void sprite::updateBG()
-{
+void sprite::updateBG(){
+	
   SDL_Rect srcrect;
   srcrect.w = basesprite->w;
   srcrect.h = basesprite->h;
@@ -34,17 +40,16 @@ void sprite::updateBG()
   srcrect.y = y;
   oldX=x;
   oldY=y;
-  SDL_BlitSurface(screen, &srcrect, backreplacement, NULL);
+  SDL_BlitSurface(SDL_GetVideoSurface(), &srcrect, backreplacement, NULL);
 }
 
-void sprite::draw()
-{
-  if(animating == 1)
-  {
-    if(lastupdate+basesprite->anim[frame].pause*speed<SDL_GetTicks())
-    {
+void sprite::draw(){
+	
+  if(animating == 1){
+    if( lastupdate + ( (basesprite->anim[frame]).pause * speed) < SDL_GetTicks()){
       frame++;
-      if(frame>basesprite->numframes-1) frame=0;
+      if( frame > basesprite->numframes-1) 
+		frame=0;
       lastupdate = SDL_GetTicks();
     }
   }
@@ -54,5 +59,6 @@ void sprite::draw()
   SDL_Rect dest;
   dest.x = x; 
   dest.y = y;
-  SDL_BlitSurface(basesprite->anim[frame].image, NULL, screen, &dest);
+
+  SDL_BlitSurface( (basesprite->anim[frame]).image, NULL, SDL_GetVideoSurface(), &dest);
 }
