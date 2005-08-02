@@ -8,7 +8,11 @@
 
 enum eventType
 {
-  E_APPCLOSE
+  E_APPCLOSE,
+  E_LEFT,
+  E_RIGHT,
+  E_UP,
+  E_DOWN
 };
 
 struct event {
