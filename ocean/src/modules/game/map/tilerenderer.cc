@@ -1,5 +1,6 @@
 
 #include "tilerenderer.h"
+#include <iostream>
 
 tileRenderer::tileRenderer(){
 }
@@ -14,6 +15,5 @@ unsigned char tileRenderer::addTile(tile Tile){
 }
 
 void  tileRenderer::renderTile (unsigned char id, int x, int y, SDL_Surface *dest){
-    
-    tiles[id - 1].render(dest, x, y);
+	    tiles[id - 1].render(dest, x, y);
 }
