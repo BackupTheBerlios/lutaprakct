@@ -12,7 +12,7 @@ bool sdlVideo::initialize(int flags){
 
  this->flags = flags;
 
- if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0){
+ if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0){
   std::cout << "ERRO: Nao foi possivel inicializar o SDL!" << std::endl;
   return false;
  }
@@ -45,7 +45,7 @@ bool sdlVideo::initialize(int flags){
   SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE   , 24 );
   SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE , 8  );
   SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER , 1  );
-  sdlflags |= SDL_OPENGL;
+  sdlflags = SDL_OPENGL;
   std::cout << "Flags do OpenGL/SDL inicializados!" << std::endl;
  }
  	if (flags &OPENGLBLIT)
@@ -73,7 +73,11 @@ bool sdlVideo::initialize(int flags){
 		bpp = 24;
 	
 	std::cout << "Inicializando SDL video..." ;
-	screen = SDL_SetVideoMode(width, height, bpp, sdlflags);
+	const SDL_VideoInfo* videoinfo;
+	videoinfo = SDL_GetVideoInfo();
+	if (videoinfo == NULL)
+		return false;
+	screen = SDL_SetVideoMode(width, height, videoinfo->vfmt->BitsPerPixel, sdlflags);
 	std::cout << "   Pronto!" << std::endl;
 	if (flags &OPENGL)
 		initializeOpenGl();
@@ -85,7 +89,7 @@ bool sdlVideo::initialize(int flags){
 }
 
 void sdlVideo::initializeOpenGl(){
-	std::cout << "Inicializando OpenGL..." ;
+
 	float ratio = (float) width / (float) height;
 	glEnable(GL_DEPTH_TEST); 
 	glViewport(0, 0, width, height);
@@ -103,10 +107,11 @@ void sdlVideo::initializeOpenGl(){
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glClearStencil(0x00);
 	glPolygonOffset(1.0, 1.0);	
-	std::cout << "   Pronto!" << std::endl;
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 }
 
 void sdlVideo::setWindowTitle(char* title){
@@ -115,7 +120,7 @@ void sdlVideo::setWindowTitle(char* title){
 
 void sdlVideo::lock(){
 	if (flags &OPENGL){
-		
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}else{
 		if (SDL_MUSTLOCK(screen)) 
     		SDL_LockSurface(screen); 
@@ -125,7 +130,7 @@ void sdlVideo::lock(){
 void sdlVideo::unlock(){
 	
 	if (flags &OPENGL){
-	
+		SDL_GL_SwapBuffers();
 	}else{
 		if (SDL_MUSTLOCK(screen)) 
 			SDL_UnlockSurface(screen);
