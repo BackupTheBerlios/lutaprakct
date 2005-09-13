@@ -1,11 +1,13 @@
 #ifndef _ALGEBRA_H_
 #define _ALGEBRA_H_
 
+#include <float.h>
+
 #define half_pi           3.14159265358979323846264338327950288419716939937510582 * 0.5
 #define quarter_pi        3.14159265358979323846264338327950288419716939937510582 * 0.25
-#define pi			     3.14159265358979323846264338327950288419716939937510582
-#define two_pi			 3.14159265358979323846264338327950288419716939937510582 * 2.0
-
+#define pi			      3.14159265358979323846264338327950288419716939937510582
+#define two_pi			  3.14159265358979323846264338327950288419716939937510582 * 2.0
+#define EPSILON           10e-6
 #define degtorad(deg) (0.017453292f*(deg))
 
 struct vec2;
@@ -87,6 +89,9 @@ struct vec3{
 	vec3(const float* xyz) : x(xyz[0]), y(xyz[1]), z(xyz[2]) { }
 	vec3(const vec2 &v) : x(v.x), y(v.y), z(1.0f) { }
 	vec3(const vec3 &v) : x(v.x), y(v.y), z(v.z) { }
+	vec3(const vec4&);
+	
+	float normalize();
 	
     bool operator==(const vec3 &v) const{
         return (v.x == x && v.y == y && v.z == z ) ? true : false;
@@ -123,6 +128,11 @@ struct vec3{
 	
 };
 
+inline const vec3 operator^(const vec3& u, const vec3& v){
+    return vec3(u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z, u.x * v.y - u.y * v.x);
+}
+
+
 inline const vec3 operator+(const vec3& u, const vec3& v){
 	return vec3(u.x + v.x, u.y + v.y, u.z + v.z);
 }
@@ -142,6 +152,7 @@ inline const vec3 operator/(const vec3& v, const float k){
 inline const vec3 operator*(const vec3& u, const vec3& v){
 	return vec3(u.x*v.x, u.y*v.y, u.z*v.z);
 }
+
 
 struct vec4{
 	
@@ -191,6 +202,13 @@ struct vec4{
 	}
 	
 };
+
+inline vec3::vec3(const vec4& u)
+{
+	x = u.x;
+	y = u.y;
+	z = u.z;
+}
 
 inline const vec4 operator+(const vec4& u, const vec4& v){
 	return vec4(u.x + v.x, u.y + v.y, u.z + v.z, u.w + v.w);
@@ -247,5 +265,25 @@ struct mat4{
 };
 
 void identity(mat4 &mat);
+const vec4 operator*(const mat4&, const vec4&);
+const vec4 operator*(const vec4&, const mat4&);
+
+const vec3      vec3_null(0,0,0);
+
+float dot(const vec3 & v, const vec3 & w);
+vec3 & normalize(vec3 & u);
+// Computes u = u * s
+vec3 & scale(vec3 & u, const float s);
+
+inline float min(const float & lambda, const float & n)
+{
+	 return (lambda < n ) ? lambda : n;
+}
+
+inline float max(const float & lambda, const float & n)
+{ 
+	return (lambda > n ) ? lambda : n;
+}
+
 
 #endif //_ALGEBRA_H_

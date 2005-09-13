@@ -5,6 +5,20 @@
 #include <memory.h>
 #include <stdlib.h>
 
+float vec3::normalize(){
+	
+	float norm = sqrt(x * x + y * y + z * z);
+	if (norm > EPSILON)
+		norm = 1 / norm;
+	else
+		norm = 0;
+	x *= norm;
+	y *= norm;
+	z *= norm;
+	return norm;
+	
+}
+
 float length(quat quat){
 	
 	return sqrt(quat.x * quat.x + quat.y * quat.y + quat.z * quat.z + quat.w * quat.w);
@@ -137,4 +151,48 @@ mat4 mat4::operator * (const mat4 &mat) const{
 	            m[12] * mat.m[1] + m[13] * mat.m[5] + m[14] * mat.m[9] + m[15] * mat.m[13],
 	            m[12] * mat.m[2] + m[13] * mat.m[6] + m[14] * mat.m[10] + m[15] * mat.m[14],
 	            m[12] * mat.m[3] + m[13] * mat.m[7] + m[14] * mat.m[11] + m[15] * mat.m[15]);
+}
+
+const vec4 operator*(const mat4& M, const vec4& v)
+{
+	vec4 u;
+    u.x = M.m[0] * v.x + M.m[1] * v.y + M.m[2] * v.z + M.m[3] * v.w;
+    u.y = M.m[4] * v.x + M.m[5] * v.y + M.m[6] * v.z + M.m[7] * v.w;
+    u.z = M.m[8] * v.x + M.m[9] * v.y + M.m[10] * v.z + M.m[11] * v.w;
+    u.w = M.m[12] * v.x + M.m[13] * v.y + M.m[14] * v.z + M.m[15] * v.w;
+    return u;
+}
+
+const vec4 operator*(const vec4& v, const mat4& M)
+{
+	vec4 u;
+    u.x = M.m[0] * v.x + M.m[1] * v.y + M.m[2] * v.z + M.m[3] * v.w;
+    u.y = M.m[4] * v.x + M.m[5] * v.y + M.m[6] * v.z + M.m[7] * v.w;
+    u.z = M.m[8] * v.x + M.m[9] * v.y + M.m[10] * v.z + M.m[11] * v.w;
+    u.w = M.m[12] * v.x + M.m[13] * v.y + M.m[14] * v.z + M.m[15] * v.w;
+    return u;
+}
+
+
+float dot(const vec3& v, const vec3& w)
+{
+    return v.x*w.x + v.y*w.y + v.z*w.z;
+}
+
+vec3 & normalize(vec3& u)
+{
+    float norm = sqrtf(u.x * u.x + u.y * u.y + u.z * u.z);
+    if (norm > EPSILON)
+        norm = 1 / norm;
+    else
+        norm = 0;
+    return scale(u,norm); 
+}
+
+vec3 & scale(vec3& u, const float s)
+{
+    u.x *= s;
+    u.y *= s;
+    u.z *= s;
+    return u;
 }
