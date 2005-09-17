@@ -2,6 +2,8 @@
 #include <cmath>
 #include <GL/gl.h>
 
+#include <iostream>
+
 camera::camera(){
 	identity(modelview);
     time = 0.0f;
@@ -18,13 +20,13 @@ camera::~camera(){
  * |m2 m6 m10   z|
  * |m3 m7 m11 m15|
  */
-void camera::move(float x, vec3& axis){
+void camera::move(float x, vec3 axis){
 
 	x *= time;
 	
 	mat4 translation;
 	identity(translation);
-	axis = x*axis;
+	axis = (-x)*axis;
 	
 	translation[12] = axis.x;
 	translation[13] = axis.y;
@@ -34,7 +36,7 @@ void camera::move(float x, vec3& axis){
 		
 }
 
-void camera::rotate(float angle, vec3& axis){
+void camera::rotate(float angle, vec3 axis){
 	
 	angle *= time;
 	
@@ -76,5 +78,22 @@ void camera::update(float time){
 
 	this->time = time;
 	glLoadMatrixf(modelview.m);
+	
+}
+
+vec3 camera::getPosition(){
+	return vec3(modelview[12], modelview[13], modelview[14]);
+}
+
+void camera::handleEvent(const event &e){
+
+	switch (e.type){
+		case E_MOUSE_ROTATE_X: rotate(e.arg1, vec3(0.0, 1.0, 0.0)); break;
+		case E_MOUSE_ROTATE_Y: rotate(e.arg1, vec3(1.0, 0.0, 0.0)); break;
+		case E_KEY_UP:         move(10.0f, vec3(0.0, 0.0, (-1.0))); break;
+	    case E_KEY_DOWN:       move(10.0f, vec3(0.0, 0.0, 1.0)); break;
+	    case E_KEY_LEFT:       move(10.0f, vec3((-1.0), 0.0, 0.0)); break;
+	    case E_KEY_RIGHT:      move(10.0f, vec3(1.0, 0.0, 0.0)); break;
+	}	
 	
 }

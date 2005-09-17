@@ -2,6 +2,7 @@
 #define _CAMERA_H_
 
 #include "../math/algebra.h"
+#include "../input/eventhandler.h"
 
 /** Nao foi criado interface nem factory para a camera. essa camera atual eh muito simples
  * e usa quaternion, nao faz sentido criar outro modelo de camera (vetorial por exemplo) e criar a
@@ -11,18 +12,23 @@
  /** TODO rotatearound e positioncamera ?
   */
  
-class camera {
+class camera : public eventHandler {
  	
 public:
 
 	camera();
 	~camera();
-	void rotate(float angle, vec3& axis);
-	void move(float x, vec3& axis);
+	void rotate(float angle, vec3 axis);
+	void move(float x, vec3 axis);
  	void update(float time);
+ 	
+ 	vec3 getPosition();
+ 	
+ 	void handleEvent(const event &e);
  	
 private:
 
+    float velocity, velocityRotate;
 	float time;
     mat4 modelview;
  	
