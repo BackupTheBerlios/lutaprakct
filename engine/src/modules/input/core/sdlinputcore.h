@@ -10,6 +10,7 @@
  * Na pratica basta  chamar doInput(); no mainloop da engine
  * TODO existe a necessidade de criar factory pra isso para suportar outras implementacoes
  * que nao usem SDL?  mas caso necessite basta refazer o doInput()
+ * OBS.: o input precisa saber o tamanho da janela pra calcular quanto o mouse se moveu.
  */
 
 class sdlInputCore : public eventHandler{
@@ -22,6 +23,14 @@ public:
 	void handleEvent(const event &e){};
 	
 	void doInput();
+	
+	void informWindowSize(int x, int y);
+	void setMouseVelocity(float v);
+	
+private:
+
+	int winheight, winwidth;
+	float mouseVelocity;
 	
 };
 
