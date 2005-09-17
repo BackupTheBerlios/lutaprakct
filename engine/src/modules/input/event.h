@@ -8,7 +8,16 @@
 
 enum eventType
 {
-  E_APPCLOSE
+  E_APPCLOSE,
+  
+  E_KEY_UP,
+  E_KEY_DOWN,
+  E_KEY_LEFT,
+  E_KEY_RIGHT,
+  
+  E_MOUSE_ROTATE_X,
+  E_MOUSE_ROTATE_Y
+  
 };
 
 struct event {
