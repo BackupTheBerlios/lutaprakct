@@ -48,6 +48,8 @@ public:
  virtual int getWidth()=0;
  virtual int getHeight()=0;
  
+ virtual void showCursor(bool value)=0;
+ 
 protected:
    int videoType;
 	

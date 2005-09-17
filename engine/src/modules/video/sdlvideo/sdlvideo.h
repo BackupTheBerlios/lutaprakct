@@ -26,6 +26,8 @@ public:
  
 	int getWidth();
 	int getHeight();
+	
+	void showCursor(bool value);
 private:
 	void initializeOpenGl();
  

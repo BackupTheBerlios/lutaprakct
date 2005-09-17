@@ -145,3 +145,11 @@ int sdlVideo::getWidth(){
 int sdlVideo::getHeight(){
  return height;
 }
+
+void sdlVideo::showCursor(bool value){
+	if (value)
+		SDL_ShowCursor(1);
+	else
+		SDL_ShowCursor(0);
+}
+
