@@ -5,6 +5,9 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+
 texture::~texture(){
 	if (img)
 		delete img;
@@ -161,6 +164,9 @@ bool texture::load(char* filename, int target, int flags){
 	else if (flags & ANISOTROPIC_16)
 		glTexParameteri(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
 	
+	 //  std::cout << "etste" << std::endl;
+	//SDL_Surface *img2 = (SDL_Surface*) IMG_Load("ogro2.tga");
+	
 	if (target == TEXTURE_1D){
 		img = (image*) ImageFactory::getInstance().create(filename);
 		glTexImage1D(target, 0, internalformat, img->getWidth(), 0, format, GL_UNSIGNED_BYTE, img->imagedata);
@@ -168,6 +174,7 @@ bool texture::load(char* filename, int target, int flags){
 	else if ( (target == TEXTURE_2D) || (target == TEXTURE_RECTANGLE) || (target == TEXTURE_RECTANGLENV) ){
 		img = (image*) ImageFactory::getInstance().create(filename);
 		glTexImage2D(target, 0, internalformat, img->getWidth(), img->getHeight(), 0, format, GL_UNSIGNED_BYTE, img->imagedata);
+		
 	}
 	
 	//nao carregue cubemaps com png.
@@ -192,8 +199,8 @@ bool texture::load(char* filename, int target, int flags){
 	glDisable(target);
 	//depois libera a memoria deletando a img
 	if(img){
-		delete img;
-		img = NULL;
+		//delete img;
+		//img = NULL;
 	}
 	return id;
 }

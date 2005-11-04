@@ -57,7 +57,8 @@ public:
 	void disable();
 	void bind();
 	void unload();
-	
+	int getWidth(){return img->getWidth();}
+	int getHeight(){return img->getHeight();}
 	std::string name;
 	
 private:
