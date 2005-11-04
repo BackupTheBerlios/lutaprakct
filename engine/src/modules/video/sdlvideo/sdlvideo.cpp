@@ -107,7 +107,7 @@ void sdlVideo::initializeOpenGl(){
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glClearStencil(0x00);
 	glPolygonOffset(1.0, 1.0);	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
