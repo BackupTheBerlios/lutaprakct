@@ -13,10 +13,16 @@ class tgaimage : public image{
 public:
 
 	tgaimage(const char *filename){ imagedata = NULL; type = TGA; load(filename); };
-	~tgaimage(){};
+	~tgaimage(){ /*if (imagedata) delete imagedata;*/};
 	
 	bool load(const char* filename, int loadingflags = 0);
 	bool write(char* filename);
+	
+private:
+	bool processHeader();
+	bool loadRaw();
+	void BGRtoRGB();
+	char encode;
 	
 };
 

@@ -35,7 +35,7 @@ public:
 protected:
 
 	int type;
-	int width, height, bpp;
+	int width, height, bpp, imagesize;
 
 	
 };
