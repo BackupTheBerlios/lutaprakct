@@ -20,7 +20,16 @@ struct mat4;
 
 struct vec2{
 	
-	float x, y;
+	//float x, y;
+    union {
+        struct {
+            float x,y;          
+        };
+        struct {
+            float s,t;          
+        };
+        float vec_array[2];     
+    };
 	
 	vec2(){ }
 	vec2(float x, float y) : x(x), y(y) { }
@@ -57,6 +66,15 @@ struct vec2{
 		return vec2(-x, -y);
 	}
 	
+    float & operator[](int i)
+    {
+        return vec_array[i];
+    }
+
+    const float operator[](int i) const
+    {
+        return vec_array[i];
+    }
 	
 };
 
@@ -82,7 +100,17 @@ inline const vec2 operator*(const vec2& u, const vec2& v){
 
 struct vec3{
 	
-	float x, y, z;
+	//float x, y, z;
+	
+    union {
+        struct {
+            float x,y,z;        
+        };
+        struct {
+            float s,t,r;       
+        };
+        float vec_array[3];   
+    };
 	
 	vec3(){ }
 	vec3(float x, float y, float z) : x(x), y(y), z(z) { }
@@ -126,6 +154,16 @@ struct vec3{
 		return vec3(-x, -y, -z);
 	}
 	
+    float & operator[](int i)
+    {
+        return vec_array[i];
+    }
+
+    const float operator[](int i) const
+    {
+        return vec_array[i];
+    }
+	
 };
 
 inline const vec3 operator^(const vec3& u, const vec3& v){
@@ -156,7 +194,17 @@ inline const vec3 operator*(const vec3& u, const vec3& v){
 
 struct vec4{
 	
-	float x, y, z, w;
+	//float x, y, z, w;
+	
+    union {
+        struct {
+            float x,y,z,w; 
+        };
+        struct {
+            float s,t,r,q;  
+        };
+        float vec_array[4];   
+    };
 	
 	vec4(){ }
 	vec4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) { }
@@ -200,6 +248,16 @@ struct vec4{
     vec4 operator - () const{
 		return vec4(-x, -y, -z, -w);
 	}
+	
+    float & operator[](int i)
+    {
+        return vec_array[i];
+    }
+
+    const float operator[](int i) const
+    {
+        return vec_array[i];
+    }
 	
 };
 
@@ -247,7 +305,31 @@ quat axisToQuaternion(float angle, vec3& axis);
 
 struct mat4{
 	
-	float m[16];
+	//float m[16];
+		
+    union {
+        struct {
+            float a00, a10, a20, a30;   // standard names for components
+            float a01, a11, a21, a31;   // standard names for components
+            float a02, a12, a22, a32;   // standard names for components
+            float a03, a13, a23, a33;   // standard names for components
+        };
+        struct {
+            float _11, _12, _13, _14;   // standard names for components
+            float _21, _22, _23, _24;   // standard names for components
+            float _31, _32, _33, _34;   // standard names for components
+            float _41, _42, _43, _44;   // standard names for components
+        };
+        union {
+            struct {
+                float b00, b10, b20, p; // standard names for components
+                float b01, b11, b21, q; // standard names for components
+                float b02, b12, b22, r; // standard names for components
+                float x, y, z, w;       // standard names for components
+            };
+        };
+        float mat_array[16];  
+    };
 		
 	mat4() { };
 	mat4(const float *mat);
@@ -259,14 +341,32 @@ struct mat4{
 	
 	operator float*();
 	operator const float*() const;
+   
+    const float& operator()(const int& i, const int& j) const
+    {
+        return mat_array[ j * 4 + i ];
+    }
+
+    float& operator()(const int& i, const int& j)
+    {
+        return  mat_array[ j * 4 + i ];
+    }
+	
 	
 	mat4 operator*(const mat4&) const;
 	
 };
 
+mat4 inverse(mat4 &mat);
 void identity(mat4 &mat);
+
 const vec4 operator*(const mat4&, const vec4&);
 const vec4 operator*(const vec4&, const mat4&);
+
+//TODO: ajeitar ou remover essa fun?ao
+void mult_matrix_vec( const vec3 &src, vec3 &dst, mat4 &mat );
+void mult_matrix_vec( vec3 & src_and_dst, mat4 &mat) ;
+
 
 const vec3      vec3_null(0,0,0);
 

@@ -73,11 +73,11 @@ quat axisToQuaternion(float angle, vec3& axis){
 }
 
 mat4::mat4(const float* mat){
-    memcpy(m, mat, sizeof(float) * 16);
+    memcpy(mat_array, mat, sizeof(float) * 16);
 }
 
 mat4::mat4(const mat4& mat){
-    memcpy(m, mat.m, sizeof(float) * 16);
+    memcpy(mat_array, mat.mat_array, sizeof(float) * 16);
 }
 
 mat4::mat4(float a11, float a12, float a13, float a14,
@@ -85,91 +85,172 @@ mat4::mat4(float a11, float a12, float a13, float a14,
            float a31, float a32, float a33, float a34,
            float a41, float a42, float a43, float a44)
 {
-	m[0] = a11;
-	m[1] = a12;
-	m[2] = a13;
-	m[3] = a14;
-	m[4] = a21;
-	m[5] = a22;
-	m[6] = a23;
-	m[7] = a24;
-	m[8] = a31;
-	m[9] = a32;
-	m[10] = a33;
-	m[11] = a34;
-	m[12] = a41;
-	m[13] = a42;
-	m[14] = a43;
-	m[15] = a44;
+	mat_array[0] = a11;
+	mat_array[1] = a12;
+	mat_array[2] = a13;
+	mat_array[3] = a14;
+	mat_array[4] = a21;
+	mat_array[5] = a22;
+	mat_array[6] = a23;
+	mat_array[7] = a24;
+	mat_array[8] = a31;
+	mat_array[9] = a32;
+	mat_array[10] = a33;
+	mat_array[11] = a34;
+	mat_array[12] = a41;
+	mat_array[13] = a42;
+	mat_array[14] = a43;
+	mat_array[15] = a44;
 }
 
 mat4::operator const float *() const{
-	return &m[0];
+	return &mat_array[0];
 }
 
 mat4::operator float *(){
-	return &m[0];
+	return &mat_array[0];
 }
 
 void identity(mat4 &mat){
-	mat[0] = 1;
-	mat[1] = 0;
-	mat[2] = 0;
-	mat[3] = 0;
-	mat[4] = 0;
-	mat[5] = 1;
-	mat[6] = 0;
-	mat[7] = 0;
-	mat[8] = 0;
-	mat[9] = 0;
-	mat[10] = 1;
-	mat[11] = 0;
-	mat[12] = 0;
-	mat[13] = 0;
-	mat[14] = 0;
-	mat[15] = 1;	
+	mat.mat_array[0] = 1;
+	mat.mat_array[1] = 0;
+	mat.mat_array[2] = 0;
+	mat.mat_array[3] = 0;
+	mat.mat_array[4] = 0;
+	mat.mat_array[5] = 1;
+	mat.mat_array[6] = 0;
+	mat.mat_array[7] = 0;
+	mat.mat_array[8] = 0;
+	mat.mat_array[9] = 0;
+	mat.mat_array[10] = 1;
+	mat.mat_array[11] = 0;
+	mat.mat_array[12] = 0;
+	mat.mat_array[13] = 0;
+	mat.mat_array[14] = 0;
+	mat.mat_array[15] = 1;	
 }
 
 mat4 mat4::operator * (const mat4 &mat) const{
 	return mat4(
-	            m[0] * mat.m[0] + m[1] * mat.m[4] + m[2] * mat.m[8] + m[3] * mat.m[12],
-	            m[0] * mat.m[1] + m[1] * mat.m[5] + m[2] * mat.m[9] + m[3] * mat.m[13],
-	            m[0] * mat.m[2] + m[1] * mat.m[6] + m[2] * mat.m[10] + m[3] * mat.m[14],
-	            m[0] * mat.m[3] + m[1] * mat.m[7] + m[2] * mat.m[11] + m[3] * mat.m[15],
+	            mat_array[0] * mat.mat_array[0] + mat_array[1] * mat.mat_array[4] + mat_array[2] * mat.mat_array[8] + mat_array[3] * mat.mat_array[12],
+	            mat_array[0] * mat.mat_array[1] + mat_array[1] * mat.mat_array[5] + mat_array[2] * mat.mat_array[9] + mat_array[3] * mat.mat_array[13],
+	            mat_array[0] * mat.mat_array[2] + mat_array[1] * mat.mat_array[6] + mat_array[2] * mat.mat_array[10] + mat_array[3] * mat.mat_array[14],
+	            mat_array[0] * mat.mat_array[3] + mat_array[1] * mat.mat_array[7] + mat_array[2] * mat.mat_array[11] + mat_array[3] * mat.mat_array[15],
 
-	            m[4] * mat.m[0] + m[5] * mat.m[4] + m[6] * mat.m[8] + m[7] * mat.m[12],
-	            m[4] * mat.m[1] + m[5] * mat.m[5] + m[6] * mat.m[9] + m[7] * mat.m[13],
-	            m[4] * mat.m[2] + m[5] * mat.m[6] + m[6] * mat.m[10] + m[7] * mat.m[14],
-	            m[4] * mat.m[3] + m[5] * mat.m[7] + m[6] * mat.m[11] + m[7] * mat.m[15],
+	            mat_array[4] * mat.mat_array[0] + mat_array[5] * mat.mat_array[4] + mat_array[6] * mat.mat_array[8] + mat_array[7] * mat.mat_array[12],
+	            mat_array[4] * mat.mat_array[1] + mat_array[5] * mat.mat_array[5] + mat_array[6] * mat.mat_array[9] + mat_array[7] * mat.mat_array[13],
+	            mat_array[4] * mat.mat_array[2] + mat_array[5] * mat.mat_array[6] + mat_array[6] * mat.mat_array[10] + mat_array[7] * mat.mat_array[14],
+	            mat_array[4] * mat.mat_array[3] + mat_array[5] * mat.mat_array[7] + mat_array[6] * mat.mat_array[11] + mat_array[7] * mat.mat_array[15],
 
-	            m[8] * mat.m[0] + m[9] * mat.m[4] + m[10] * mat.m[8] + m[11] * mat.m[12],
-	            m[8] * mat.m[1] + m[9] * mat.m[5] + m[10] * mat.m[9] + m[11] * mat.m[13],
-	            m[8] * mat.m[2] + m[9] * mat.m[6] + m[10] * mat.m[10] + m[11] * mat.m[14],
-	            m[8] * mat.m[3] + m[9] * mat.m[7] + m[10] * mat.m[11] + m[11] * mat.m[15],
+	            mat_array[8] * mat.mat_array[0] + mat_array[9] * mat.mat_array[4] + mat_array[10] * mat.mat_array[8] + mat_array[11] * mat.mat_array[12],
+	            mat_array[8] * mat.mat_array[1] + mat_array[9] * mat.mat_array[5] + mat_array[10] * mat.mat_array[9] + mat_array[11] * mat.mat_array[13],
+	            mat_array[8] * mat.mat_array[2] + mat_array[9] * mat.mat_array[6] + mat_array[10] * mat.mat_array[10] + mat_array[11] * mat.mat_array[14],
+	            mat_array[8] * mat.mat_array[3] + mat_array[9] * mat.mat_array[7] + mat_array[10] * mat.mat_array[11] + mat_array[11] * mat.mat_array[15],
 
-	            m[12] * mat.m[0] + m[13] * mat.m[4] + m[14] * mat.m[8] + m[15] * mat.m[12],
-	            m[12] * mat.m[1] + m[13] * mat.m[5] + m[14] * mat.m[9] + m[15] * mat.m[13],
-	            m[12] * mat.m[2] + m[13] * mat.m[6] + m[14] * mat.m[10] + m[15] * mat.m[14],
-	            m[12] * mat.m[3] + m[13] * mat.m[7] + m[14] * mat.m[11] + m[15] * mat.m[15]);
+	            mat_array[12] * mat.mat_array[0] + mat_array[13] * mat.mat_array[4] + mat_array[14] * mat.mat_array[8] + mat_array[15] * mat.mat_array[12],
+	            mat_array[12] * mat.mat_array[1] + mat_array[13] * mat.mat_array[5] + mat_array[14] * mat.mat_array[9] + mat_array[15] * mat.mat_array[13],
+	            mat_array[12] * mat.mat_array[2] + mat_array[13] * mat.mat_array[6] + mat_array[14] * mat.mat_array[10] + mat_array[15] * mat.mat_array[14],
+	            mat_array[12] * mat.mat_array[3] + mat_array[13] * mat.mat_array[7] + mat_array[14] * mat.mat_array[11] + mat_array[15] * mat.mat_array[15]);
+}
+
+/*
+    calculate the determinent of a 2x2 matrix in the from
+
+    | a1 a2 |
+    | b1 b2 |
+
+*/
+float det2x2(float a1, float a2, float b1, float b2)
+{
+    return a1 * b2 - b1 * a2;
+}
+
+/*
+    calculate the determinent of a 3x3 matrix in the from
+
+    | a1 a2 a3 |
+    | b1 b2 b3 |
+    | c1 c2 c3 |
+
+*/
+float det3x3(float a1, float a2, float a3, 
+                         float b1, float b2, float b3, 
+                         float c1, float c2, float c3)
+{
+    return a1 * det2x2(b2, b3, c2, c3) - b1 * det2x2(a2, a3, c2, c3) + c1 * det2x2(a2, a3, b2, b3);
+}
+
+mat4 inverse(mat4 &A){
+	
+	mat4 B;
+    float det,oodet;
+
+    B.a00 =  det3x3(A.a11, A.a21, A.a31, A.a12, A.a22, A.a32, A.a13, A.a23, A.a33);
+    B.a10 = -det3x3(A.a10, A.a20, A.a30, A.a12, A.a22, A.a32, A.a13, A.a23, A.a33);
+    B.a20 =  det3x3(A.a10, A.a20, A.a30, A.a11, A.a21, A.a31, A.a13, A.a23, A.a33);
+    B.a30 = -det3x3(A.a10, A.a20, A.a30, A.a11, A.a21, A.a31, A.a12, A.a22, A.a32);
+
+    B.a01 = -det3x3(A.a01, A.a21, A.a31, A.a02, A.a22, A.a32, A.a03, A.a23, A.a33);
+    B.a11 =  det3x3(A.a00, A.a20, A.a30, A.a02, A.a22, A.a32, A.a03, A.a23, A.a33);
+    B.a21 = -det3x3(A.a00, A.a20, A.a30, A.a01, A.a21, A.a31, A.a03, A.a23, A.a33);
+    B.a31 =  det3x3(A.a00, A.a20, A.a30, A.a01, A.a21, A.a31, A.a02, A.a22, A.a32);
+
+    B.a02 =  det3x3(A.a01, A.a11, A.a31, A.a02, A.a12, A.a32, A.a03, A.a13, A.a33);
+    B.a12 = -det3x3(A.a00, A.a10, A.a30, A.a02, A.a12, A.a32, A.a03, A.a13, A.a33);
+    B.a22 =  det3x3(A.a00, A.a10, A.a30, A.a01, A.a11, A.a31, A.a03, A.a13, A.a33);
+    B.a32 = -det3x3(A.a00, A.a10, A.a30, A.a01, A.a11, A.a31, A.a02, A.a12, A.a32);
+
+    B.a03 = -det3x3(A.a01, A.a11, A.a21, A.a02, A.a12, A.a22, A.a03, A.a13, A.a23);
+    B.a13 =  det3x3(A.a00, A.a10, A.a20, A.a02, A.a12, A.a22, A.a03, A.a13, A.a23);
+    B.a23 = -det3x3(A.a00, A.a10, A.a20, A.a01, A.a11, A.a21, A.a03, A.a13, A.a23);
+    B.a33 =  det3x3(A.a00, A.a10, A.a20, A.a01, A.a11, A.a21, A.a02, A.a12, A.a22);
+
+    det = (A.a00 * B.a00) + (A.a01 * B.a10) + (A.a02 * B.a20) + (A.a03 * B.a30);
+
+    oodet = 1.0 / det;
+
+    B.a00 *= oodet;
+    B.a10 *= oodet;
+    B.a20 *= oodet;
+    B.a30 *= oodet;
+
+    B.a01 *= oodet;
+    B.a11 *= oodet;
+    B.a21 *= oodet;
+    B.a31 *= oodet;
+
+    B.a02 *= oodet;
+    B.a12 *= oodet;
+    B.a22 *= oodet;
+    B.a32 *= oodet;
+
+    B.a03 *= oodet;
+    B.a13 *= oodet;
+    B.a23 *= oodet;
+    B.a33 *= oodet;
+
+    return B;
+	
+	
 }
 
 const vec4 operator*(const mat4& M, const vec4& v)
 {
 	vec4 u;
-    u.x = M.m[0] * v.x + M.m[1] * v.y + M.m[2] * v.z + M.m[3] * v.w;
-    u.y = M.m[4] * v.x + M.m[5] * v.y + M.m[6] * v.z + M.m[7] * v.w;
-    u.z = M.m[8] * v.x + M.m[9] * v.y + M.m[10] * v.z + M.m[11] * v.w;
-    u.w = M.m[12] * v.x + M.m[13] * v.y + M.m[14] * v.z + M.m[15] * v.w;
+    u.x = M.mat_array[0] * v.x + M.mat_array[1] * v.y + M.mat_array[2] * v.z + M.mat_array[3] * v.w;
+    u.y = M.mat_array[4] * v.x + M.mat_array[5] * v.y + M.mat_array[6] * v.z + M.mat_array[7] * v.w;
+    u.z = M.mat_array[8] * v.x + M.mat_array[9] * v.y + M.mat_array[10] * v.z + M.mat_array[11] * v.w;
+    u.w = M.mat_array[12] * v.x + M.mat_array[13] * v.y + M.mat_array[14] * v.z + M.mat_array[15] * v.w;
     return u;
 }
 
 const vec4 operator*(const vec4& v, const mat4& M)
 {
 	vec4 u;
-    u.x = M.m[0] * v.x + M.m[1] * v.y + M.m[2] * v.z + M.m[3] * v.w;
-    u.y = M.m[4] * v.x + M.m[5] * v.y + M.m[6] * v.z + M.m[7] * v.w;
-    u.z = M.m[8] * v.x + M.m[9] * v.y + M.m[10] * v.z + M.m[11] * v.w;
-    u.w = M.m[12] * v.x + M.m[13] * v.y + M.m[14] * v.z + M.m[15] * v.w;
+    u.x = M.mat_array[0] * v.x + M.mat_array[1] * v.y + M.mat_array[2] * v.z + M.mat_array[3] * v.w;
+    u.y = M.mat_array[4] * v.x + M.mat_array[5] * v.y + M.mat_array[6] * v.z + M.mat_array[7] * v.w;
+    u.z = M.mat_array[8] * v.x + M.mat_array[9] * v.y + M.mat_array[10] * v.z + M.mat_array[11] * v.w;
+    u.w = M.mat_array[12] * v.x + M.mat_array[13] * v.y + M.mat_array[14] * v.z + M.mat_array[15] * v.w;
     return u;
 }
 
@@ -196,3 +277,31 @@ vec3 & scale(vec3& u, const float s)
     u.z *= s;
     return u;
 }
+
+void mult_matrix_vec( const vec3 &src, vec3 &dst, mat4 &mat )
+{
+		float w = (
+			src.x * mat.a30 +
+			src.y * mat.a31 + 
+			src.z * mat.a32 +
+			mat.a33          );
+
+        dst.x  = (
+			src.x * mat.a00 +
+			src.y * mat.a01 +
+			src.z * mat.a02 +
+			mat.a03          ) / w;
+		dst.y  = (
+			src.x * mat.a10 +
+			src.y * mat.a11 +
+			src.z * mat.a12 +
+			mat.a13          ) / w;
+		dst.z  = (
+			src.x * mat.a20 +
+			src.y * mat.a21 + 
+			src.z * mat.a22 +
+			mat.a23          ) / w;
+}
+    
+void mult_matrix_vec( vec3 & src_and_dst, mat4 &mat) 
+{ mult_matrix_vec(vec3(src_and_dst), src_and_dst, mat); }
