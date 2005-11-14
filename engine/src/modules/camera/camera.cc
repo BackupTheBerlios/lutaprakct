@@ -77,7 +77,7 @@ void camera::rotate(float angle, vec3 axis){
 void camera::update(float time){
 
 	this->time = time;
-	glLoadMatrixf(modelview.m);
+	glLoadMatrixf(modelview.mat_array);
 	
 }
 
