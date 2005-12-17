@@ -2,6 +2,7 @@
 #define _BASICLIGHTMATERIAL_H_
 
 #include "material.h"
+#include "../shaders/pixelLightShader.h"
 
 /*
  * esse material eh o tipo basico de per pixel light
@@ -13,17 +14,17 @@ class basicLightMaterial : public material{
 	
 public:
 
-	basicLightMaterial();
+	basicLightMaterial() : shader(NULL){ };
+	basicLightMaterial(std::string filename) : shader(NULL){ initialize(filename); };
 	virtual ~basicLightMaterial();
 	
 	void initialize(std::string filename);
 	virtual void bind();
 	virtual void unbind();
 	
-private:
+public:
 	
-	
-	
+	pixelLightShader *shader;
 };
 
 #endif //_BASICLIGHTMATERIAL_H_
