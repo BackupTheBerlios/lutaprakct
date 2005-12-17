@@ -3,6 +3,7 @@
 
 #include "../math/algebra.h"
 #include "../input/eventhandler.h"
+#include "../../util/patterns/singleton.h"
 
 /** Nao foi criado interface nem factory para a camera. essa camera atual eh muito simples
  * e usa quaternion, nao faz sentido criar outro modelo de camera (vetorial por exemplo) e criar a
@@ -18,6 +19,7 @@ public:
 
 	camera();
 	~camera();
+	void initialize();
 	void rotate(float angle, vec3 axis);
 	void move(float x, vec3 axis);
  	void update(float time);
@@ -33,5 +35,7 @@ private:
     mat4 modelview;
  	
 };
+
+typedef singleton<camera> Camera;
 
 #endif //_CAMERA_H_

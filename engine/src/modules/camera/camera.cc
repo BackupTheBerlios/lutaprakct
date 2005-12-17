@@ -5,8 +5,12 @@
 #include <iostream>
 
 camera::camera(){
+	initialize();
+}
+
+void camera::initialize(){
 	identity(modelview);
-    time = 0.0f;
+    time = 0.0f;	
 }
 
 camera::~camera(){
@@ -27,11 +31,10 @@ void camera::move(float x, vec3 axis){
 	mat4 translation;
 	identity(translation);
 	axis = (-x)*axis;
-	
+
 	translation[12] = axis.x;
 	translation[13] = axis.y;
 	translation[14] = axis.z;
-	
 	modelview = modelview*translation;
 		
 }
