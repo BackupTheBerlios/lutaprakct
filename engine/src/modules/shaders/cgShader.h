@@ -3,6 +3,9 @@
 
 #include <Cg/cg.h>
 #include <Cg/cgGL.h>
+
+#include "../material/materialData.h"
+
 /* interface basica para shader em Cg
  */
 
@@ -12,7 +15,15 @@
 
 enum {
 	PROFILE_ARBVP1 = 1,
-	PROFILE_ARBFP1
+	PROFILE_ARBFP1,
+	PROFILE_VP40,
+	PROFILE_FP40
+	
+};
+
+enum {
+	AUTOCOMPILE_MANUAL = 1 << 1,
+	TESTE = 1 << 2
 	
 };
 
@@ -20,18 +31,21 @@ class cgShader{
 	
 public:
 
-	cgShader(char *vertexfile, int vertex, char * fragmentfile, int fragment) { initialize(vertexfile, vertex, fragmentfile , fragment); };
+	cgShader(){};
+	cgShader(char *vertexfile, int vertex, char * fragmentfile, int fragment, int flags) { initialize(vertexfile, vertex, fragmentfile , fragment, flags); };
 	virtual ~cgShader() { kill(); };
 	
-	bool initialize(char *vertexfile, int vertex, char * fragmentfile, int fragment );
+	bool initialize(char *vertexfile, int vertex, char * fragmentfile, int fragment, int flags );
 	void kill();
 	void bind();
 	void unbind();
-	virtual void setInitialParameters() = 0;
-	virtual void setLoopParameters() = 0;
+	void compile();
+	virtual void setInitialParameters(materialData *config) = 0;
+	virtual void setLoopParameters(materialData *config) = 0;
 
+	CGcontext getContext(){return context; };
 
-private:
+protected:
 	bool hasfrag, hasvertex;
 	CGcontext context;
 	CGprogram vertexprogram, fragmentprogram;

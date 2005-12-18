@@ -1,5 +1,6 @@
 
 #include "cgShader.h"
+#include <iostream>
 
 void cgShader::kill(){
 	
@@ -37,41 +38,58 @@ void cgShader::unbind(){
 	
 }
 
-bool cgShader::initialize(char* vertexfile, int vertex, char * fragmentfile, int fragment){
+void cgShader::compile(){
+	
+	cgCompileProgram(vertexprogram);
+	cgCompileProgram(fragmentprogram);
+	
+	cgGLLoadProgram(vertexprogram);
+	cgGLLoadProgram(fragmentprogram);
+	
+}
+
+bool cgShader::initialize(char* vertexfile, int vertex, char * fragmentfile, int fragment, int flags){
 
 	context = cgCreateContext();
 	
-	if (vertex == PROFILE_ARBVP1){
+	if (vertex == PROFILE_ARBVP1)
 		vertexprofile = CG_PROFILE_ARBVP1;
-	}else{
-		return false;
-	}
+	else if (vertex == PROFILE_VP40)
+		vertexprofile == CG_PROFILE_VP30;
+	
 		
-	if (vertex == PROFILE_ARBFP1){
+	if (fragment == PROFILE_ARBFP1)
 		fragmentprofile = CG_PROFILE_ARBFP1;
-	}else{
-		return false;
-	}	
+	else if (fragment == PROFILE_FP40)
+		fragmentprofile = CG_PROFILE_FP30;
+	
+	if (flags &AUTOCOMPILE_MANUAL)
+		cgSetAutoCompile(context, CG_COMPILE_MANUAL);	
 	
 	if (vertexfile){
 		hasvertex = true;
+		
 		vertexprogram = cgCreateProgramFromFile(context, CG_SOURCE, vertexfile, vertexprofile, NULL, NULL);
-		if (!cgIsProgramCompiled(vertexprogram))
-			cgCompileProgram(vertexprogram);
+		//if (!cgIsProgramCompiled(vertexprogram))
+		//	cgCompileProgram(vertexprogram);
 
 		cgGLEnableProfile(vertexprofile);
-		cgGLLoadProgram(vertexprogram);
+		
+		if (!flags)
+			cgGLLoadProgram(vertexprogram);
 	}
+	
 	
 	if (fragmentfile){
 		hasfrag = true;
+		
 		fragmentprogram = cgCreateProgramFromFile(context, CG_SOURCE, fragmentfile, fragmentprofile, NULL, NULL);
-		if (!cgIsProgramCompiled(fragmentprogram))
-			cgCompileProgram(fragmentprogram);
-
+		//if (!cgIsProgramCompiled(fragmentprogram))
+		//	cgCompileProgram(fragmentprogram);
 		cgGLEnableProfile(fragmentprofile);
-		cgGLLoadProgram(fragmentprogram);
+		
+		if (!flags)
+			cgGLLoadProgram(fragmentprogram);
 	}
-	
 	return true;
 }
