@@ -56,7 +56,6 @@ bool videosystem::initialize(int flags){
 	else if (flags &BPP_24)
 		bpp = 24;
 	
-	
 	screen = SDL_SetVideoMode(width, height, bpp, sdlflags);
 	if (screen == NULL){
 		std::cout << "Nao foi possivel inicializar o video." << std::endl;
