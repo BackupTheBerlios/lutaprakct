@@ -1,9 +1,10 @@
-#include "md2IO.h"
 #include <math.h>
 #include <GL/gl.h>
 #include <cstdio>
 #include <iostream>
 #include <fstream>
+
+#include "md2IO.h"
 
 using namespace std;
 
