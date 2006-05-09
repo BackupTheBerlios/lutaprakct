@@ -4,7 +4,6 @@
 #include <fstream>
 
 #include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
 
 bool tgaimage::processHeader(){
 	

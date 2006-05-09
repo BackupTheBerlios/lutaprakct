@@ -25,7 +25,7 @@ public:
 
  	textureManager() { };
 	~textureManager() {};
-	texture* load(char *name, int target, int flag );
+	texture* load(char *name, int target, int format, int internalformat, int flag );
 	void free(char *name);
 	void freeAll();
 };

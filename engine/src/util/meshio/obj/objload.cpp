@@ -10,17 +10,15 @@
 
 void scale_down( int nverts, float *&vertexdata );
 
-static void normalize( float v[3] )
-{
-    float len = (float) sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] );
-    if ( len == 0.0 )
-        {
-        fprintf( stderr, "." );
-        v[0] = 0.0;
-        v[1] = 0.0;
-        v[2] = 1.0;
+static void normalize( float v[3] ){
+	
+	float len = (float) sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] );
+	if ( len == 0.0 ){
+		v[0] = 0.0;
+		v[1] = 0.0;
+		v[2] = 1.0;
         return;
-        }
+	}
     len = 1.0f / len;
     v[0] = v[0]*len;
     v[1] = v[1]*len;

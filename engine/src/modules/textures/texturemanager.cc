@@ -1,12 +1,12 @@
 #include "texturemanager.h"
  
-texture* textureManager::load(char *name, int target, int flags){
+texture* textureManager::load(char *name, int target, int format, int internalformat, int flags){
   
 	//cria o iterator para o map e procura pelo nome da textura
 	std::map<std::string, texture*>::iterator iter = ids.find(name);
 	//se nao tiver a textura, entao carrega e adiciona no map
 	if ( iter == ids.end()){
-		texture *tex = new texture(name, target, flags); 
+		texture *tex = new texture(name, target, format, internalformat, flags); 
 		ids[name] = tex;
 		return tex;
 	}

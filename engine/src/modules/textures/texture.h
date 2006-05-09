@@ -14,32 +14,47 @@ class texture{
 public:
 
     enum{
-		RGB                    = 1 << 0,
-		RGBA                   = 1 << 1,
-		BGR                    = 1 << 2,
-		BGRA                   = 1 << 3,
+		CLAMP                  = 1 << 1,
+		CLAMP_TO_EDGE          = 1 << 2,
 		
-		CLAMP                  = 1 << 4,
-		CLAMP_TO_EDGE          = 1 << 5,
+		NEAREST                = 1 << 3,
+		LINEAR                 = 1 << 4,
+        NEAREST_MIPMAP_NEAREST = 1 << 5,
+		NEAREST_MIPMAP_LINEAR  = 1 << 6,
+		LINEAR_MIPMAP_NEAREST  = 1 << 7,
+		LINEAR_MIPMAP_LINEAR   = 1 << 8,
 		
-		NEAREST                = 1 << 6,
-		LINEAR                 = 1 << 7,
-        NEAREST_MIPMAP_NEAREST = 1 << 8,
-		NEAREST_MIPMAP_LINEAR  = 1 << 9,
-		LINEAR_MIPMAP_NEAREST  = 1 << 10,
-		LINEAR_MIPMAP_LINEAR   = 1 << 11,
+		ANISOTROPIC_2          = 1 << 9,
+		ANISOTROPIC_4          = 1 << 10,
+		ANISOTROPIC_8          = 1 << 11,
+		ANISOTROPIC_16	       = 1 << 12,
 		
-		ANISOTROPIC_2          = 1 << 12,
-		ANISOTROPIC_4          = 1 << 13,
-		ANISOTROPIC_8          = 1 << 14,
-		ANISOTROPIC_16	       = 1 << 15,
+		COMPRESSION_ARB        = 1 << 13,
+		COMPRESSION_DXT1       = 1 << 14,
+		COMPRESSION_DXT3       = 1 << 15,
+		COMPRESSION_DXT5       = 1 << 16,
 		
-		COMPRESSION_ARB        = 1 << 16,
-		COMPRESSION_DXT1       = 1 << 17,
-		COMPRESSION_DXT3       = 1 << 18,
-		COMPRESSION_DXT5       = 1 << 19
+		MIPMAP_SGI			   = 1 << 17
 	};
-
+	
+	//formats
+	enum {
+		RGB                    = 1,
+		RGBA                   = 2,
+		BGR                    = 3,
+		BGRA                   = 4,
+		LUMINANCE              = 5,
+		LUMINANCE_ALPHA        = 6
+	};
+	//internal formats
+	enum {
+		RGB8                    = 1,
+		RGBA8                   = 2,
+		RGB16                   = 3,
+		RGBA16                  = 4
+	};
+	
+	//targets
 	enum {
 		TEXTURE_1D          = GL_TEXTURE_1D,
 		TEXTURE_2D          = GL_TEXTURE_2D,
@@ -49,10 +64,10 @@ public:
 		TEXTURE_RECTANGLENV = GL_TEXTURE_RECTANGLE_NV
 	};
 
-    texture(char* filename, int target, int flags);
+    texture(char* filename, int target, int format, int internalformat, int flags);
     ~texture();
     
-	bool load(char* filename, int target, int flags);
+	bool load(char* filename, int target, int format, int internalformat, int flags);
 	void enable();
 	void disable();
 	void bind();

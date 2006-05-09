@@ -1,4 +1,3 @@
-
 #include "engine.h"
 #include "modules/input/core/sdlinputcore.h"
 #include "util/meshio/obj/objload.h"
@@ -8,11 +7,14 @@
 #include "modules/textures/texturemanager.h"
 
 #include "modules/math/algebra.h"
+#include "modules/shaders/pixelLightShader.h"
+
+#include "modules/material/basicLightMaterial.h"
 
 #include <iostream>
 #include <GL/gl.h>
 #include <GL/glu.h>
-
+#define FRAMEDELAY 50
 unsigned int nverts = 0;
 unsigned int nindices = 0;
 unsigned int *indices = NULL;
@@ -26,12 +28,49 @@ GLfloat LightAmbient[]= { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f };	
 GLfloat LightPosition[]= { 0.0f, -200.0f, -200.0f, 1.0f };
 
-md2IO *model;
+basicLightMaterial *mat = new basicLightMaterial();
+
+MD2Obj Obj; // Our object class
+  //GLuint Texture[TEXTURECOUNT]; // Texture store 
+ 
+  float ViewRotate=0.0f; // A few vars to handle view rotation, animation and time base values
+  long Time1,Time2,Ticks,NextFrame;
+  int Frames,CurFrame=0;
+ 
+  char Text[256]; // General purpose string
+ 
+  GLfloat Ambient[]  = { 0.1f,  0.1f,  0.1f, 1.0f};  // Ambient light value
+  GLfloat Diffuse[]  = { 1.0f,  1.0f,  1.0f, 1.0f};  // Diffuse light value
+  GLfloat Position[] = {10.0f, 60.0f, 10.0f, 1.0f};  // Light position
+ 
+  // Allocate all textures in one go
+  //glGenTextures(32,Texture);
+ 
+  // Load our Object
+  int RunLevel;
+
+
+//md2IO *model;
 engine::engine(){ 
 	done = false;
 }
 
 engine::~engine(){
+}
+
+void cgErrorCallback(void)
+{
+    CGerror LastError = cgGetError();
+
+    if(LastError)
+    {
+        const char *Listing = cgGetLastListing((mat->shader)->getContext());
+        printf("\n---------------------------------------------------\n");
+        printf("%s\n\n", cgGetErrorString(LastError));
+        printf("%s\n", Listing);
+        printf("---------------------------------------------------\n");
+        printf("Cg error, exiting...\n");
+    }
 }
 
 texture *tex;
@@ -50,21 +89,29 @@ bool engine::initialize(){
 	InputCore::getInstance().informWindowSize(video->getWidth(), video->getHeight());
 	InputCore::getInstance().setMouseVelocity(10.0);
 	
-    c = new camera();
+   // c = new camera();
+	Camera::getInstance().initialize();
     t = new timer();
     
     std::cout << "Engine inicializada com sucesso!" << std::endl;  
     
-    LoadObjModel("Raygun_01.OBJ",nverts,nindices,indices,vertexdata,normaldata,tangendata,binormdata,texcoords);
+    LoadObjModel("salinha.obj",nverts,nindices,indices,vertexdata,normaldata,tangendata,binormdata,texcoords);
     
-    glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
-    glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
-    glEnable(GL_LIGHT1);
+//    glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
+ //   glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
+ //   glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);
+ //   glEnable(GL_LIGHT1);
 //    model = new 	md2IO();
  //   model->ReadFile("Tris.MD2");
  //  tex = TextureManager::getInstance().load("ogro2.tga", texture::TEXTURE_2D, texture::CLAMP | texture::RGB | texture::LINEAR_MIPMAP_LINEAR);
-	tex = TextureManager::getInstance().load("rock.tga", texture::TEXTURE_2D, texture::CLAMP | texture::RGB | texture::LINEAR_MIPMAP_LINEAR);   
+//	tex = TextureManager::getInstance().load("rock.tga", texture::TEXTURE_2D, texture::CLAMP | texture::RGB | texture::LINEAR_MIPMAP_LINEAR);  
+	cgSetErrorCallback(cgErrorCallback);
+//	shader->initialize("perpixellightv.cg" ,  PROFILE_ARBVP1, "perpixellightf.cg",  PROFILE_ARBFP1); 
+//	shader->setInitialParameters();
+	mat->initialize("teste");
+	  Time1=Time2=clock();
+  NextFrame=Time1 + FRAMEDELAY;
+	 Obj.Load("WalkMech.md2");
 	return true;
 	
 }
@@ -78,22 +125,27 @@ void engine::draw(){
 	video->lock();
 
 
-	//glLoadIdentity();
-	glEnable(GL_LIGHTING);
-	glPushMatrix();
-	glRotatef(40.7,1.0f,1.0f,1.0f);	
-    glVertexPointer(3, GL_FLOAT, 0, vertexdata);
-    glNormalPointer(GL_FLOAT, 0, normaldata);
-    glTexCoordPointer( 2, GL_FLOAT, 0, texcoords );
-    glEnableClientState( GL_VERTEX_ARRAY );
-    glEnableClientState( GL_NORMAL_ARRAY );
-    glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-    tex->enable();
-    tex->bind();
-    glDrawElements(GL_TRIANGLES, nindices, GL_UNSIGNED_INT, indices);
+//	glLoadIdentity();
+//	shader->setLoopParameters();
+//	shader->bind();
+	mat->bind();
+//	glEnable(GL_LIGHTING);
+//	glPushMatrix();
+	//glRotatef(40.7,1.0f,1.0f,1.0f);	
+  //  glVertexPointer(3, GL_FLOAT, 0, vertexdata);
+ ///   glNormalPointer(GL_FLOAT, 0, normaldata);
+ //   glTexCoordPointer( 2, GL_FLOAT, 0, texcoords );
+//    glEnableClientState( GL_VERTEX_ARRAY );
+//    glEnableClientState( GL_NORMAL_ARRAY );
+//    glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+  //  tex->enable();
+  //  tex->bind();
+  //  glDrawElements(GL_TRIANGLES, nindices, GL_UNSIGNED_INT, indices);
 //    model->AnimateModel(0, 100, 0.01);
-    glPopMatrix();
-	glTranslatef(1.5f,0.0f,-70.0f);				// Move Right And Into The Screen
+	//shader->unbind();
+//	mat->unbind();
+ //   glPopMatrix();
+//	glTranslatef(1.5f,0.0f,-70.0f);				// Move Right And Into The Screen
 /*tex->enable();
 tex->bind();
 	glRotatef(70.7,1.0f,1.0f,1.0f);			// Rotate The Cube On X, Y & Z
@@ -175,13 +227,71 @@ tex->bind();
 		glVertex3f( 10.0f,-10.0f,-10.0f);			// Bottom Right Of The Quad (Right)
 	glEnd();						// Done Drawing The Quad
 */
+ 
+ 
+  // Find out how many frames we have
+  Frames=Obj.GetFrameCount();
+ 
+ // glEnable(GL_LIGHTING);
+ // glEnable(GL_LIGHT0);
+ // glLightfv(GL_LIGHT0, GL_AMBIENT, Ambient); // Set the ambient lighting value for Light0
+ // glLightfv(GL_LIGHT0, GL_DIFFUSE, Diffuse); // Set the diffuse lighting value for Light0
+ 
+ 
+  // Set up TBM
+
+    // Get ticks since last frame
+     Time2=clock();
+     Ticks=Time2-Time1;
+     Time1=Time2;
+ 
+     // Set up the view 
+   //  glTranslatef(0.0f,0.0f,-100.0f);
+//     glRotatef(-60.0f,1.0f,0.0f,0.0f);
+ 
+     // Set Light Position
+     //glLightfv(GL_LIGHT0,GL_POSITION,Position);  // Set position for the light
+ 
+     // Rotate view
+  //   glRotatef(ViewRotate,0.0f,0.0f,1.0f);
+ 
+     // Draw our Object
+ //    gluLookAt(0, 0, 0, 0, 0, -300, 0, 1, 0);
+ //    glPushMatrix();
+//     glTranslatef(0.0f, 0.0f, -1000.0f);
+//     glColor3f(1.0, 0.0, 0.0);
+     vec3 pos = Camera::getInstance().getPosition();
+     std::cout << "x " << pos.x << " y " << pos.y << " z " << pos.z << std::endl;
+//     glScalef(1000000.0, 0.0, 0.0);
+     Obj.Draw(CurFrame);
+ 
+      // Advance the frame counter
+      if(Time1>NextFrame)
+       {
+        CurFrame++;
+        NextFrame=Time1 + FRAMEDELAY;
+         
+         if(CurFrame>=Frames)
+          CurFrame=0;
+       }
+ 
+// glPopMatrix();
+     // Show our scene
+   //  FlipBuffers();
+     // Rotate view for next frame
+    // ViewRotate+=(Ticks/50.0f);
+   // }
+ 
+ 
+  // Clean up textures
 	video->unlock();
 }
 
 void engine::update(){
 	//TODO passar o tempo
 	t->update();
-	c->update(t->getSPF());
+//	c->update(t->getSPF());
+	Camera::getInstance().update(t->getSPF());
 }
 
 
