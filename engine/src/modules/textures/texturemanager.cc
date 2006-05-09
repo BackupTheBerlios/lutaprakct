@@ -6,6 +6,7 @@ texture* textureManager::load(char *name, int target, int format, int internalfo
 	std::map<std::string, texture*>::iterator iter = ids.find(name);
 	//se nao tiver a textura, entao carrega e adiciona no map
 	if ( iter == ids.end()){
+		flags |= this->flags;
 		texture *tex = new texture(name, target, format, internalformat, flags); 
 		ids[name] = tex;
 		return tex;
@@ -39,4 +40,12 @@ void textureManager::freeAll(){
 		 delete (*iter).second;
 	 }
 	 ids.clear();
+}
+
+void textureManager::setDefaultFlags(int flags){
+
+	flags = texture::LINEAR_MIPMAP_LINEAR ;
+	flags |= texture::MIPMAP_SGI;
+	flags |= texture::COMPRESSION_ARB;
+	
 }

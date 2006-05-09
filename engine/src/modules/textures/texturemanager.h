@@ -20,12 +20,15 @@ class textureManager{
 private:
 
 	std::map<std::string, texture*> ids;
+	int flags;
 	
 public:
 
  	textureManager() { };
 	~textureManager() {};
 	texture* load(char *name, int target, int format, int internalformat, int flag );
+	void setDefaultFlags(int flags);//default flags for texture loading
+	int getFlags(){return flags; };
 	void free(char *name);
 	void freeAll();
 };
