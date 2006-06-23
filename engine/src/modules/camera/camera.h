@@ -2,7 +2,7 @@
 #define _CAMERA_H_
 
 #include "../math/algebra.h"
-#include "../input/eventhandler.h"
+#include "../events/eventhandler.h"
 #include "../../util/patterns/singleton.h"
 
 /** Nao foi criado interface nem factory para a camera. essa camera atual eh muito simples
