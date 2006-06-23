@@ -1,8 +1,8 @@
 
 #include "videofactory.h"
 
-#include "../../../modules/video/videosystem.h"
-#include "../../../modules/video/sdlvideo/sdlvideo.h"
+#include "../../../modules/renderer/video/videosystem.h"
+#include "../../../modules/renderer/video/sdlvideo/sdlvideo.h"
 
 product* videoFactory::create(std::string args){
 	
