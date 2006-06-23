@@ -1,21 +1,32 @@
 #ifndef _TIMER_H_
 #define _TIMER_H_
 
-/*classe que mede o tempo entre os frames e o FPS*/
 
-class timer {
+#include "../core/task.h"
+
+/*classe que mede o tempo entre os frames e o FPS*/
+class Timer : public Task {
 	
 public:
-	timer();
-	~timer(){};
+	Timer();
+	virtual ~Timer(){};
 
 	float getFPS(){ return fps; }
-	float getSPF(){ return spf; }
+	float getElapsedTime(){ return elapsedTime; }
+	
 	void  update();
+	void stop() { }; //sem stop
+	bool start();
+
+	AUTO_SIZE;
 
 private:
+
+	unsigned long lastTime;
+	unsigned long currentTime;
+	
+	float elapsedTime;
 	float fps;
-	float spf;
 };
 
 #endif //_TIMER_H_
