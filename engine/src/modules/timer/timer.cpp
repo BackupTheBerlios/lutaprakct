@@ -2,13 +2,15 @@
 #include "timer.h"
 #include "SDL/SDL.h"
 
+#include <iostream>
+
 Timer::Timer(){
 		
 	if (SDL_WasInit(SDL_INIT_TIMER))
 		SDL_InitSubSystem(SDL_INIT_TIMER);
 }
 
-bool Timer::start(){
+bool Timer::start(void* data ){
 	
 	fps = 60;
 	elapsedTime = 0;
@@ -17,7 +19,7 @@ bool Timer::start(){
 	return true;
 }
 
-void Timer::update(){
+void Timer::update(void* data ){
 	
 	//calculo do tempo que passou desse frame pro anterior
 	lastTime = currentTime;
@@ -31,4 +33,6 @@ void Timer::update(){
 		ticks = 0;
 	}
 	ticks++;
+	
+//	std::cout << "fps " << fps << " current time " << currentTime << " lastTime " << lastTime <<" elapsed time " << elapsedTime << std::endl;
 }

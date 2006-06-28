@@ -10,45 +10,45 @@ sdlVideo::sdlVideo(){
 
 bool sdlVideo::initialize(int flags){
 
- this->flags = flags;
+	this->flags = flags;
 
- if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0){
-  std::cout << "ERRO: Nao foi possivel inicializar o SDL!" << std::endl;
-  return false;
- }
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER ) < 0){
+		std::cout << "ERRO: Nao foi possivel inicializar o SDL!" << std::endl;
+		return false;
+	}
  
- atexit(SDL_Quit);
- int sdlflags;
+	atexit(SDL_Quit);
+	int sdlflags;
 
- if (flags &SWSURFACE)
-  sdlflags = SDL_SWSURFACE;
- else if (flags &HWSURFACE) 
-  sdlflags = SDL_HWSURFACE;
+	if (flags &SWSURFACE)
+		sdlflags = SDL_SWSURFACE;
+	else if (flags &HWSURFACE) 
+		sdlflags = SDL_HWSURFACE;
  
- if (flags &ASYNCBLIT)
-  sdlflags |= SDL_ASYNCBLIT;
- if (flags &ANYFORMAT)
-  sdlflags |= SDL_ANYFORMAT;
- if (flags &HWPALETTE)
-  sdlflags |= SDL_HWPALETTE;
- if (flags &DOUBLEBUF){
-  if (flags &HWSURFACE)
-   sdlflags |= SDL_DOUBLEBUF;
- }
- if (flags &FULLSCREEN)
-  sdlflags |= SDL_FULLSCREEN;
- if (flags &OPENGL){
-  SDL_GL_SetAttribute( SDL_GL_RED_SIZE     , 8  );
-  SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE   , 8  );
-  SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE    , 8  );
-  SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE   , 8  );
-  SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE   , 24 );
-  SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE , 8  );
-  SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER , 1  );
-  sdlflags = SDL_OPENGL;
-  std::cout << "Flags do OpenGL/SDL inicializados!" << std::endl;
- }
- 	if (flags &OPENGLBLIT)
+	if (flags &ASYNCBLIT)
+		sdlflags |= SDL_ASYNCBLIT;
+	if (flags &ANYFORMAT)
+		sdlflags |= SDL_ANYFORMAT;
+	if (flags &HWPALETTE)
+		sdlflags |= SDL_HWPALETTE;
+	if (flags &DOUBLEBUF){
+		if (flags &HWSURFACE)
+			sdlflags |= SDL_DOUBLEBUF;
+	}
+	if (flags &FULLSCREEN)
+		sdlflags |= SDL_FULLSCREEN;
+	if (flags &OPENGL){
+		SDL_GL_SetAttribute( SDL_GL_RED_SIZE     , 8  );
+		SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE   , 8  );
+		SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE    , 8  );
+		SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE   , 8  );
+		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE   , 24 );
+		SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE , 8  );
+		SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER , 1  );
+		sdlflags = SDL_OPENGL;
+		std::cout << "Flags do OpenGL/SDL inicializados!" << std::endl;
+	}
+	if (flags &OPENGLBLIT)
 		sdlflags |= SDL_OPENGLBLIT;
 	if (flags &RESIZABLE)
 		sdlflags |= SDL_RESIZABLE;
@@ -107,9 +107,9 @@ void sdlVideo::initializeOpenGl(){
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glClearStencil(0x00);
-	glPolygonOffset(1.0, 1.0);	
+	//glPolygonOffset(1.0, 1.0);	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 }

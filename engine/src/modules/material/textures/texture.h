@@ -1,7 +1,7 @@
 #ifndef _TEXTURE_H_
 #define _TEXTURE_H_
 
-#include "../../util/image/image.h"
+#include "../../../util/image/image.h"
 #include <GL/gl.h>
 #include <GL/glext.h>
 
@@ -75,10 +75,11 @@ public:
 	int getWidth(){return img->getWidth();}
 	int getHeight(){return img->getHeight();}
 	std::string name;
+
+	image *img;
 	
 private:
 
-	image *img;
 
 	GLuint id;
 	GLuint target;

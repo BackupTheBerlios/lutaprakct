@@ -16,19 +16,19 @@ bool Logger::initialize(){
 
 void Logger::write(char* logfilename, const char* msg, ...){
 	
-   va_list args; va_start(args,msg);
-   char szBuf[1024];
-   vsprintf(szBuf,msg,args);
+	va_list args; va_start(args,msg);
+	char szBuf[1024];
+	vsprintf(szBuf,msg,args);
 
 	std::ofstream out;
-	out.open(logfilename);
+	out.open(logfilename, std::ios::out | std::ios::app);
 
 	out << szBuf << std::endl;
 
 #ifdef DEBUG
 	out.flush();
 #endif
-   
+   out.close();
    
 }
 

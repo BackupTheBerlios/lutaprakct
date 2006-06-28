@@ -1,7 +1,7 @@
 
 #include "texture.h"
-#include "../../util/patterns/factories/imagefactory.h"
-#include "../../util/glext/glextensions.h"
+#include "../../../util/patterns/factories/imagefactory.h"
+#include "../../../util/glext/glextensions.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -199,8 +199,8 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 	glDisable(target);
 	//depois libera a memoria deletando a img
 	if(img){
-		delete img;
-		img = NULL;
+		//delete img;
+		//img = NULL;
 	}
 	return id;
 }

@@ -23,9 +23,9 @@ public:
 	
 	void handleEvent(const event &e){};
 	
-	bool start();
-	void update();
-	void stop();
+	bool start(void* data);
+	void update(void* data);
+	void stop(void* data);
 	
 	void informWindowSize(unsigned int x, unsigned int y);
 	void setMouseVelocity(float v);

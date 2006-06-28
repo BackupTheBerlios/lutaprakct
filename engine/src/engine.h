@@ -2,7 +2,7 @@
 #ifndef _ENGINE_H_
 #define _ENGINE_H_
 
-#include "modules/timer/timer.h"
+//#include "modules/timer/timer.h"
 #include "modules/renderer/renderer.h"
 #include "modules/events/input/sdlinputcore.h"
 
@@ -21,7 +21,7 @@ public:
 private:
 
 	MemoryManagedPointer<SdlInputCore> inputTask;
-	MemoryManagedPointer<Timer> globalTimer;
+//	MemoryManagedPointer<Timer> globalTimer;
 	MemoryManagedPointer<Renderer> rendererTask;
 
 };

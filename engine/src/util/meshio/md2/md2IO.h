@@ -1,10 +1,10 @@
 #ifndef _MD2IO_H_
 #define _MD2IO_H_
 
-#include "../../../modules/math/algebra.h"
+#include "../../math/algebra.h"
 #include "../nvMeshIO.h"
-#include "../../../modules/textures/texture.h"
-#include "../../../modules/textures/texturemanager.h"
+#include "../../../modules/material/textures/texture.h"
+#include "../../../modules/material/textures/texturemanager.h"
 
 #define MD2_OK         0x0
 #define MD2_ERR_MEM    0x1

@@ -3,7 +3,7 @@
 
 #include <map>
 #include <string>
-#include "../../util/patterns/singleton.h"
+#include "../../../util/patterns/singleton.h"
 #include "texture.h"
 
 /* essa classe faz uma associacao usando map entre o nome do file da textura
@@ -33,6 +33,6 @@ public:
 	void freeAll();
 };
 
-typedef singleton<textureManager> TextureManager;
+typedef singleton<textureManager> TEXTUREMANAGER;
 
 #endif //_TEXTUREMANAGER_H_

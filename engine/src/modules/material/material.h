@@ -1,9 +1,9 @@
 #ifndef _MATERIAL_H_
 #define _MATERIAL_H_
 
-#include "materialData.h";
-#include "../textures/texture.h"
-#include "../textures/texturemanager.h"
+#include "materialData.h"
+#include "textures/texture.h"
+#include "textures/texturemanager.h"
 
 /* interface da classe responsavel pelo material. os outros tipos de material
  * devem herdar dessa classe e possuem informa?oes adicionais e metodos adicionais

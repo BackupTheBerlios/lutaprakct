@@ -3,17 +3,17 @@
 #include "../event.h"
 #include <SDL/SDL.h>
 
-void SdlInputCore::stop(){
+void SdlInputCore::stop(void* data){
 }
 
 //TODO alterar o lance do 800x600
-bool SdlInputCore::start(){
+bool SdlInputCore::start(void* data){
 	informWindowSize(800, 600);
 	setMouseVelocity(10.0);
 	return true;	
 }
 
-void SdlInputCore::update(){
+void SdlInputCore::update(void* data){
 	
 	SDL_Event event_sdl;
 	

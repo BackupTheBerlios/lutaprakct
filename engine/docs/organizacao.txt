@@ -1,0 +1,83 @@
+A pasta engine tem as seguintes pastas:
+
+/data: onde ficam os meshes e texturas
+/docs: onde ficam a documenta??o
+/libs: as libs que estao sendo utilizadas (atualmente nenhuma)
+/src: o codigo
+/src/modules: codigo necessario pra rodar a engine.
+/src/util: classes e fun?oes auxiliares utilizadas pos outros modules ou util
+
+Lista de Modulos:
+
+core: ? o principal da arquitetura da engine. contem a interface Task e a classe kernel,
+que ? respons?vel por executar todas as tasks. (talvez mudar o nome kernel pra gamecore)
+
+events: sistema de eventos da engine, aqui existe a pasta input/ que tem as fun?oes do SDL
+pra pegar o input do mouse e teclado, essa classe ? a sdlInputCore.
+Alem disso existe a interface eventHandler que todas as classes que precisam receber
+eventos tem que herdar (por exemplo a classe camera). A classe eventDispatcher ? um
+singleton que possui ? chamado pelo construtor do eventHandler. Logo, quando um eventhandler
+? instanciado, ele ? adicionado em uma fila no eventDispatcher. Quando algum evento ?
+enviado pelo sdlInputCore ou pela fun??o sendEvent() de algum eventHandler, essa fun??o
+? enviada para o eventDispacther que percorre a lista de eventHandlers.
+Toda classe que herdar de eventHandler tem q implementar o metodo handleEvent onde deve
+ser implementado o codigo para tratamento do evento. (por exemplo o metodo handleEvent da
+camera deve tratar o input das teclas de se mover e o mouse)
+
+light: ainda nao foi feito. Esse sistema vai controlar quais luzes estao visiveis na cena.
+Entao para cada luz, para cada objeto visivel,  desenhe esse objeto.
+
+material: o sistema de material ? formado por textura + shader. A classe material ? uma
+interface tambem com os metodos virtuais initialize, bind e unbind. esses metodos sao
+virtuais pq dependendo do material eles sao inicializados e setados de maneira diferente.
+dentro desse module tem a pasta /textures, que contem duas classes: texture e textureManager
+que ? um singleton. use sempre TextureManager::getInstance.load() pra carregar uma textura
+
+mesh: classe que trata todos os meshes. por enquanto so tem a pasta terreno.
+/terreno: o terreno ? gerado lendo um heightmap e por bruteforce mesmo, mas ele usa uma
+octree para nao desenhar toda a cena.
+
+renderer: classe que tem o mainloop de desenho da engine. basicamente ele percorre todos
+os objetos e desenha eles, aplica o material, etc
+/camera: classe que trata a camera. precisa ser refeita.
+/video: classe simples que trata da inicializa??o da janela usando sdl. a inicializa??o
+do opengl fica aqui tbm.
+
+settings: classe que por enquanto so guarda informa??es e nao esta sendo usada. depois 
+ela sera utilizada para descobrir recursos do pc de quem esta rodando a maquina e configurar
+o game pra aquela maquina.
+
+shaders: contem os wrapers pra tratar os shaders. ? uma interface e algumas fun?oes basicas.
+os outros shaders devem herdar dessa classe.
+
+timer: classe simples, ? um singleton que fica contando o tempo que passou entre 2 frames
+e os FPS
+
+Lista de Utils:
+
+glext: inicializa??o das extensions do opengl.
+
+image: classe pra ler imagens. por enquanto so tga.
+
+interfaces: interfaces genericas. talvez obsoletas.
+
+logger: logger ? um singleton. use pra debugar.
+
+math: varias classes pra tratar vetores, matrizes e quaternions e outras opera??es 
+matematicas.
+
+memory: garbage colector e smart pointers.
+
+meshio: classes e fun??es responsaveis por carregar formatos de meshes como .ase, .obj e
+outros. algumas fun?oes sao do SDK da nvidia. implementar para ler collada no futuro.
+
+patterns: classes de padroes de projeto. talvez as factories estejam obsoletas e seja
+melhor fazer uma fun??o que retorna a interface. o singleton ? o padrao mais utilizado,
+leia o comentario para saber como utiliza-lo. alem disso tem uma classe pra functors,
+mas talvez seja melhor usar os functors implementados no STL e o dator (uma classe generica
+para guardar qualquer tipo basico).
+
+profiler: faz os calculos de como esta o uso da engine. precisa de reparos.
+
+structures: estruturas de dados usadas na engine. apesar de usar muitas estruturas da STL
+algumas precisam ser implementadas como octrees, dentre outras.

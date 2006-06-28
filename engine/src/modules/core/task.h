@@ -12,11 +12,11 @@ class Task : public MemoryManagedObject{
 			priority = 5000;
 		}
 		
-		virtual bool start()=0;
-		virtual void onSuspend(){};
-		virtual void update()=0;
-		virtual void onResume(){};
-		virtual void stop()=0;
+		virtual bool start(void* data)=0;
+		virtual void onSuspend(void* data ){};
+		virtual void update(void* data)=0;
+		virtual void onResume(void* data){};
+		virtual void stop(void* data ) = 0;
 
 		bool canKill;
 		long priority;

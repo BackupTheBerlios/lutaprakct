@@ -7,28 +7,32 @@
 
 #include "modules/renderer/renderer.h"
 #include "modules/core/kernel.h"
-#include "modules/timer/timer.h"
+//#include "modules/timer/timer.h"
 
 void Engine::run(){
 	
 	if(!LOGGER::getInstance().initialize())return;
 
 	LOGGER::getInstance().write("start.log", "Inicializando engine");
+
 	//parse the 'settings.eng' file
 	//SETTINGS::getInstance().parseFile("settings.esf");
-	
+
+	LOGGER::getInstance().write("start.log", "Inicializando renderer");	
 	rendererTask = new Renderer();
 	rendererTask->priority=10000;
 	KERNEL::getInstance().addTask( (MemoryManagedPointer<Task>(rendererTask)) );
 
+	LOGGER::getInstance().write("start.log", "Inicializando input");	
 	inputTask = new SdlInputCore();
 	inputTask->priority=20;
 	KERNEL::getInstance().addTask(MemoryManagedPointer<Task>(inputTask));
 
-	globalTimer=new Timer();
+/*	globalTimer=new Timer();
 	globalTimer->priority=10;
-	KERNEL::getInstance().addTask(MemoryManagedPointer<Task>(globalTimer));
+	KERNEL::getInstance().addTask(MemoryManagedPointer<Task>(globalTimer));*/
 
+	LOGGER::getInstance().write("start.log", "Inicializando profiler");
 	//set up the profiler with an output handler
 	ProfileLogHandler profileLogHandler;
 	ProfileSample::outputHandler=&profileLogHandler;

@@ -4,16 +4,16 @@
 
 #include <iostream>
 
-camera::camera(){
+Camera::Camera(){
 	initialize();
 }
 
-void camera::initialize(){
+void Camera::initialize(){
 	identity(modelview);
     time = 0.0f;	
 }
 
-camera::~camera(){
+Camera::~Camera(){
 }
 
 /* move em x unidades a camera no eixo axis.
@@ -24,7 +24,7 @@ camera::~camera(){
  * |m2 m6 m10   z|
  * |m3 m7 m11 m15|
  */
-void camera::move(float x, vec3 axis){
+void Camera::move(float x, vec3 axis){
 
 	x *= time;
 	
@@ -39,7 +39,7 @@ void camera::move(float x, vec3 axis){
 		
 }
 
-void camera::rotate(float angle, vec3 axis){
+void Camera::rotate(float angle, vec3 axis){
 	
 	angle *= time;
 	
@@ -77,19 +77,21 @@ void camera::rotate(float angle, vec3 axis){
 	
 }
 
-void camera::update(float time){
+void Camera::update(float time){
 
 	this->time = time;
 	glLoadMatrixf(modelview.mat_array);
 	
 }
 
-vec3 camera::getPosition(){
+vec3 Camera::getPosition(){
 	return vec3(modelview[12], modelview[13], modelview[14]);
 }
 
-void camera::handleEvent(const event &e){
+void Camera::handleEvent(const event &e){
 
+	std::cout << "camera handleEvent" << std::endl;
+	std::cout << "x " << modelview[12] << " y "<< modelview[13] << " z " << modelview[14] << std::endl;
 	switch (e.type){
 		case E_MOUSE_ROTATE_X: rotate(e.arg1, vec3(0.0, 1.0, 0.0)); break;
 		case E_MOUSE_ROTATE_Y: rotate(e.arg1, vec3(1.0, 0.0, 0.0)); break;

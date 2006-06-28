@@ -3,6 +3,7 @@
 
 
 #include "../core/task.h"
+#include "../../util/patterns/singleton.h"
 
 /*classe que mede o tempo entre os frames e o FPS*/
 class Timer : public Task {
@@ -14,9 +15,9 @@ public:
 	float getFPS(){ return fps; }
 	float getElapsedTime(){ return elapsedTime; }
 	
-	void  update();
-	void stop() { }; //sem stop
-	bool start();
+	void  update(void* data );
+	void stop(void* data ) { }; //sem stop
+	bool start(void* data );
 
 	AUTO_SIZE;
 
@@ -28,5 +29,7 @@ private:
 	float elapsedTime;
 	float fps;
 };
+
+typedef singleton<Timer> TIMER;
 
 #endif //_TIMER_H_

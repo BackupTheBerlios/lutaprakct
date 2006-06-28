@@ -1,4 +1,5 @@
 #include "texturemanager.h"
+#include <iostream>
  
 texture* textureManager::load(char *name, int target, int format, int internalformat, int flags){
   

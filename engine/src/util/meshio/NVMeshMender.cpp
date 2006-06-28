@@ -98,7 +98,7 @@ Comments:
 
 
 #include "NVMeshMender.h"
-#include "../../modules/math/algebra.h"
+#include "../math/algebra.h"
 #include <map>
 #include <set>
 #include <assert.h>

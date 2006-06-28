@@ -1,9 +1,9 @@
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
-#include "../math/algebra.h"
-#include "../events/eventhandler.h"
-#include "../../util/patterns/singleton.h"
+#include "../../../util/math/algebra.h"
+#include "../../events/eventhandler.h"
+#include "../../../util/patterns/singleton.h"
 
 /** Nao foi criado interface nem factory para a camera. essa camera atual eh muito simples
  * e usa quaternion, nao faz sentido criar outro modelo de camera (vetorial por exemplo) e criar a
@@ -13,12 +13,12 @@
  /** TODO rotatearound e positioncamera ?
   */
  
-class camera : public eventHandler {
+class Camera : public eventHandler {
  	
 public:
 
-	camera();
-	~camera();
+	Camera();
+	~Camera();
 	void initialize();
 	void rotate(float angle, vec3 axis);
 	void move(float x, vec3 axis);
@@ -36,6 +36,6 @@ private:
  	
 };
 
-typedef singleton<camera> Camera;
+typedef singleton<Camera> CAMERA;
 
 #endif //_CAMERA_H_

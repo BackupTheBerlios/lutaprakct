@@ -22,7 +22,7 @@ Comments:
 
 #include "nv_ase.h"
 #include <assert.h>
-#include "../../../modules/math/algebra.h"
+#include "../../math/algebra.h"
 
 // File mapper name
 #define NV_ASE_MAPPER_NAME "NvASEFileMapper"
