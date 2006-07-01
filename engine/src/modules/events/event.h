@@ -15,6 +15,8 @@ enum eventType
   E_KEY_LEFT,
   E_KEY_RIGHT,
   
+  E_KEY_ESC,
+  
   E_MOUSE_ROTATE_X,
   E_MOUSE_ROTATE_Y
   
