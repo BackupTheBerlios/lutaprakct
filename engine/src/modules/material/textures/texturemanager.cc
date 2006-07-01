@@ -43,7 +43,7 @@ void textureManager::freeAll(){
 	 ids.clear();
 }
 
-void textureManager::setDefaultFlags(int flags){
+void textureManager::setDefaultFlags(){
 
 	flags = texture::LINEAR_MIPMAP_LINEAR ;
 	flags |= texture::MIPMAP_SGI;

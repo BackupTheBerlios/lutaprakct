@@ -48,10 +48,10 @@ public:
 	};
 	//internal formats
 	enum {
-		RGB8                    = 1,
-		RGBA8                   = 2,
-		RGB16                   = 3,
-		RGBA16                  = 4
+		RGB8                    = GL_RGB8,
+		RGBA8                   = GL_RGBA8,
+		RGB16                   = GL_RGB16,
+		RGBA16                  = GL_RGBA16
 	};
 	
 	//targets

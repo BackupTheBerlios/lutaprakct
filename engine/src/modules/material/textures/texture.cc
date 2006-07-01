@@ -58,6 +58,8 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 	this->flags = flags;
 	this->target = target;
 	
+	//primeiro verifica o formato. se tiver compressao o formato interno deve ser outro
+	//se nao tiver compressao recebe o formato interno passado
 	if ( format == RGB ){
 		this->format = GL_RGB;
 		if (flags &COMPRESSION_ARB)
@@ -67,7 +69,6 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 		else
 			this->internalformat = internalformat;
 	}
-	
 	else if (format == RGBA) {
 		this->format = GL_RGBA;
 		if (flags &COMPRESSION_ARB)
@@ -111,70 +112,71 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 		
 	}
 	
-	glEnable(target);
-	glGenTextures(1,&id);
-	glBindTexture(target,id);
+	glEnable(this->target);
+	glGenTextures(1, &id);
+	glBindTexture(this->target, id);
 	
+	//verifica algusn flags
 	if (flags & CLAMP){
-		glTexParameteri(target,GL_TEXTURE_WRAP_S,GL_CLAMP);
-		glTexParameteri(target,GL_TEXTURE_WRAP_T,GL_CLAMP);
-		glTexParameteri(target,GL_TEXTURE_WRAP_R,GL_CLAMP);
+		glTexParameteri(this->target, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(this->target, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameteri(this->target, GL_TEXTURE_WRAP_R, GL_CLAMP);
 	} 
 	else if (flags & CLAMP_TO_EDGE) {
-		glTexParameteri(target,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-		glTexParameteri(target,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-		glTexParameteri(target,GL_TEXTURE_WRAP_R,GL_CLAMP_TO_EDGE);
+		glTexParameteri(this->target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(this->target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(this->target, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	}
 		
 	if (flags & NEAREST){
-		glTexParameteri(target,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-		glTexParameteri(target,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+		glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	} 
 	else if (flags & LINEAR) {
-		glTexParameteri(target,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-		glTexParameteri(target,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	} 
 	else if (flags & NEAREST_MIPMAP_NEAREST) {
 		if ( flags &MIPMAP_SGI)
-			glTexParameteri(target,GL_GENERATE_MIPMAP_SGIS,GL_TRUE);
-		glTexParameteri(target,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-		glTexParameteri(target,GL_TEXTURE_MIN_FILTER,GL_NEAREST_MIPMAP_NEAREST);
+			glTexParameteri(this->target, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+		glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	} 
 	else if (flags & NEAREST_MIPMAP_LINEAR) {
 		if ( flags &MIPMAP_SGI)
-			glTexParameteri(target,GL_GENERATE_MIPMAP_SGIS,GL_TRUE);
-		glTexParameteri(target,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-		glTexParameteri(target,GL_TEXTURE_MIN_FILTER,GL_NEAREST_MIPMAP_LINEAR);
+			glTexParameteri(this->target, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+		glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	} 
 	else if (flags & LINEAR_MIPMAP_NEAREST) {
 		if ( flags &MIPMAP_SGI)
-			glTexParameteri(target,GL_GENERATE_MIPMAP_SGIS,GL_TRUE);
-		glTexParameteri(target,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-		glTexParameteri(target,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
+			glTexParameteri(this->target, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+		glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	} 
 	else if (flags & LINEAR_MIPMAP_LINEAR ) {
 		if ( flags &MIPMAP_SGI)
-			glTexParameteri(target,GL_GENERATE_MIPMAP_SGIS,GL_TRUE);
-		glTexParameteri(target,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-		glTexParameteri(target,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+			glTexParameteri(this->target, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+		glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	}
 	
 	if (flags & ANISOTROPIC_2 )
-		glTexParameteri(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 2);
+		glTexParameteri(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 2);
 	else if (flags & ANISOTROPIC_4)
-		glTexParameteri(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
+		glTexParameteri(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
 	else if (flags & ANISOTROPIC_8)
-		glTexParameteri(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 8);
+		glTexParameteri(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 8);
 	else if (flags & ANISOTROPIC_16)
-		glTexParameteri(target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
+		glTexParameteri(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
 	
 	if (target == TEXTURE_1D){
 		img = (image*) ImageFactory::getInstance().create(filename);
-		glTexImage1D(target, 0, internalformat, img->getWidth(), 0, format, GL_UNSIGNED_BYTE, img->imagedata);
+		glTexImage1D(this->target, 0, this->internalformat, img->getWidth(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
 	}
 	else if ( (target == TEXTURE_2D) || (target == TEXTURE_RECTANGLE) || (target == TEXTURE_RECTANGLENV) ){
 		img = (image*) ImageFactory::getInstance().create(filename);
-		glTexImage2D(target, 0, internalformat, img->getWidth(), img->getHeight(), 0, format, GL_UNSIGNED_BYTE, img->imagedata);
+		glTexImage2D(this->target, 0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
 	}
 	
 	//nao carregue cubemaps com png.
@@ -189,7 +191,7 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 		for (int i = 0; i < 6; i++){
 			sprintf(buff, filename, facenames[i]);
 			img = (image*) ImageFactory::getInstance().create(buff);
-			glTexImage2D(facetargets[i],0, internalformat, img->getWidth(), img->getHeight(),0,format,GL_UNSIGNED_BYTE, img->imagedata);
+			glTexImage2D(facetargets[i],0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
 			if (img->imagedata){
 				delete img;
 				img = NULL;
