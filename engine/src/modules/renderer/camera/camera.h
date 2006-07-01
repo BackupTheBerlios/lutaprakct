@@ -18,21 +18,28 @@ class Camera : public eventHandler {
 public:
 
 	Camera();
-	~Camera();
-	void initialize();
-	void rotate(float angle, vec3 axis);
-	void move(float x, vec3 axis);
- 	void update(float time);
- 	
- 	vec3 getPosition();
- 	
- 	void handleEvent(const event &e);
- 	
-private:
 
-    float velocity, velocityRotate;
-	float time;
-    mat4 modelview;
+	void setPosition(float x, float y, float z,
+                     float xv, float yv, float zv,
+                     float xu, float yu, float zu);
+
+	void move(float direction);
+	void update(float xDir, float yDir,
+                        float zDir, float dir);
+	void strafe(float direction);
+	void calculateStrafe();
+	void rotate(float AngleDir, float xSpeed,
+                        float ySpeed, float zSpeed);
+	void rotateByMouse(int mousePosX, int mousePosY,
+                         int midX, int midY);
+
+ 	void handleEvent(const event &e);
+
+	float xPos, yPos, zPos;                         
+	float xView, yView, zView;                      
+	float xUp, yUp, zUp;                            
+	float xStrafe, yStrafe, zStrafe;                
+	float currentRotationAngle;                     
  	
 };
 

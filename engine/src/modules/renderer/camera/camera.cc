@@ -4,101 +4,196 @@
 
 #include <iostream>
 
+
 Camera::Camera(){
-	initialize();
+	xPos = yPos = zPos = 0;
+	xView = yView = zView = 0;
+	xUp = yUp = zUp = 0;
+	xStrafe = yStrafe = zStrafe = 0;
 }
 
-void Camera::initialize(){
-	identity(modelview);
-    time = 0.0f;	
+
+void Camera::setPosition(float x, float y, float z,
+                        float xv, float yv, float zv,
+                        float xu, float yu, float zu){
+	xPos = x;   yPos = y;   zPos = z;
+	xView = xv; yView = yv; zView = zv;
+	xUp = xu;   yUp = yu;   zUp = zu;
 }
 
-Camera::~Camera(){
+
+void Camera::move(float space){
+	
+	float xLookDirection = 0, yLookDirection = 0, zLookDirection = 0;
+
+	//acha o vetor direcao
+	xLookDirection = xView - xPos;
+	yLookDirection = yView - yPos;
+	zLookDirection = zView - zPos;
+
+	//normaliza
+	float dp = 1 /(float)sqrt(xLookDirection * xLookDirection + yLookDirection * yLookDirection +
+                             zLookDirection * zLookDirection);
+	xLookDirection *= dp;
+	yLookDirection *= dp;
+	zLookDirection *= dp;
+
+	update(xLookDirection, yLookDirection, zLookDirection, space);
 }
 
-/* move em x unidades a camera no eixo axis.
- * o processo eh so criar a matriz de translacao com o axis e multiplicar pela modelview
- * matriz de translacao tem o formato:
- * |m0 m4 m8    x|
- * |m1 m5 m9    y|
- * |m2 m6 m10   z|
- * |m3 m7 m11 m15|
- */
-void Camera::move(float x, vec3 axis){
 
-	x *= time;
+void Camera::update(float xDir, float yDir, float zDir, float space){
 	
-	mat4 translation;
-	identity(translation);
-	axis = (-x)*axis;
+	xPos += xDir * space;
+	yPos += yDir * space;
+	zPos += zDir * space;
 
-	translation[12] = axis.x;
-	translation[13] = axis.y;
-	translation[14] = axis.z;
-	modelview = modelview*translation;
-		
+	xView += xDir * space;
+	yView += yDir * space;
+	zView += zDir * space;
 }
 
-void Camera::rotate(float angle, vec3 axis){
+
+void Camera::strafe(float space){
 	
-	angle *= time;
-	
-	quat rotation, rotationConjugate;
-	angle = degtorad(angle);
-	
-	rotation = axisToQuaternion(angle, axis);
-	rotationConjugate = conjugate(rotation);
-	
-	quat quatX(1.0, 0.0, 0.0, 0.0),
-	     quatY(0.0, 1.0, 0.0, 0.0),
-	     quatZ(0.0, 0.0, 1.0, 0.0);
-	
-	quatX = rotation * quatX * rotationConjugate;
-	quatY = rotation * quatY * rotationConjugate;
-	quatZ = rotation * quatZ * rotationConjugate;
-	
-	mat4 matrix;
-	
-	identity(matrix);
-	
-	matrix[0] = quatX.x;
-	matrix[4] = quatX.y;
-	matrix[8] = quatX.z;
-	
-	matrix[1] = quatY.x;
-	matrix[5] = quatY.y;
-	matrix[9] = quatY.z;
-	
-	matrix[2] = quatZ.x;
-	matrix[6] = quatZ.y;
-	matrix[10] = quatZ.z;
-	
-	modelview = modelview * matrix;
-	
+   calculateStrafe();
+   update(xStrafe, yStrafe, zStrafe, space);
 }
 
-void Camera::update(float time){
 
-	this->time = time;
-	glLoadMatrixf(modelview.mat_array);
+void Camera::calculateStrafe(){
 	
+	float xDir = 0, yDir = 0, zDir = 0;
+	float xCross = 0, yCross = 0, zCross = 0;
+
+	xDir = xView - xPos;
+	yDir = yView - yPos;
+	zDir = zView - zPos;
+
+	float dp = 1 /(float)sqrt(xDir * xDir + yDir * yDir + zDir * zDir);
+	xDir *= dp;
+	yDir *= dp;
+	zDir *= dp;
+
+	//faz o cross product entre o vetor Up e o Direction. Com isso pegamos o vetor 
+	// perpendicular, que no caso esta no eixo x.
+
+	xCross = (yDir * zUp) - (zDir * yUp);
+	yCross = (zDir * xUp) - (xDir * zUp);
+	zCross = (xDir * yUp) - (yDir * xUp);
+
+	xStrafe = xCross;
+	yStrafe = yCross;
+	zStrafe = zCross;
 }
 
-vec3 Camera::getPosition(){
-	return vec3(modelview[12], modelview[13], modelview[14]);
+
+void Camera::rotate(float AngleDir, float xSpeed, float ySpeed, float zSpeed){
+	
+	float xNewLookDirection = 0, yNewLookDirection = 0, zNewLookDirection = 0;
+	float xLookDirection = 0, yLookDirection = 0, zLookDirection = 0;
+	float CosineAngle = 0, SineAngle = 0;
+
+	CosineAngle = (float)cos(AngleDir);
+	SineAngle = (float)sin(AngleDir);
+
+	xLookDirection = xView - xPos;
+	yLookDirection = yView - yPos;
+	zLookDirection = zView - zPos;
+
+	float dp = 1 /(float)sqrt(xLookDirection * xLookDirection + yLookDirection * yLookDirection +
+                             zLookDirection * zLookDirection);
+	xLookDirection *= dp;
+	yLookDirection *= dp;
+	zLookDirection *= dp;
+
+	// Calculate the new X position.
+	xNewLookDirection = (CosineAngle + (1 - CosineAngle) * xSpeed) * xLookDirection;
+	xNewLookDirection += ((1 - CosineAngle) * xSpeed * ySpeed - zSpeed * SineAngle)* yLookDirection;
+	xNewLookDirection += ((1 - CosineAngle) * xSpeed * zSpeed + ySpeed * SineAngle) * zLookDirection;
+
+	// Calculate the new Y position.
+	yNewLookDirection = ((1 - CosineAngle) * xSpeed * ySpeed + zSpeed * SineAngle) * xLookDirection;
+	yNewLookDirection += (CosineAngle + (1 - CosineAngle) * ySpeed) * yLookDirection;
+	yNewLookDirection += ((1 - CosineAngle) * ySpeed * zSpeed - xSpeed * SineAngle) * zLookDirection;
+
+	// Calculate the new Z position.
+	zNewLookDirection = ((1 - CosineAngle) * xSpeed * zSpeed - ySpeed * SineAngle) * xLookDirection;
+	zNewLookDirection += ((1 - CosineAngle) * ySpeed * zSpeed + xSpeed * SineAngle) * yLookDirection;
+	zNewLookDirection += (CosineAngle + (1 - CosineAngle) * zSpeed) * zLookDirection;
+
+
+	// Last we add the new rotations to the old view to correctly rotate the camera.
+	xView = xPos + xNewLookDirection;
+	yView = yPos + yNewLookDirection;
+	zView = zPos + zNewLookDirection;
+}
+
+
+void Camera::rotateByMouse(int mousePosX, int mousePosY, int midX, int midY){
+
+	
+	float yDirection = 0.0f;         // Direction angle.
+	float yRotation = 0.0f;          // Rotation angle.
+
+	//se o mouse nao se moveu, retorna
+	if((mousePosX == midX) && (mousePosY == midY)) 
+		return;
+
+	// Next we get the direction of each axis.  We divide by 1000 to get a smaller value back.
+	yDirection = (float)((midX - mousePosX)) / 1000.0f;		
+	yRotation = (float)((midY - mousePosY)) / 1000.0f;		
+
+	// We use curentRotX to help use keep the camera from rotating too far in either direction.
+	currentRotationAngle -= yRotation;  
+
+	// Stop the camera from going to high...
+	if(currentRotationAngle > 1.0f){
+		currentRotationAngle = 1.0f;
+		return;
+	}
+
+	// Stop the camera from going to low...
+	if(currentRotationAngle < -1.0f){
+		currentRotationAngle = -1.0f;
+		return;
+	}
+
+   // Next we get the axis which is a perpendicular vector of the view direction and up values.
+   // We use the cross product of that to get the axis then we normalize it.
+	float xAxis = 0, yAxis = 0, zAxis = 0;
+	float xDir = 0, yDir = 0, zDir = 0;
+
+   // Get the Direction of the view.
+	xDir = xView - xPos;
+	yDir = yView - yPos;
+	zDir = zView - zPos;
+
+   // Get the cross product of the direction and the up.
+	xAxis = (yDir * zUp) - (zDir * yUp);
+	yAxis = (zDir * xUp) - (xDir * zUp);
+	zAxis = (xDir * yUp) - (yDir * xUp);
+
+   // Normalize it.
+	float len = 1 /(float)sqrt(xAxis * xAxis + yAxis * yAxis + zAxis * zAxis);
+	xAxis *= len;
+	yAxis *= len;
+	zAxis *= len;
+
+   // Rotate the camera.
+	rotate(yRotation, xAxis, yAxis, zAxis);
+	rotate(yDirection, 0, 1, 0);
 }
 
 void Camera::handleEvent(const event &e){
 
-	std::cout << "camera handleEvent" << std::endl;
-	std::cout << "x " << modelview[12] << " y "<< modelview[13] << " z " << modelview[14] << std::endl;
 	switch (e.type){
-		case E_MOUSE_ROTATE_X: rotate(e.arg1, vec3(0.0, 1.0, 0.0)); break;
-		case E_MOUSE_ROTATE_Y: rotate(e.arg1, vec3(1.0, 0.0, 0.0)); break;
-		case E_KEY_UP:         move(10.0f, vec3(0.0, 0.0, (-1.0))); break;
-	    case E_KEY_DOWN:       move(10.0f, vec3(0.0, 0.0, 1.0)); break;
-	    case E_KEY_LEFT:       move(10.0f, vec3((-1.0), 0.0, 0.0)); break;
-	    case E_KEY_RIGHT:      move(10.0f, vec3(1.0, 0.0, 0.0)); break;
+		//case E_MOUSE_ROTATE_X: rotate(e.arg1, vec3(0.0, 1.0, 0.0)); break;
+		//case E_MOUSE_ROTATE_Y: rotate(e.arg1, vec3(1.0, 0.0, 0.0)); break;
+		case E_KEY_UP:         move(0.1); break;
+	    case E_KEY_DOWN:       move(-0.1); break;
+	    case E_KEY_LEFT:       strafe(-0.1); break;
+	    case E_KEY_RIGHT:      strafe(0.1); break;
 	}	
 	
 }
