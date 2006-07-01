@@ -120,6 +120,8 @@ void sdlVideo::setWindowTitle(char* title){
 
 void sdlVideo::lock(){
 	if (flags &OPENGL){
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}else{
 		if (SDL_MUSTLOCK(screen)) 
