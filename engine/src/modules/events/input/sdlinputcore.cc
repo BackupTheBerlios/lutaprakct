@@ -2,6 +2,7 @@
 #include "sdlinputcore.h"
 #include "../event.h"
 #include <SDL/SDL.h>
+#include "../../renderer/camera/camera.h"
 
 void SdlInputCore::stop(void* data){
 }
@@ -30,6 +31,7 @@ void SdlInputCore::update(void* data){
     if ( keystate[SDLK_DOWN] ) sendEvent(E_KEY_DOWN);
     if ( keystate[SDLK_LEFT] ) sendEvent(E_KEY_LEFT);
     if ( keystate[SDLK_RIGHT] ) sendEvent(E_KEY_RIGHT);
+    if ( keystate[SDLK_ESCAPE] ) sendEvent(E_KEY_ESC);
     
     /* mouse input */
 	int x, y;
@@ -38,14 +40,15 @@ void SdlInputCore::update(void* data){
 	int heightMiddle = winheight / 2;
 
 	SDL_GetMouseState(&x, &y);
+	CAMERA::getInstance().rotateByMouse(x, y, widthMiddle, heightMiddle);
 	
-	if (x != widthMiddle){
-		sendEvent(E_MOUSE_ROTATE_X, (x-widthMiddle)*mouseVelocity);
+	//if (x != widthMiddle){
+	//	sendEvent(E_MOUSE_ROTATE_X, (x-widthMiddle)*mouseVelocity);
 //		c->rotate((x - widthMiddle) * velMouse, vec3(0.0, 1.0, 0.0));
-	}if (y != heightMiddle){
-		sendEvent(E_MOUSE_ROTATE_Y, (y-heightMiddle)*mouseVelocity);
+	//}if (y != heightMiddle){
+	//	sendEvent(E_MOUSE_ROTATE_Y, (y-heightMiddle)*mouseVelocity);
 	//	c->rotate((y - heightMiddle) * velMouse, vec3(1.0, 0.0, 0.0));
-	}
+//	}
 	
 	SDL_WarpMouse(widthMiddle, heightMiddle);
 	
