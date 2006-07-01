@@ -4,8 +4,9 @@
 #include "task.h"
 #include "../../util/patterns/singleton.h"
 #include "../../util/memory/memoryManagedObject.h"
+#include "../events/eventhandler.h"
 
-class Kernel{
+class Kernel : public eventHandler{
 	
 	public:
 		Kernel();
@@ -18,6 +19,7 @@ class Kernel{
 		void resumeTask(MemoryManagedPointer<Task> t);
 		void removeTask(MemoryManagedPointer<Task> t);
 		void killAllTasks();
+		void handleEvent(const event &e);
 
 	protected:
 	

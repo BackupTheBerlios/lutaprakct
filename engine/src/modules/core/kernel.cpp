@@ -95,3 +95,9 @@ void Kernel::killAllTasks(){
 		(*it)->canKill=true;
 	}
 }
+
+void Kernel::handleEvent(const event &e){
+	switch (e.type){
+		case E_KEY_ESC:        killAllTasks(); break;
+	}		
+}
