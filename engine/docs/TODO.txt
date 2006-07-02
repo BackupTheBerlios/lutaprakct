@@ -11,3 +11,5 @@ TODO LIST
 9- fazer o shader de agua
 10- fazer atmospheric scattering
 11- testar o carregamendo de modelos md2 com animacao e se necessario refazer
+12- terminar o sistema de transicao de texturas no terreno
+13- adicionar noise para dar detalhe ao terreno ou usar detail textures
