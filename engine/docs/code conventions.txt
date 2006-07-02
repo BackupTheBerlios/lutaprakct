@@ -1,0 +1,34 @@
+
+
+1- Use sempre o * de ponteiro do lado do tipo e nao do lado da variavel.
+exemplo: char* c; e nao char *c;
+
+2- Use o nome das classes maiusculo e nomes dos metodos e variaveis em minusculo.
+
+3- Crie nome para as variaveis que tenham sentido e nao coisas como int* aux; ou char* str;
+ao inves disso use char* fileName; ou algo que indique o que a variavel faz.
+
+4- Nome de variaveis e metodos sempre comecam minusculo, caso sejam palavras compostas 
+coloquem em maisculo o segundo nome, mas nao use _. por exemplo char* fileName; e nao
+char* file_name;
+
+5- A chave aberta { fica sempre na mesma linha onde ela foi usada, por exemplos:
+
+if (x){
+	...
+}
+
+while (x){
+	...
+}
+
+class foo{
+
+};
+
+6- Use espa?o entre operadores aritimeticos e entre parametros passados em funcoes:
+
+a = b + c; e nao a=b+c; e nem a = b+c;
+
+
+

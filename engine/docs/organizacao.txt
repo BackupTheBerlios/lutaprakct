@@ -1,7 +1,7 @@
 A pasta engine tem as seguintes pastas:
 
 /data: onde ficam os meshes e texturas
-/docs: onde ficam a documenta??o
+/docs: onde ficam a documentacao
 /libs: as libs que estao sendo utilizadas (atualmente nenhuma)
 /src: o codigo
 /src/modules: codigo necessario pra rodar a engine.
@@ -9,17 +9,17 @@ A pasta engine tem as seguintes pastas:
 
 Lista de Modulos:
 
-core: ? o principal da arquitetura da engine. contem a interface Task e a classe kernel,
-que ? respons?vel por executar todas as tasks. (talvez mudar o nome kernel pra gamecore)
+core: eh o principal da arquitetura da engine. contem a interface Task e a classe kernel,
+que eh responsavel por executar todas as tasks. (talvez mudar o nome kernel pra gamecore)
 
 events: sistema de eventos da engine, aqui existe a pasta input/ que tem as fun?oes do SDL
-pra pegar o input do mouse e teclado, essa classe ? a sdlInputCore.
+pra pegar o input do mouse e teclado, essa classe eh a sdlInputCore.
 Alem disso existe a interface eventHandler que todas as classes que precisam receber
 eventos tem que herdar (por exemplo a classe camera). A classe eventDispatcher ? um
-singleton que possui ? chamado pelo construtor do eventHandler. Logo, quando um eventhandler
-? instanciado, ele ? adicionado em uma fila no eventDispatcher. Quando algum evento ?
-enviado pelo sdlInputCore ou pela fun??o sendEvent() de algum eventHandler, essa fun??o
-? enviada para o eventDispacther que percorre a lista de eventHandlers.
+singleton que possui eh chamado pelo construtor do eventHandler. Logo, quando um eventhandler
+eh instanciado, ele eh adicionado em uma fila no eventDispatcher. Quando algum evento ?
+enviado pelo sdlInputCore ou pela funcao sendEvent() de algum eventHandler, essa fun??o
+eh enviada para o eventDispacther que percorre a lista de eventHandlers.
 Toda classe que herdar de eventHandler tem q implementar o metodo handleEvent onde deve
 ser implementado o codigo para tratamento do evento. (por exemplo o metodo handleEvent da
 camera deve tratar o input das teclas de se mover e o mouse)
@@ -47,23 +47,26 @@ settings: classe que por enquanto so guarda informa??es e nao esta sendo usada. 
 ela sera utilizada para descobrir recursos do pc de quem esta rodando a maquina e configurar
 o game pra aquela maquina.
 
-shaders: contem os wrapers pra tratar os shaders. ? uma interface e algumas fun?oes basicas.
+shaders: contem os wrapers pra tratar os shaders. eh uma interface e algumas funcoes basicas.
 os outros shaders devem herdar dessa classe.
 
-timer: classe simples, ? um singleton que fica contando o tempo que passou entre 2 frames
+timer: classe simples, eh um singleton que fica contando o tempo que passou entre 2 frames
 e os FPS
+
+effects: essa pasta talvez mude de lugar. por enquanto so tem a fog que eh um wraper
+sobre as fun?oes de fog do opengl.
 
 Lista de Utils:
 
-glext: inicializa??o das extensions do opengl.
+glext: inicializacao das extensions do opengl.
 
 image: classe pra ler imagens. por enquanto so tga.
 
 interfaces: interfaces genericas. talvez obsoletas.
 
-logger: logger ? um singleton. use pra debugar.
+logger: logger eh um singleton. use pra debugar.
 
-math: varias classes pra tratar vetores, matrizes e quaternions e outras opera??es 
+math: varias classes pra tratar vetores, matrizes e quaternions e outras operacoes 
 matematicas.
 
 memory: garbage colector e smart pointers.
