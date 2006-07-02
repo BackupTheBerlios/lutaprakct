@@ -1,0 +1,13 @@
+TODO LIST
+
+1- colocar o profiler pra funcionar
+2- refazer a camera usando quaternion
+3- remover a factory pra imagem e pra videosystem
+4- fazer o sistema de GUI usando opengl
+5- fazer o skydome com nuvens geradas por shaders
+6- fazer o sistema de billboarding para a vegeta??o
+7- testar as octrees do terreno
+8- fazer horizon texture no terreno
+9- fazer o shader de agua
+10- fazer atmospheric scattering
+11- testar o carregamendo de modelos md2 com animacao e se necessario refazer
