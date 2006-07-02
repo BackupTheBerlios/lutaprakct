@@ -172,10 +172,14 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 	
 	if (target == TEXTURE_1D){
 		img = (image*) ImageFactory::getInstance().create(filename);
+		width = img->getWidth();
+		height = 0;
 		glTexImage1D(this->target, 0, this->internalformat, img->getWidth(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
 	}
 	else if ( (target == TEXTURE_2D) || (target == TEXTURE_RECTANGLE) || (target == TEXTURE_RECTANGLENV) ){
 		img = (image*) ImageFactory::getInstance().create(filename);
+		width = img->getWidth();
+		height = img->getHeight();
 		glTexImage2D(this->target, 0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
 	}
 	
@@ -191,6 +195,8 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 		for (int i = 0; i < 6; i++){
 			sprintf(buff, filename, facenames[i]);
 			img = (image*) ImageFactory::getInstance().create(buff);
+			width = img->getWidth();
+			height = img->getHeight();
 			glTexImage2D(facetargets[i],0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
 			if (img->imagedata){
 				delete img;

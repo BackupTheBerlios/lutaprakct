@@ -72,8 +72,10 @@ public:
 	void disable();
 	void bind();
 	void unload();
-	int getWidth(){return img->getWidth();}
-	int getHeight(){return img->getHeight();}
+	
+	int getWidth(){return width;}
+	int getHeight(){return height;}
+	int getId(){ return id; }
 	std::string name;
 
 	image *img;
@@ -84,6 +86,8 @@ private:
 	GLuint id;
 	GLuint target;
 	GLuint format, internalformat;
+	
+	int width, height;
 	int flags;
 	
 };
