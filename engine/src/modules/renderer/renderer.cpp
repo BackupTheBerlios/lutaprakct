@@ -5,13 +5,19 @@
 #include "../timer/timer.h"
 #include "../../util/interfaces/product.h"
 #include "../../util/patterns/factories/videofactory.h"
-
 #include "../../util/logger/logger.h"
 #include "../../util/math/algebra.h"
+#include "../../util/glext/glextensions.h"
+
+#include "../effects/fog/fog.h"
 
 #include <iostream>
 
 GLuint terrainTexID;
+Fog *f;
+texture *t;
+texture *t2;
+texture *alpha;
 
 void RenderOctreeNode(Octree* pNode)
 {
@@ -47,18 +53,24 @@ void RenderOctreeNode(Octree* pNode)
          float *pTC2 = pNode->getTexCoord2();
 
          // Apply the textures.
-         //glActiveTextureARB(GL_TEXTURE0_ARB);
+         glActiveTextureARB(GL_TEXTURE0_ARB);
          glEnable(GL_TEXTURE_2D);
-         glBindTexture(GL_TEXTURE_2D, terrainTexID);
+        glBindTexture(GL_TEXTURE_2D, t->getId());
+       // t->enable();
+       // t->bind();
 
-        // glActiveTextureARB(GL_TEXTURE1_ARB);
-        // glEnable(GL_TEXTURE_2D);
-        // glBindTexture(GL_TEXTURE_2D, terrainDetailTex.ID);
+         glActiveTextureARB(GL_TEXTURE1_ARB);
+         glEnable(GL_TEXTURE_2D);
+         glBindTexture(GL_TEXTURE_2D, alpha->getId());
+         
+         glActiveTextureARB(GL_TEXTURE2_ARB);
+         glEnable(GL_TEXTURE_2D);
+         glBindTexture(GL_TEXTURE_2D, t2->getId());
 
-         //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
-         //glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE_ARB, 2);
+         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
+         glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE_ARB, 2);
 
-         //glActiveTextureARB(GL_TEXTURE0_ARB);
+         glActiveTextureARB(GL_TEXTURE0_ARB);
 
          // Set pointers.
          glEnableClientState(GL_VERTEX_ARRAY);
@@ -67,10 +79,15 @@ void RenderOctreeNode(Octree* pNode)
          glVertexPointer(3, GL_FLOAT, 0, pVerts);
          glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
          
-        //glClientActiveTextureARB(GL_TEXTURE1_ARB);
+         glClientActiveTextureARB(GL_TEXTURE1_ARB);
          glEnableClientState(GL_TEXTURE_COORD_ARRAY);
          glTexCoordPointer(2, GL_FLOAT, 0, pTC2);
-         //glClientActiveTextureARB(GL_TEXTURE0_ARB);
+         
+         glClientActiveTextureARB(GL_TEXTURE0_ARB);
+
+         glClientActiveTextureARB(GL_TEXTURE2_ARB);
+         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+         glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
 
          // Draw the entire node's data.
          //glColor3f(1.0, 0.0, 0.0);
@@ -79,9 +96,12 @@ void RenderOctreeNode(Octree* pNode)
          // Disable all the client states we enabled.
          glDisableClientState(GL_VERTEX_ARRAY);
          glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-         //glClientActiveTextureARB(GL_TEXTURE1_ARB);
+         
+         //t->unbind();
+         
+         glClientActiveTextureARB(GL_TEXTURE1_ARB);
          glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-         //glClientActiveTextureARB(GL_TEXTURE0_ARB);
+         glClientActiveTextureARB(GL_TEXTURE0_ARB);
       }
    else
       {
@@ -101,44 +121,57 @@ void RenderOctreeNode(Octree* pNode)
 }
 
 void Renderer::stop(void* data){
-	std::cout << "stoping renderer" << std::endl;
 }
 
 bool Renderer::start(void* data){
 
+	//inicializa??o basica do video
 	video = (videoSystem*)VideoFactory::getInstance().create("sdlvideo");
 	if (!video->initialize( videoSystem::RES_800x600 | videoSystem::BPP_8 | videoSystem::OPENGL ))
 		return false;
 	video->setWindowTitle("Engine");
     video->showCursor(false);
+    
+    //inicializacao dos flags que as texturas vao usar
+	TEXTUREMANAGER::getInstance().setDefaultFlags();
 
-	if(!terrain.loadMap("../data/map.raw", 8))
+	//inicializacao das extensions
+	initializeExtensions();
+
+	if(!terrain.loadMap("../data/map.raw", 4))
 		std::cout << "Nao foi possivel ler o mapa" << std::endl;
 
-	CAMERA::getInstance().initialize();
+//	CAMERA::getInstance().initialize();
 
-
-   	if(!terrain.loadTile(LOWEST_TILE, "lowest.tga")) return false;
-	if(!terrain.loadTile(LOW_TILE, "low.tga")) return false;
-	if(!terrain.loadTile(HIGH_TILE, "high.tga")) return false;
-	if(!terrain.loadTile(HIGHEST_TILE, "highest.tga")) return false;
+/*
+   	if(!terrain.loadTile(LOWEST_TILE, "lowest2.tga")) return false;
+	if(!terrain.loadTile(LOW_TILE, "low2.tga")) return false;
+	if(!terrain.loadTile(HIGH_TILE, "high2.tga")) return false;
+	if(!terrain.loadTile(HIGHEST_TILE, "highest2.tga")) return false;
 
 	unsigned char *image = NULL;
-	int imgSize = 0;
 
-	std::cout << "gerando textura" << std::endl;
-	image = terrain.generateTextureMap(256);
+	image = terrain.generateTextureMap(512);
 	if(!image) return false;
-	std::cout << "textura gerada" << std::endl;
 
    // Load both textures.
 	glGenTextures(1, &terrainTexID);
 	glBindTexture(GL_TEXTURE_2D, terrainTexID);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);						
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 256, 256,
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 8);					
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512,
 	             0, GL_RGB, GL_UNSIGNED_BYTE, image);
+*/
+	f = new Fog(0.5, 0.5, 0.5, 1.0,  0.03, 0.0, 100.0,  FOG_EXP);
+	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
+	t2 = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
+	alpha = TEXTUREMANAGER::getInstance().load("alphamap4.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, texture::ANISOTROPIC_4);
 
+   CAMERA::getInstance().setPosition(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+
+	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
 	
 }
@@ -148,11 +181,17 @@ void Renderer::update(void* data){
 	video->lock();
 //	std::cout << "renderer main loop" << std::endl;
 	/*loop em todas entidades visiveis pra desenha-las*/
-	CAMERA::getInstance().update(0.1);
-	std::cout << "fps " << TIMER::getInstance().getFPS() << " 1/fps " << 1.0/(TIMER::getInstance().getFPS()) << std::endl;
-	vec3 cameraPosition = CAMERA::getInstance().getPosition();
+//	CAMERA::getInstance().update(0.1);
+//	std::cout << "fps " << TIMER::getInstance().getFPS() << " 1/fps " << 1.0/(TIMER::getInstance().getFPS()) << std::endl;
+//	vec3 cameraPosition = CAMERA::getInstance().getPosition();
 //	std::cout <<  "camera position: " << cameraPosition.x << " " << cameraPosition.y << " " << cameraPosition.z << std::endl;
+   gluLookAt(CAMERA::getInstance().xPos, CAMERA::getInstance().yPos, CAMERA::getInstance().zPos,
+             CAMERA::getInstance().xView, CAMERA::getInstance().yView, CAMERA::getInstance().zView,
+             CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
+	//f->bind();
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	RenderOctreeNode(terrain.rootNode);
+	//f->unbind();
 	video->unlock();
 	
 }
