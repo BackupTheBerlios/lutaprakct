@@ -68,7 +68,7 @@ void pixelLightShader::setInitialParameters(materialData *config){
 
 void pixelLightShader::setLoopParameters(materialData *config){
 
-	vec3 pos = CAMERA::getInstance().getPosition();
+	vec3 pos; //= CAMERA::getInstance().getPosition();
 	cgGLSetParameter3f(eyePosition, pos.x, pos.y, pos.z );
 	
     cgGLSetStateMatrixParameter(ModelViewProj, CG_GL_MODELVIEW_PROJECTION_MATRIX, CG_GL_MATRIX_IDENTITY);
