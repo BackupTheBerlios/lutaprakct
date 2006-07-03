@@ -89,64 +89,71 @@ void Terrain::createTerrainMesh(){
 			float top = (float)(z + 1) / heightMap.size;
 
                // V1.
-			texCoords[t++] = left;
-			texCoords[t++] = bottom;
-			texCoords2[t2++] = left * numRepeats;
-			texCoords2[t2++] = bottom * numRepeats;
+
+			texCoords[t++] = left * numRepeats;//0.0;//left;
+			texCoords[t++] = bottom * numRepeats;//0.0;//bottom;
+			texCoords2[t2++] = left;//left * numRepeats;
+			texCoords2[t2++] = bottom;//bottom * numRepeats;
 			vertex[i++] = (float)x;
 			vertex[i++] = getScaledHeight(x, z);
 			vertex[i++] = (float)z;
 			totalVerts++;
+           // LOGGER::getInstance().write("heightmap.log", "V1 texCords: %f textCoords: %f TexCoords2: %f texCoords2: %f X: %d Y: %f z: %d \n", left, bottom, left*numRepeats, bottom*numRepeats, x, getScaledHeight(x, z), z );
 
                // V2.
-			texCoords[t++] = left;
-			texCoords[t++] = top;
-			texCoords2[t2++] = left * numRepeats;
-			texCoords2[t2++] = top * numRepeats;
+			texCoords[t++] = left * numRepeats;//0.0;//left;
+			texCoords[t++] = top * numRepeats;//1.0;//top;
+			texCoords2[t2++] = left;//left * numRepeats;
+			texCoords2[t2++] = top;//top * numRepeats;
 			vertex[i++] = (float)x;
 			vertex[i++] = getScaledHeight(x, z + 1);
 			vertex[i++] = (float)z + 1;
 			totalVerts++;
+           // LOGGER::getInstance().write("heightmap.log", "V2 texCords: %f textCoords: %f TexCoords2: %f texCoords2: %f X: %d Y: %f z: %d \n", left, top, left*numRepeats, top*numRepeats, x, getScaledHeight(x, z+1), z+1 );
 
                // V3.
-			texCoords[t++] = right;
-			texCoords[t++] = bottom;
-			texCoords2[t2++] = right * numRepeats;
-			texCoords2[t2++] = bottom * numRepeats;
+			texCoords[t++] = right * numRepeats;//1.0;//right;
+			texCoords[t++] = bottom * numRepeats;//0.0;//bottom;
+			texCoords2[t2++] = right;//right * numRepeats;
+			texCoords2[t2++] = bottom;//bottom * numRepeats;
 			vertex[i++] = (float)x + 1;
 			vertex[i++] = getScaledHeight(x + 1, z);
 			vertex[i++] = (float)z;
 			totalVerts++;
+            //LOGGER::getInstance().write("heightmap.log", "V3 texCords: %f textCoords: %f TexCoords2: %f texCoords2: %f X: %d Y: %f z: %d \n", right, bottom, right*numRepeats, bottom*numRepeats, x+1, getScaledHeight(x+1, z), z );
 
                // V4.
-			texCoords[t++] = right;
-			texCoords[t++] = bottom;
-			texCoords2[t2++] = right * numRepeats;
-			texCoords2[t2++] = bottom * numRepeats;
+			texCoords[t++] = right * numRepeats;//1.0;//right;
+			texCoords[t++] = bottom * numRepeats;//0.0;//bottom;
+			texCoords2[t2++] = right;//right * numRepeats;
+			texCoords2[t2++] = bottom;//bottom * numRepeats;
 			vertex[i++] = (float)x + 1;
 			vertex[i++] = getScaledHeight(x + 1, z);
 			vertex[i++] = (float)z;
 			totalVerts++;
+            //LOGGER::getInstance().write("heightmap.log", "V4 texCords: %f textCoords: %f TexCoords2: %f texCoords2: %f X: %d Y: %f z: %d \n", right, bottom, right*numRepeats, bottom*numRepeats, x+1, getScaledHeight(x+1, z), z );
 
                // V5.
-			texCoords[t++] = right;
-			texCoords[t++] = top;
-			texCoords2[t2++] = right * numRepeats;
-			texCoords2[t2++] = top * numRepeats;
+			texCoords[t++] = right * numRepeats;//1.0;//right;
+			texCoords[t++] = top * numRepeats;//1.0;//top;
+			texCoords2[t2++] = right;//right * numRepeats;
+			texCoords2[t2++] = top;//top * numRepeats;
 			vertex[i++] = (float)x + 1;
 			vertex[i++] = getScaledHeight(x + 1, z + 1);
 			vertex[i++] = (float)z + 1;
 			totalVerts++;
+            //LOGGER::getInstance().write("heightmap.log", "V5 texCords: %f textCoords: %f TexCoords2: %f texCoords2: %f X: %d Y: %f z: %d \n", right, top, right*numRepeats, top*numRepeats, x+1, getScaledHeight(x+1, z+1), z+1 );
 
                // V6.
-			texCoords[t++] = left;
-			texCoords[t++] = top;
-			texCoords2[t2++] = left * numRepeats;
-			texCoords2[t2++] = top * numRepeats;
+			texCoords[t++] = left * numRepeats;//0.0;//left;
+			texCoords[t++] = top * numRepeats;//1.0;//top;
+			texCoords2[t2++] = left;//left * numRepeats;
+			texCoords2[t2++] = top;//top * numRepeats;
 			vertex[i++] = (float)x;
 			vertex[i++] = getScaledHeight(x, z + 1);
 			vertex[i++] = (float)z + 1;
 			totalVerts++;
+            //LOGGER::getInstance().write("heightmap.log", "V6 texCords: %f textCoords: %f TexCoords2: %f texCoords2: %f X: %d Y: %f z: %d \n", left, top, left*numRepeats, top*numRepeats, x, getScaledHeight(x, z+1), z+1 );
 
 			totalTriangles += 2;
 		}
@@ -354,103 +361,76 @@ unsigned char Terrain::interpolateHeight(int x, int z, float textureMapRatio){
 
 
 unsigned char *Terrain::generateTextureMap(unsigned int imageSize){
-   // Red, green, and blue color values.  OpenGL texture id.
-	//unsigned char* image;
+	
+	
 	unsigned char red = 0, green = 0, blue = 0;
 
-   // Set of texture coords and last height which is used in combining the images.
 	float tu, tv;
-   int lastHeight = -1;
+	int lastHeight = -1;
 
-   // Each of these hold the total color values of each used in the final image.
 	float totalRed = 0, totalGreen = 0, totalBlue = 0;
 	
-   // Blend amounts for each texture tile and the ratio between the terrain size and image size.
-   float blendList[MAX_TILES] = {0};
+   //quantidade de blend para cada texture tile
+	float blendList[MAX_TILES] = {0};
 	float textureMapRatio = (float)heightMap.size / (float)imageSize;
 
-	// Reset the number of tiles.
 	tiles.numTiles = 0;
+   
+   //ve quantas imagens tem.
+	for(int i = 0; i < MAX_TILES; i++){
+		if(tiles.textureTiles[i]) tiles.numTiles++;
+	}
 
-   // First we loop through the max amount of tiles we can have and see how many actually
-   // have images.  This way the user does not have to have a set number of images before
-   // we can generate a texture.  Need just at least 1 to see anything.
-	for(int i = 0; i < MAX_TILES; i++)
-	   {
-		   if(tiles.textureTiles[i]) tiles.numTiles++;
-	   }
+	if(tiles.numTiles == 0) 
+		return NULL;
 
-   if(tiles.numTiles == 0) 
-   	return NULL;
+	for(int i = 0; i < MAX_TILES; i++){
+		if(tiles.textureTiles[i]){
+			tiles.regions[i].lowHeight = lastHeight + 1;
+			lastHeight += 255 / tiles.numTiles;
+			tiles.regions[i].optimalHeight = lastHeight;
+			tiles.regions[i].highHeight = (lastHeight - tiles.regions[i].lowHeight) + lastHeight;
+		}
+	}
 
-	// Loop through again to calculate the tile regions.
-	for(int i = 0; i < MAX_TILES; i++)
-	   {
-		   // If the image was loaded, perform calculations.
-		   if(tiles.textureTiles[i])
-		      {
-			      // Here we calculate the low, optimal, and high height for this region.
-			      tiles.regions[i].lowHeight = lastHeight + 1;
-   			   
-               lastHeight += 255 / tiles.numTiles;
-
-			      tiles.regions[i].optimalHeight = lastHeight;
-
-			      tiles.regions[i].highHeight = (lastHeight -
-			         tiles.regions[i].lowHeight) + lastHeight;
-		      }
-	   }
-
-	// Create the texture array.
 	unsigned char *image = new unsigned char[imageSize * imageSize * 3];
 	
-		std::cout << "gerando imagem" << std::endl;
-	// And the last part in the generation is to create the 2D image.
-	LOGGER::getInstance().write("terrain.log", "numTiles %d", tiles.numTiles);
-	LOGGER::getInstance().write("terrain.log", "imageSize %d", imageSize);
-	for(unsigned int z = 0; z < imageSize; z++)
-	   {
-		   for(unsigned int x = 0; x < imageSize; x++)
-		      {
-			      // Intialize the color variables.
-			      totalRed = 0.0f;
-			      totalGreen = 0.0f;
-			      totalBlue = 0.0f;
+	for(unsigned int z = 0; z < imageSize; z++){
+		for(unsigned int x = 0; x < imageSize; x++){
+			
+			totalRed = 0.0f;
+			totalGreen = 0.0f;
+			totalBlue = 0.0f;
 
-			      // Loop through all tiles and generate each final pixel color.
-			      for(int i = 0; i < tiles.numTiles; i++)
-			         {
-					      // Calculate the texture coords.  This is used to
-					      // get a pixel from  each tile.
-					     // std::cout << "pegando tamanho da imagem" << std::endl;
-					      getTexCoords(tiles.textureTiles[i]->getWidth(),
-                                 tiles.textureTiles[i]->getHeight(), x, z,
-                                 tu, tv);
-					      //std::cout << "pegando tamanho da imagem" << std::endl;
+			// Loop through all tiles and generate each final pixel color.
+			for(int i = 0; i < tiles.numTiles; i++){
+				// Calculate the texture coords.  This is used to
+				// get a pixel from  each tile.
+				getTexCoords(tiles.textureTiles[i]->getWidth(),
+					tiles.textureTiles[i]->getHeight(), x, z,
+					tu, tv);
 
-					      // Get the color of the pixel for the set of texture coords.
-					      int index = (((unsigned int)tv * imageSize) + (unsigned int)tu) * 3;
-					      //std::cout << "lendo canal da textura " << std::endl;
-					      red = tiles.textureTiles[i]->img->imagedata[index + 0];
-					      green = tiles.textureTiles[i]->img->imagedata[index + 1];
-					      blue = tiles.textureTiles[i]->img->imagedata[index + 2];
+				// Get the color of the pixel for the set of texture coords.
+				int index = (((unsigned int)tv * imageSize) + (unsigned int)tu) * 3;
+				red = tiles.textureTiles[i]->img->imagedata[index + 0];
+				green = tiles.textureTiles[i]->img->imagedata[index + 1];
+				blue = tiles.textureTiles[i]->img->imagedata[index + 2];
          
-					      // Calculate the amount to blend this pixel with the rest.
-					      blendList[i] = regionPercent(i, interpolateHeight(x, z,
-					                                       textureMapRatio));
+				// Calculate the amount to blend this pixel with the rest.
+				blendList[i] = regionPercent(i, interpolateHeight(x, z, textureMapRatio));
 
 					      // Store the pixel from this tile to the total.
-					      totalRed += red * blendList[i];
-					      totalGreen += green * blendList[i];
-					      totalBlue += blue * blendList[i];
-			         }
+				totalRed += red * blendList[i];
+				totalGreen += green * blendList[i];
+				totalBlue += blue * blendList[i];
+			}
 
 			      // Set a pixel in our final texture image.
-			      image[((z * imageSize) + x) * 3] = (unsigned char)totalRed;
-               image[((z * imageSize) + x) * 3 + 1] = (unsigned char)totalGreen;
-               image[((z * imageSize) + x) * 3 + 2] = (unsigned char)totalBlue;
-		      }
-	   }
+			image[((z * imageSize) + x) * 3] = (unsigned char)totalRed;
+			image[((z * imageSize) + x) * 3 + 1] = (unsigned char)totalGreen;
+			image[((z * imageSize) + x) * 3 + 2] = (unsigned char)totalBlue;
+		}
+	}
 
 	return image;
 }
