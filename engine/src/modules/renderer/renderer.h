@@ -10,6 +10,8 @@ class Renderer : public Task{
 	
 public:
 
+	Renderer(){ video = NULL; }
+	
 	bool start(void* data);
 	void stop(void* data);
 	void update(void* data);

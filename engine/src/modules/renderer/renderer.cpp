@@ -3,8 +3,6 @@
 #include<GL/glu.h>
 #include "renderer.h"
 #include "../timer/timer.h"
-#include "../../util/interfaces/product.h"
-#include "../../util/patterns/factories/videofactory.h"
 #include "../../util/logger/logger.h"
 #include "../../util/math/algebra.h"
 #include "../../util/glext/glextensions.h"
@@ -139,7 +137,9 @@ void Renderer::stop(void* data){
 bool Renderer::start(void* data){
 
 	//inicializa??o basica do video
-	video = (videoSystem*)VideoFactory::getInstance().create("sdlvideo");
+	video =  initializeVideo(videoSystem::VIDEO_SDL);
+	if (video == NULL)
+		return false;
 	if (!video->initialize( videoSystem::RES_800x600 | videoSystem::BPP_8 | videoSystem::OPENGL ))
 		return false;
 	video->setWindowTitle("Engine");
@@ -204,7 +204,7 @@ void Renderer::update(void* data){
    gluLookAt(CAMERA::getInstance().xPos, CAMERA::getInstance().yPos, CAMERA::getInstance().zPos,
              CAMERA::getInstance().xView, CAMERA::getInstance().yView, CAMERA::getInstance().zView,
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
-	//f->bind();
+	f->bind();
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glTranslatef(0.0, 0.0, 0.0);
 	dome->draw();
