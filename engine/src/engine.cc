@@ -1,4 +1,6 @@
 
+#include <SDL/SDL.h>
+
 #include "engine.h"
 
 #include "util/logger/logger.h"
@@ -42,7 +44,7 @@ void Engine::run(){
 	
 }
 
-int main()
+int main(int argc, char *argv[])
 {
 	Engine eng;
 	eng.run();
