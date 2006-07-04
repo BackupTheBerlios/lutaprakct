@@ -1,13 +1,12 @@
 #ifndef _VIDEOSYSTEM_H_
 #define _VIDEOSYSTEM_H_
 
-#include "../../../util/interfaces/system.h"
 #include <SDL/SDL.h>
 
 /**interface padrao para todos os tipos de video
  */
 
-class videoSystem : public systemInterface {
+class videoSystem  {
 	
 public:
 	
@@ -54,5 +53,7 @@ protected:
    int videoType;
 	
 };
+
+videoSystem* initializeVideo(int videoType);
 
 #endif //_VIDEOSYSTEM_H_
