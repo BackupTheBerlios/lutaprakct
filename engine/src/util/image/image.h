@@ -2,7 +2,6 @@
 #define _IMAGE_H_
 
  #include <GL/gl.h>
- #include "../interfaces/product.h"
 
 /* interface da image, todos os outros formatos herdam desse: jpgimage, pngimage, tgaimage, etc
  */
@@ -16,7 +15,7 @@ enum imagetype{
 	DDS
 };
 
-class image : public product{
+class image{
 	
 public:
 
@@ -24,8 +23,8 @@ public:
 	virtual ~image(){};
 	
 	
-	virtual bool load(const char *filename, int loadingflags = 0)=0;
-	virtual bool write(char *filename)=0;
+	virtual bool load(const char* filename, int loadingflags = 0)=0;
+	virtual bool write(char* filename)=0;
 	
 	GLubyte *imagedata;
 	
@@ -39,5 +38,9 @@ protected:
 
 	
 };
+
+//funcao de carregar imagem:
+
+image* loadImage(const char* filename);
 
 #endif //_IMAGE_H_
