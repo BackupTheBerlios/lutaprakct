@@ -10,6 +10,7 @@
 #include "../../util/glext/glextensions.h"
 
 #include "../effects/fog/fog.h"
+#include "../mesh/skydome/skydome.h"
 
 #include <iostream>
 
@@ -18,6 +19,8 @@ Fog *f;
 texture *t;
 texture *t2;
 texture *alpha;
+
+Skydome *dome;
 
 void RenderOctreeNode(Octree* pNode)
 {
@@ -53,9 +56,9 @@ void RenderOctreeNode(Octree* pNode)
          float *pTC2 = pNode->getTexCoord2();
 
          // Apply the textures.
-         glActiveTextureARB(GL_TEXTURE0_ARB);
-         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, t->getId());
+		glActiveTextureARB(GL_TEXTURE0_ARB);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, t->getId());
        // t->enable();
        // t->bind();
 
@@ -71,7 +74,6 @@ void RenderOctreeNode(Octree* pNode)
          glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE_ARB, 2);
 
          glActiveTextureARB(GL_TEXTURE0_ARB);
-
          // Set pointers.
          glEnableClientState(GL_VERTEX_ARRAY);
          glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -98,7 +100,18 @@ void RenderOctreeNode(Octree* pNode)
          glDisableClientState(GL_TEXTURE_COORD_ARRAY);
          
          //t->unbind();
-         
+		glActiveTextureARB(GL_TEXTURE2_ARB);
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		glActiveTextureARB(GL_TEXTURE1_ARB);
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+		glActiveTextureARB(GL_TEXTURE0_ARB);
+		glDisable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, 0);
+        
          glClientActiveTextureARB(GL_TEXTURE1_ARB);
          glDisableClientState(GL_TEXTURE_COORD_ARRAY);
          glClientActiveTextureARB(GL_TEXTURE0_ARB);
@@ -165,6 +178,9 @@ bool Renderer::start(void* data){
 	             0, GL_RGB, GL_UNSIGNED_BYTE, image);
 */
 	f = new Fog(0.5, 0.5, 0.5, 1.0,  0.03, 0.0, 100.0,  FOG_EXP);
+	std::cout << "Inicializando Skydome...";
+	dome = new Skydome("sky2.tga", 32, 48, 1000.0, 1.0);
+	std::cout << "Pronto!" << std::endl;
 	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	t2 = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	alpha = TEXTUREMANAGER::getInstance().load("alphamap4.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, texture::ANISOTROPIC_4);
@@ -190,7 +206,11 @@ void Renderer::update(void* data){
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
 	//f->bind();
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glTranslatef(0.0, 0.0, 0.0);
+	dome->draw();
+	glTranslatef(0.0, 100.0, 0.0);
 	RenderOctreeNode(terrain.rootNode);
+
 	//f->unbind();
 	video->unlock();
 	
