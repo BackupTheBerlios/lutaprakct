@@ -1,6 +1,5 @@
 
 #include "texture.h"
-#include "../../../util/patterns/factories/imagefactory.h"
 #include "../../../util/glext/glextensions.h"
 #include <cstdlib>
 #include <iostream>
@@ -13,6 +12,7 @@ texture::~texture(){
 }
 
 texture::texture(char* filename, int target, int format, int internalformat, int flags) : img(NULL), flags(flags){
+	img = NULL;
 	load(filename, target, format, internalformat, flags);
 }
 
@@ -171,13 +171,13 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 		glTexParameteri(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
 	
 	if (target == TEXTURE_1D){
-		img = (image*) ImageFactory::getInstance().create(filename);
+		img = loadImage(filename);
 		width = img->getWidth();
 		height = 0;
 		glTexImage1D(this->target, 0, this->internalformat, img->getWidth(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
 	}
 	else if ( (target == TEXTURE_2D) || (target == TEXTURE_RECTANGLE) || (target == TEXTURE_RECTANGLENV) ){
-		img = (image*) ImageFactory::getInstance().create(filename);
+		img = loadImage(filename);
 		width = img->getWidth();
 		height = img->getHeight();
 		glTexImage2D(this->target, 0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
@@ -194,7 +194,7 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 		char *facenames[] = {"posx", "negx", "posy", "negy", "posz", "negz" };
 		for (int i = 0; i < 6; i++){
 			sprintf(buff, filename, facenames[i]);
-			img = (image*) ImageFactory::getInstance().create(buff);
+			img = loadImage(filename);
 			width = img->getWidth();
 			height = img->getHeight();
 			glTexImage2D(facetargets[i],0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
