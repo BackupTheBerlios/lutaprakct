@@ -151,7 +151,7 @@ bool Renderer::start(void* data){
 	//inicializacao das extensions
 	initializeExtensions();
 
-	if(!terrain.loadMap("../data/map.raw", 4))
+	if(!terrain.loadMap("map.raw", 4))
 		std::cout << "Nao foi possivel ler o mapa" << std::endl;
 
 //	CAMERA::getInstance().initialize();
