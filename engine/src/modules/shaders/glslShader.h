@@ -8,14 +8,17 @@ class glslShader{
 	
 	public: 
 		glslShader();
-		~glslShader();
+		glslShader(const char* vertexSource, const char* fragmentSource);
+		virtual ~glslShader();
 	
-		bool initialize(char* vertexSource, char* fragmentSource);
+		bool initialize(const char* vertexSource,const char* fragmentSource);
 		void kill();
 		void bind();
 		void unbind();
 	
-	private:
+		GLcharARB* getCompilerLog();
+	
+	protected:
 	
 		GLhandleARB fragment, vertex, program;
 	
