@@ -5,6 +5,7 @@
 
 #include "../../../util/math/algebra.h"
 #include "../../material/textures/texturemanager.h"
+#include "../../shaders/cloudShader.h"
 
 class Skydome{
 	
@@ -38,7 +39,8 @@ private:
 	unsigned short* indices;
 	
 	texture* skytexture;
-	
+	cloudShader* clouds;
+	GLuint texNoiseId;
 };
 
 
