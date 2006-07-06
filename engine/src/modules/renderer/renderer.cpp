@@ -151,7 +151,7 @@ bool Renderer::start(void* data){
 	//inicializacao das extensions
 	initializeExtensions();
 
-	if(!terrain.loadMap("map.raw", 4))
+	if(!terrain.loadMap("map.raw", 8))
 		std::cout << "Nao foi possivel ler o mapa" << std::endl;
 
 //	CAMERA::getInstance().initialize();
@@ -179,7 +179,7 @@ bool Renderer::start(void* data){
 */
 	f = new Fog(0.5, 0.5, 0.5, 1.0,  0.03, 0.0, 100.0,  FOG_EXP);
 	std::cout << "Inicializando Skydome...";
-	dome = new Skydome("sky2.tga", 32, 48, 1000.0, 1.0);
+	dome = new Skydome("sky2.tga", 32, 48, 500.0, 1.0);
 	std::cout << "Pronto!" << std::endl;
 	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	t2 = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
@@ -204,14 +204,15 @@ void Renderer::update(void* data){
    gluLookAt(CAMERA::getInstance().xPos, CAMERA::getInstance().yPos, CAMERA::getInstance().zPos,
              CAMERA::getInstance().xView, CAMERA::getInstance().yView, CAMERA::getInstance().zView,
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
-	//f->bind();
+//	f->bind();
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glTranslatef(0.0, 0.0, 0.0);
 	dome->draw();
+	f->bind();
 	glTranslatef(0.0, 100.0, 0.0);
 	RenderOctreeNode(terrain.rootNode);
 
-	//f->unbind();
+	f->unbind();
 	video->unlock();
 	
 }

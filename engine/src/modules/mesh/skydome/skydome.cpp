@@ -7,9 +7,10 @@
 
 #include <iostream>
 
+//Scale defaultl 0.001 0.0009
 const char* cloudVertexSource = 
 "varying vec3  MCposition; 												\n"
-"float Scale = 1.0;														\n"
+"float Scale = 0.0009;													\n"
 "void main(){															\n"
 "	vec3 ECposition = vec3(gl_ModelViewMatrix * gl_Vertex);				\n"
 "   MCposition      = vec3(gl_Vertex) * Scale;							\n"
@@ -20,13 +21,15 @@ const char* cloudFragmentSource =
 "varying vec3  MCposition;																			\n"
 "uniform sampler3D Noise;																			\n"
 "vec3 SkyColor = vec3(0.0, 0.0, 0.8);																\n"
-"vec3 CloudColor = vec3(0.8, 0.8, 0.8);																\n"
+"uniform vec3 Offset; 																				\n"
+"vec3 CloudColor = vec3(1.0, 1.0, 1.0);																\n"
 "void main(){																						\n"
-"    vec4  noisevec  = texture3D(Noise, MCposition);												\n"
+"    vec4  noisevec  = texture3D(Noise, MCposition /*+ Offset*/);										\n"
 "    float intensity = (noisevec[0] + noisevec[1] + noisevec[2] + noisevec[3] + 0.03125) * 1.5;		\n"
 "    vec3 color   = mix(SkyColor, CloudColor, intensity) * 1.0;										\n"
 "    gl_FragColor = vec4(color, 1.0);																\n"
 "}																									\n\0";
+
 
 Skydome::Skydome(){
 	vertices = NULL;
@@ -108,6 +111,7 @@ void Skydome::draw(){
 	for(int i = 0; i < slices; i++)
 		glDrawElements(GL_TRIANGLE_STRIP, (sides + 1) * 2, GL_UNSIGNED_SHORT, &indices[i * (sides + 1) * 2]);
 	
+	clouds->setLoopParameters();
 	clouds->unbind();
 	//skytexture->disable();
 	glDisable(GL_TEXTURE_3D);

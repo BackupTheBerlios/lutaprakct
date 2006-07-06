@@ -12,6 +12,11 @@ class cloudShader : public glslShader{
 		~cloudShader(){kill();};
 		
 		void setInitialParameters();
+		void setLoopParameters();
+		
+	private:
+		
+		float animation[3];
 	
 };
 
