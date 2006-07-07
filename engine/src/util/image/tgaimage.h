@@ -16,7 +16,8 @@ public:
 	~tgaimage(){ /*if (imagedata) delete imagedata;*/};
 	
 	bool load(const char* filename, int loadingflags = 0);
-	bool write(char* filename);
+	bool write(char* filename, short int width, short int height, unsigned char depth,
+						unsigned char* data);
 	
 private:
 	bool processHeader();

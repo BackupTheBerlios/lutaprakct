@@ -5,6 +5,21 @@
 
 #include <SDL/SDL.h>
 
+/* o header do tga sao 12 fields, cada um sao:
+# id (unsigned char)
+# colour map type (unsigned char)
+# image type (unsigned char)
+# colour map first entry (short int)
+# colour map length (short int)
+# map entry size (short int)
+# horizontal origin (short int)
+# vertical origin (short int)
+# width (short int)
+# height (short int)
+# pixel depth (unsigned char)
+# image descriptor (unsigned char)
+ */
+
 bool tgaimage::processHeader(){
 	
 	short ColMapStart,ColMapLen;
@@ -124,65 +139,6 @@ bool tgaimage::load(const char *filename, int loadingflags){
 //   if((imagedata[17] & 0x20)==0) 
 //     FlipImg();
 
-
- /*  std::cout << "etste" << std::endl;
-	SDL_Surface *img = (SDL_Surface*) IMG_Load(filename);
-	imagedata = (GLubyte*) img->pixels;
-	SDL_SaveBMP( img, "lol.bmp");
-	   if ( !imagedata )
-   {
-      std::cout << "IMG_Load: " << IMG_GetError() << std::endl;
-   }
-	width = img->w;
-	height = img->h;
-	//bpp = img->bpp;
-*/
-/*GLubyte TGAheader[12] = { 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	GLubyte TGAcmp[12];
-	GLubyte header[6];
-	GLuint imagesize, temp, bytesPerPixel;
-std::cout << "lendo tga" << std::endl;
-	FILE *f = fopen (filename, "rb");
-	
-	if ((f == NULL)
-	    || (fread (TGAcmp, 1, sizeof (TGAcmp), f) != sizeof (TGAcmp))
-	    || (memcmp (TGAheader, TGAcmp, sizeof (TGAheader)) != 0)
-	    || (fread (header, 1, sizeof (header), f) != sizeof (header))){
-		fclose (f);
-		std::cout << "nao foi possivel ler a textura" << std::endl;
-		return false;
-	}
-	width = header[1] * 256 + header[0];
-	height = header[3] * 256 + header[2];
-	std::cout << "tamanho " <<width << std::endl;
-	bpp = header[4];
-	bytesPerPixel = bpp / 8;
-	imagesize = width * height * bytesPerPixel;
-
-	if ((width <= 0) || (height <= 0)
-	    || ((header[4] != 24) && (header[4] != 32))){
-		fclose (f);
-		return false;
-	}
-
-	imagedata = new GLubyte[imagesize];
-	if ((imagedata == NULL)
-	    || (fread (imagedata, 1, imagesize, f) != imagesize)){
-		delete imagedata;
-		fclose (f);
-		return false;
-	}
-	//swap no formato BGR do TGA pra RGB somente se
-	//nao for especificado o formato BGR ou BGRA
-//	if ( (format != GL_BGR_EXT) && (format != GL_BGRA_EXT) ){
- 		for (GLuint i = 0; i < (imagesize); i += bytesPerPixel){
-			temp = imagedata[i];	//guarda o valor do B
-			imagedata[i] = imagedata[i + 2];	//B recebe o valor do R
-			imagedata[i + 2] = temp;	//R recebe o valor de B, ficando RGB
-		}
-//	}
-	fclose (f);
-	return true;*/
 	return true;
 	
 }
@@ -234,56 +190,61 @@ void tgaimage::BGRtoRGB(){
 	
 }
 
-bool tgaimage::write(char* filename){
-	return false;
+bool tgaimage::write(char* filename, short int width, short int height, unsigned char depth,
+						unsigned char* data){
+	
+							
+	unsigned char cGarbage = 0, type, mode;
+	short int iGarbage = 0;
+	int i;
+	FILE *file;
+
+	file = fopen(filename, "wb");
+	if (file == NULL) {
+		return false;
+	}
+
+	// verifica se eh RGB/RGBA ou gayscale 
+	mode = depth / 8;
+	if ((depth == 24) || (depth == 32))
+		type = 2;
+	else
+		type = 3;
+
+	// escreve o header
+	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
+	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
+
+	fwrite(&type, sizeof(unsigned char), 1, file);
+
+	fwrite(&iGarbage, sizeof(short int), 1, file);
+	fwrite(&iGarbage, sizeof(short int), 1, file);
+	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
+	fwrite(&iGarbage, sizeof(short int), 1, file);
+	fwrite(&iGarbage, sizeof(short int), 1, file);
+
+	fwrite(&width, sizeof(short int), 1, file);
+	fwrite(&height, sizeof(short int), 1, file);
+	fwrite(&depth, sizeof(unsigned char), 1, file);
+
+	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
+
+	// swap nos pixels do tga
+	unsigned char aux;
+	if (mode >= 3)
+		for (i=0; i < width * height * mode ; i+= mode) {
+			aux = data[i];
+			data[i] = data[i+2];
+			data[i+2] = aux;
+	}
+
+	// salva a imagem toda
+	fwrite(data, sizeof(unsigned char), width * height * mode, file);
+	fclose(file);
+
+	//deleta os pixels
+	delete data;
+
+	return true;
 }
 
-
-
-/*	GLubyte TGAheader[12] = { 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	GLubyte TGAcmp[12];
-	GLubyte header[6];
-	GLuint imagesize, temp, bytesPerPixel;
-std::cout << "lendo tga" << std::endl;
-	FILE *f = fopen (filename, "rb");
-	
-	if ((f == NULL)
-	    || (fread (TGAcmp, 1, sizeof (TGAcmp), f) != sizeof (TGAcmp))
-	    || (memcmp (TGAheader, TGAcmp, sizeof (TGAheader)) != 0)
-	    || (fread (header, 1, sizeof (header), f) != sizeof (header))){
-		fclose (f);
-		std::cout << "nao foi possivel ler a textura" << std::endl;
-		return false;
-	}
-	width = header[1] * 256 + header[0];
-	height = header[3] * 256 + header[2];
-	std::cout << "tamanho " <<width << std::endl;
-	bpp = header[4];
-	bytesPerPixel = bpp / 8;
-	imagesize = width * height * bytesPerPixel;
-
-	if ((width <= 0) || (height <= 0)
-	    || ((header[4] != 24) && (header[4] != 32))){
-		fclose (f);
-		return false;
-	}
-
-	imagedata = new GLubyte[imagesize];
-	if ((imagedata == NULL)
-	    || (fread (imagedata, 1, imagesize, f) != imagesize)){
-		delete imagedata;
-		fclose (f);
-		return false;
-	}
-	//swap no formato BGR do TGA pra RGB somente se
-	//nao for especificado o formato BGR ou BGRA
-//	if ( (format != GL_BGR_EXT) && (format != GL_BGRA_EXT) ){
- 		for (GLuint i = 0; i < (imagesize); i += bytesPerPixel){
-			temp = imagedata[i];	//guarda o valor do B
-			imagedata[i] = imagedata[i + 2];	//B recebe o valor do R
-			imagedata[i + 2] = temp;	//R recebe o valor de B, ficando RGB
-		}
-//	}
-	fclose (f);
-	return true;
-	*/

@@ -24,7 +24,8 @@ public:
 	
 	
 	virtual bool load(const char* filename, int loadingflags = 0)=0;
-	virtual bool write(char* filename)=0;
+	virtual bool write(char* filename, short int width, short int height, unsigned char depth,
+						unsigned char* data)=0;
 	
 	GLubyte *imagedata;
 	
