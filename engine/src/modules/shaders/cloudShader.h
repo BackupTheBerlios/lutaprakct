@@ -16,6 +16,7 @@ class cloudShader : public glslShader{
 		
 	private:
 		
+		GLint time;
 		float animation[3];
 	
 };
