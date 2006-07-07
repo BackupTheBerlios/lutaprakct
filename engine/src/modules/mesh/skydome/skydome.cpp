@@ -23,7 +23,7 @@ const char* cloudVertexSource2 =
 "//   gl_TexCoord[0] = vec4( (tex + time), (tex2 + time), 0.0, 0.0); \n"
 "	  gl_TexCoord[0] = vec4( (gl_Vertex.x / 1000.0) + time, gl_Vertex.z / 1000.0, 0.0, 0.0);	\n"
 "//   gl_TexCoord[1] = vec4( (tex2 + time) , (tex + time), 0.0, 0.0); \n"
-"	  gl_TexCoord[1] =vec4(gl_Vertex.x / 1000.0 + time, gl_Vertex.z/1000.0 , 0.0, 0.0);	\n"
+"//	  gl_TexCoord[1] =vec4(gl_Vertex.x / 1000.0 + time, gl_Vertex.z/1000.0 , 0.0, 0.0);	\n"
 "//   intensity    = gl_Vertex.y / 1000.0;													\n"
 "//   intensity    = clamp(intensity, 0.0, 1.0) / 1.8;								\n"
 "//   intensity_sq = intensity * intensity;												\n"
@@ -37,8 +37,8 @@ const char* cloudFragmentSource2=
 "vec4 horizon = vec4(0.1, 0.1, 0.8, 1.0);											\n"
 "void main(){																		\n"
 "   vec4 clouds_0 = texture2D(s_texture_0, gl_TexCoord[0].xy);						\n"
-"   vec4 clouds_1 = texture2D(s_texture_1, gl_TexCoord[1].xy);						\n"
-"   vec4 clouds = (clouds_0 + clouds_1) * 0.6; //intensity_sq;								\n"
+" //  vec4 clouds_1 = texture2D(s_texture_1, gl_TexCoord[1].xy);						\n"
+"   vec4 clouds = (clouds_0 + clouds_0) * 0.6; //intensity_sq;								\n"
 "//   vec4 cloud_color = vec4((1.0 - intensity) * horizon.x, (1.0 - intensity) * horizon.y, intensity * horizon.z, 0.0);	\n"
 "//   vec4 cloud_color = vec4((1.0 - intensity), (1.0 - intensity) * horizon.y, intensity * horizon.z, 0.0);	\n"
 "//	vec4 cloud_color = mix(gl_Color, clouds, 1.5);										\n"
@@ -203,7 +203,7 @@ void Skydome::draw(){
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
 	
-	int mode = 2;
+	int mode = 3;
 	if ( mode == 1)
 		skytexture->bind();
 	else if ( mode == 2){
@@ -212,7 +212,7 @@ void Skydome::draw(){
 		glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
 		nuvem->bind();
 		cshader->bind();
-	//}else if ( mode == 3 ){
+	}else if ( mode == 3 ){
 		glEnableClientState(GL_COLOR_ARRAY);
 		glColorPointer(4, GL_FLOAT, 0, &colors[0]);
 	}
@@ -228,7 +228,7 @@ void Skydome::draw(){
 		cshader->setLoopParameters();
 		cshader->unbind();
 		nuvem->unbind();
-	//}else if ( mode == 3 ){
+	}else if ( mode == 3 ){
 		glDisableClientState(GL_COLOR_ARRAY);
 	}
 
