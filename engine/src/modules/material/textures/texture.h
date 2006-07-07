@@ -68,10 +68,12 @@ public:
     ~texture();
     
 	bool load(char* filename, int target, int format, int internalformat, int flags);
+	void unload();
+	
 	void enable();
 	void disable();
 	void bind();
-	void unload();
+	void unbind();
 	
 	int getWidth(){return width;}
 	int getHeight(){return height;}

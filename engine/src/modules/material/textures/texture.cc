@@ -24,7 +24,12 @@ void texture::disable(){
 	glDisable(target);
 }
 
+void texture::unbind(){
+	glDisable(target);
+}
+
 void texture::bind(){
+	glEnable(target);
 	GLfloat parm;
 	glGetTexParameterfv(target, GL_TEXTURE_WRAP_S, &parm);
 	if (flags & CLAMP){
