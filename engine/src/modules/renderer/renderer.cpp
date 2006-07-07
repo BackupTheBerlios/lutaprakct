@@ -10,6 +10,7 @@
 #include "../effects/fog/fog.h"
 #include "../mesh/skydome/skydome.h"
 
+
 #include <iostream>
 
 GLuint terrainTexID;
@@ -151,7 +152,7 @@ bool Renderer::start(void* data){
 	//inicializacao das extensions
 	initializeExtensions();
 
-	if(!terrain.loadMap("map.raw", 8))
+	if(!terrain.loadMap("map.raw", 4))
 		std::cout << "Nao foi possivel ler o mapa" << std::endl;
 
 //	CAMERA::getInstance().initialize();
@@ -179,13 +180,16 @@ bool Renderer::start(void* data){
 */
 	f = new Fog(0.5, 0.5, 0.5, 1.0,  0.03, 0.0, 100.0,  FOG_EXP);
 	std::cout << "Inicializando Skydome...";
-	dome = new Skydome("sky2.tga", 32, 48, 500.0, 1.0);
+	dome = new Skydome("sky2.tga", 32, 48, 1000.0, 0.8);
 	std::cout << "Pronto!" << std::endl;
 	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	t2 = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	alpha = TEXTUREMANAGER::getInstance().load("alphamap4.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, texture::ANISOTROPIC_4);
 
-   CAMERA::getInstance().setPosition(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f);
+   	CAMERA::getInstance().setPosition(100.07f, 124.641f, 50.5f, 108.0f, 124.0f, 50.0f, 0.0f, 1.0f, 0.0f);
+	
+	dome->setCoordinates(44.0, 36.0, 6.0, 180.0);
+    dome->update(0);
 
 	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
@@ -204,15 +208,17 @@ void Renderer::update(void* data){
    gluLookAt(CAMERA::getInstance().xPos, CAMERA::getInstance().yPos, CAMERA::getInstance().zPos,
              CAMERA::getInstance().xView, CAMERA::getInstance().yView, CAMERA::getInstance().zView,
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
+             
+  //  std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
 //	f->bind();
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glTranslatef(0.0, 0.0, 0.0);
 	dome->draw();
-	f->bind();
+	//f->bind();
 	glTranslatef(0.0, 100.0, 0.0);
 	RenderOctreeNode(terrain.rootNode);
 
-	f->unbind();
+	//f->unbind();
 	video->unlock();
 	
 }
