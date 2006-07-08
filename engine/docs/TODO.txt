@@ -4,7 +4,7 @@ TODO LIST
 2- refazer a camera usando quaternion
 3- remover a factory pra imagem e pra videosystem - DONE
 4- fazer o sistema de GUI usando opengl
-5- fazer o skydome com nuvens geradas por shaders
+5- fazer o skydome com nuvens geradas por shaders - DONE
 6- fazer o sistema de billboarding para a vegetacao
 7- testar as octrees do terreno
 8- fazer horizon texture no terreno
@@ -13,3 +13,5 @@ TODO LIST
 11- testar o carregamendo de modelos md2 com animacao e se necessario refazer
 12- terminar o sistema de transicao de texturas no terreno
 13- adicionar noise para dar detalhe ao terreno ou usar detail textures
+14- fazer uma classe para tratar o frustum
+15- organizar a hierarquia dos meshes e renderer
