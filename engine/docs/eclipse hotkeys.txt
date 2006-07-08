@@ -1,0 +1,7 @@
+
+- selecione um objeto e pressione F3 ou Ctrl + F3 para o eclipse achar a definicao da classe
+
+- comentar e descomentar varias linhas de uma vez: selecione as linhas e use: ctrl + shift + /
+ou ctrl + shift + \
+
+- navegar entre os metodos de uma classe em um .cpp: ctrl + shift + UP/Down
