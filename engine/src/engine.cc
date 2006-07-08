@@ -39,6 +39,9 @@ void Engine::run(){
 	ProfileLogHandler profileLogHandler;
 	ProfileSample::outputHandler=&profileLogHandler;
 
+	//inicializa a seed para numeros random
+	srand(time(0));
+
 	//main game loop
 	KERNEL::getInstance().execute();
 	
