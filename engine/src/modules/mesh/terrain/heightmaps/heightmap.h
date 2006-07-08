@@ -12,7 +12,7 @@ public:
 	Heightmap(){ data = NULL; };
 	virtual ~Heightmap();
 	
-	void saveTga(std::string filename, short int sizex, short int sizey, short int depth, unsigned char* data);
+	void saveTga(std::string filename, short int sizex, short int sizey, short int depth);
 	void clearData();
 	
 	//sets e gets
