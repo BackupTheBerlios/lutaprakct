@@ -190,7 +190,7 @@ void tgaimage::BGRtoRGB(){
 	
 }
 
-bool tgaimage::write(char* filename, short int width, short int height, unsigned char depth,
+bool tgaimage::write(const char* filename, short int width, short int height, unsigned char depth,
 						unsigned char* data){
 	
 							
@@ -211,7 +211,6 @@ bool tgaimage::write(char* filename, short int width, short int height, unsigned
 	else
 		type = 3;
 
-	// escreve o header
 	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
 	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
 
@@ -228,22 +227,19 @@ bool tgaimage::write(char* filename, short int width, short int height, unsigned
 	fwrite(&depth, sizeof(unsigned char), 1, file);
 
 	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
-
 	// swap nos pixels do tga
 	unsigned char aux;
-	if (mode >= 3)
+	if (mode >= 3){
 		for (i=0; i < width * height * mode ; i+= mode) {
 			aux = data[i];
 			data[i] = data[i+2];
 			data[i+2] = aux;
+		}
 	}
 
 	// salva a imagem toda
 	fwrite(data, sizeof(unsigned char), width * height * mode, file);
 	fclose(file);
-
-	//deleta os pixels
-	delete data;
 
 	return true;
 }
