@@ -15,3 +15,4 @@ TODO LIST
 13- adicionar noise para dar detalhe ao terreno ou usar detail textures
 14- fazer uma classe para tratar o frustum
 15- organizar a hierarquia dos meshes e renderer
+16- fazer o terreno ler .tga e .raw
