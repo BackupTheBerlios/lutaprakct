@@ -120,8 +120,6 @@ void Skydome::load(std::string filename, int sides, int slices, float radius, fl
 	
 	float st, sp, c; //star theta, star phi
 
-	srand(time(0));
-
 	for (int i = 0; i < starsNum; i++){
 		
 		st = (rand() % 90) / 180.0f * pi;
