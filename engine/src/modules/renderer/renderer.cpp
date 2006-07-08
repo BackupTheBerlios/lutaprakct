@@ -192,12 +192,10 @@ bool Renderer::start(void* data){
 	dome->setCoordinates(44.0, 36.0, 6.0, 180.0);
     dome->update(0);
 
-	std::cout << "Gerando heightmap...";
-	HillsHeightmap* hm = new HillsHeightmap();
-	std:: cout << "construtor carregado... ";
-	hm->generate("hills.tga", 128, 128, 2.0, 40.0, 200, 1);
-//	delete hm;
-	std::cout << "Pronto!" << std::endl;
+	HillsHeightmap* hm= new HillsHeightmap();
+	hm->generate(512, 512, 2.0, 40.0, 8000, 1);
+	hm->saveTga("hills3.tga", 512, 512, 8);
+	delete hm;
 	
 	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
