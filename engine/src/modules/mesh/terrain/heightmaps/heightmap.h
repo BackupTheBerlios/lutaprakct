@@ -5,14 +5,15 @@
 
 //essa classe GERA as imagens tga dos heightmaps
 
-
-
 class Heightmap{
 	
 public:
 	//contrutor e destrutor
 	Heightmap(){ data = NULL; };
 	virtual ~Heightmap();
+	
+	void saveTga(std::string filename, short int sizex, short int sizey, short int depth, unsigned char* data);
+	void clearData();
 	
 	//sets e gets
 	int getSizeX(){return sizex; }

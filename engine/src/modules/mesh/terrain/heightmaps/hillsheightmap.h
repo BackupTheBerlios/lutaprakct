@@ -8,13 +8,14 @@ class HillsHeightmap : public Heightmap{
 	public:
 	
 		HillsHeightmap(){tempData = NULL;};
-		~HillsHeightmap(){};
+		~HillsHeightmap(){ if (data){ free(data); data = NULL; }
+						   if (tempData){ delete tempData; tempData = NULL;} };
 		
-		void generate(std::string filename, unsigned short	 sizex, unsigned short sizey, float hillMin,
+		void generate( unsigned short	 sizex, unsigned short sizey, float hillMin,
 						float hillMax, unsigned short numHills, 
 						unsigned short	flattening, bool isIsland = false);
 						
-		void clearData();
+		void clearTempData();
 		
 	private:
 

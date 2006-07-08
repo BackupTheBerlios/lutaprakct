@@ -1,10 +1,7 @@
 
 #include "hillsheightmap.h"
-#include "../../../../util/image/tgaimage.h"
 
-#include <iostream>
-
-void HillsHeightmap::generate(std::string filename, unsigned short	 sizex, unsigned short sizey, float hillMin,
+void HillsHeightmap::generate(unsigned short	 sizex, unsigned short sizey, float hillMin,
 						float hillMax, unsigned short numHills, 
 						unsigned short	flattening, bool isIsland){
 
@@ -16,6 +13,7 @@ void HillsHeightmap::generate(std::string filename, unsigned short	 sizex, unsig
 	this->isIsland = isIsland;
 	this->flattening = flattening;
 	
+	//data teve que ser usado malloc por um bug estranho que ocorria quando usava new
 	data = (unsigned char *)malloc(sizeof(unsigned char) * sizex * sizey * 3);
 	tempData = new float[sizex * sizey];
 	if (tempData == NULL)
@@ -23,33 +21,20 @@ void HillsHeightmap::generate(std::string filename, unsigned short	 sizex, unsig
 	if (data == NULL)
 		return;
 	
-	std::cout << "adicionando hills" << std::endl;
 	for( int i = 1; i < numHills; i++ ){
 		addHill();
 	}
-	std::cout << "adicionando hills2" << std::endl;
 	
-	std::cout << "normalizando" << std::endl;
 	normalize();
-	std::cout << "normalizando2" << std::endl;
-	std::cout << "flatten" << std::endl;
 	flatten();
-	std::cout << "flatten2" << std::endl;
-	std::cout << "write" << std::endl;
 	writeData();
-	std::cout << "write2" << std::endl;
 	
-	//tempData;
-	std::cout << "criando tga" << std::endl;
-	tgaimage *tga = new tgaimage();
-	std::cout << "criando tga2" << std::endl;
-	std::cout << "write tga" << std::endl;
-	tga->write(filename.c_str(), sizex, sizey, 8, data);
-	std::cout << "write tga2" << std::endl;
-	delete tga;
+	delete []tempData;
+	tempData = NULL;
+	
 }
 
-void HillsHeightmap::clearData(){
+void HillsHeightmap::clearTempData(){
 
 	for(unsigned int x = 1; x <= sizex; x++ ){
 		for(unsigned int y = 1; y <= sizey; y++ ){
@@ -162,7 +147,7 @@ void HillsHeightmap::normalize(){
 		}
 	}else{
 		//terreno sem altura
-		clearData();
+		clearTempData();
 	}
 	
 }
@@ -192,7 +177,6 @@ void HillsHeightmap::writeData(){
 	for (int x = 1; x <= sizex; x++ )
 		for (int y = 1; y <= sizey; y++){
 			data[x + sizey*y] = (unsigned char) ( getCell(x, y)*255 );			
-			std::cout << getCell(x, y) << std::endl;
 		}
 	
 }
