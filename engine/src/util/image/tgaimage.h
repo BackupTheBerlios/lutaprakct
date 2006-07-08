@@ -14,7 +14,7 @@ public:
 
 	tgaimage(){ imagedata = NULL; type = TGA; };
 	tgaimage(const char *filename){ imagedata = NULL; type = TGA; load(filename); };
-	~tgaimage(){ /*if (imagedata) delete imagedata;*/};
+	~tgaimage(){ if (imagedata){ delete imagedata; imagedata = NULL; }};
 	
 	bool load(const char* filename, int loadingflags = 0);
 	bool write(const char* filename, short int width, short int height, unsigned char depth,
