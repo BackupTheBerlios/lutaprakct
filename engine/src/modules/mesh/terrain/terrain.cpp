@@ -23,15 +23,24 @@ Terrain::~Terrain(){
 
 
 bool Terrain::loadMap(char *filename, int detailRepeats){
-	
-	FILE *fp;
 
 	if(!filename) 
 		return false;
 
-	if(heightMap.mapData != NULL) 
-		shutDown();
+	heightMap = new HillsHeightmap();
+	std::cout << "gerando mapa" << std::endl;
+	heightMap->generate(256, 256, 2.0, 40.0, 800, 1);
+	std::cout << "salvando mapa" << std::endl;
+	heightMap->saveTga("hills4.tga", 256, 256, 24);
+	std::cout << "mapa pronto" << std::endl;
 
+	
+	heightScale = 0.2;
+	//if(heightMap.mapData != NULL) 
+	//	shutDown();
+
+	/*
+	FILE *fp;
 	fp = fopen(filename, "rb");
 	if(!fp) 
 		return false;
@@ -47,11 +56,15 @@ bool Terrain::loadMap(char *filename, int detailRepeats){
 
    // Read in the entire file into the array.
 	fread(heightMap.mapData, 1, heightMap.size * heightMap.size, fp);
+	fclose(fp);*/
+
 	numRepeats = detailRepeats;
-
+	std::cout << "criando mapa mesh" << std::endl;
 	createTerrainMesh();
+	std::cout << "mapa mesh criado" << std::endl;
+	delete heightMap;
+	std::cout << "mapa deletado" << std::endl;
 
-	fclose(fp);
 	return true;
 }
 
@@ -70,8 +83,8 @@ void Terrain::createTerrainMesh(){
 		delete[] texCoords2;
 
    //Sizes we need for the points/color and tex coords.
-	int size = ((heightMap.size - 1) * (heightMap.size - 1) * 6) * 3;
-	int tSize = ((heightMap.size - 1) *(heightMap.size - 1) * 6) * 2;
+	int size = ((heightMap->getSizeX() - 1) * (heightMap->getSizeX() - 1) * 6) * 3;
+	int tSize = ((heightMap->getSizeX() - 1) *(heightMap->getSizeX() - 1) * 6) * 2;
 
 	vertex = new float[size];
 	texCoords = new float[tSize];
@@ -80,13 +93,13 @@ void Terrain::createTerrainMesh(){
    // Loop through and generate a grid.  Use the height map
    // when setting the Y to create the terrain mesh.  Create 2 triangles
    // each iteration.
-	for(int z = 0; z < heightMap.size - 1; z++){
-		for(int x = 0; x < heightMap.size - 1; x++){
+	for(int z = 0; z < heightMap->getSizeX() - 1; z++){
+		for(int x = 0; x < heightMap->getSizeX() - 1; x++){
 			      // Calculate texture coords for these tris.
-			float left = (float)x / heightMap.size;
-			float right = ((float)x + 1) / heightMap.size;
-			float bottom = (float)z / heightMap.size;
-			float top = (float)(z + 1) / heightMap.size;
+			float left = (float)x / heightMap->getSizeX();
+			float right = ((float)x + 1) / heightMap->getSizeX();
+			float bottom = (float)z / heightMap->getSizeX();
+			float top = (float)(z + 1) / heightMap->getSizeX();
 
                // V1.
 
@@ -179,10 +192,10 @@ void Terrain::createTerrainMesh(){
 
 bool Terrain::saveMap(char *filename){
 	
-	FILE *fp;
+	/*FILE *fp;
 
    // Error Checking...
-	if(heightMap.mapData == 0) return false;
+	if(heightMap.data == 0) return false;
 	if(filename == 0) return false;
 
 	// Open the file to write it out as an text file.
@@ -192,14 +205,14 @@ bool Terrain::saveMap(char *filename){
 	if(fp == 0) return false;
 
    // Write out the size and scale values.
-	fwrite(&heightMap.size, 1, sizeof(heightMap.size), fp);
+	fwrite(&heightMap.getSizeX(), 1, sizeof(heightMap.getSizeX()), fp);
 	fwrite(&heightScale, 1, sizeof(heightScale), fp);
 
 	// Write out all of the data in one big write.
-	fwrite(heightMap.mapData, 1, heightMap.size * heightMap.size, fp);
+	fwrite(heightMap.data, 1, heightMap.getSizeX() * heightMap.getSizeX(), fp);
 	
 	// Close the file.
-	fclose(fp);
+	fclose(fp);*/
 	return true;
 }
 
@@ -210,19 +223,19 @@ void Terrain::setHeightScale(float val){
 
 
 void Terrain::setHeight(unsigned char val, int x, int z){
-	heightMap.mapData[x + heightMap.size * z] = val;
+	heightMap->data[x + heightMap->getSizeX() * z] = val;
 }
 
 
 unsigned char Terrain::getHeight(int x, int z){
    // Return the unscaled height value of the specified point.
-   return heightMap.mapData[x + heightMap.size * z];
+   return heightMap->data[x + heightMap->getSizeX() * z];
 }
 
 
 float Terrain::getScaledHeight(int x, int z){
    // Return the scaled height value of the specified point.
-   return (heightMap.mapData[x + heightMap.size * z] * heightScale);
+   return (heightMap->data[x + heightMap->getSizeX() * z] * heightScale);
 }
 
 
@@ -334,7 +347,7 @@ unsigned char Terrain::interpolateHeight(int x, int z, float textureMapRatio){
 	// Set the high value.  If scaled x + 1 is greater than the entire size of the map then
    // we send the low to return as default.  Else we grab the high x.
    // This way we don't go out  of bounds in the array.
-	if((scaledX + 1) > heightMap.size)
+	if((scaledX + 1) > heightMap->getSizeX())
 		return low;
 	else
 		high = getHeight((int)scaledX + 1, (int)scaledZ);
@@ -346,7 +359,7 @@ unsigned char Terrain::interpolateHeight(int x, int z, float textureMapRatio){
 	interpolatedX = ((high - low) * interpolation) + low;
 
 	// Next we do the same thing for the z that we did for the x.
-	if((scaledZ + 1 ) > heightMap.size)
+	if((scaledZ + 1 ) > heightMap->getSizeX())
 		return low;
 	else
 		high = getHeight((int)scaledX, (int)scaledZ + 1);
@@ -372,7 +385,7 @@ unsigned char *Terrain::generateTextureMap(unsigned int imageSize){
 	
    //quantidade de blend para cada texture tile
 	float blendList[MAX_TILES] = {0};
-	float textureMapRatio = (float)heightMap.size / (float)imageSize;
+	float textureMapRatio = (float)heightMap->getSizeX() / (float)imageSize;
 
 	tiles.numTiles = 0;
    
@@ -464,11 +477,11 @@ void Terrain::shutDown(){
 		texCoords2 = NULL;
 	}
 
-	if(heightMap.mapData){
-		delete[] heightMap.mapData;
-		heightMap.mapData = NULL;
-		heightMap.size = 0;
-	}
+	//if(heightMap.data){
+	//	delete[] heightMap.data;
+	//	heightMap.data = NULL;
+	//	heightMap.getSizeX() = 0;
+	//}
 
 	if(rootNode){
 		rootNode->shutdown();

@@ -1,8 +1,10 @@
 #ifndef TERRAIN_H_
 #define TERRAIN_H_
 
-#include"../../../util/structures/octree.h"
-#include"../../material/textures/texturemanager.h"
+#include "../../../util/structures/octree.h"
+#include "../../material/textures/texturemanager.h"
+
+#include "heightmaps/hillsheightmap.h"
 
 #define MAX_TILES 5
 
@@ -11,15 +13,16 @@ class HeightMap{
 	
 	public:
 	
-		HeightMap() { mapData = 0; size = 0; }
+		HeightMap() { data = 0; size = 0; }
 		
 		~HeightMap(){
 			size = 0;
-			if(mapData) delete[] mapData;
-			mapData = 0;
+			if(data) delete []data;
+			data = 0;
 		}
 
-		unsigned char *mapData;
+		int getSizeX(){return size; };
+		unsigned char *data;
 		int size;
 };
 
@@ -78,8 +81,10 @@ class Terrain{
 		void shutDown();
 
       // Stores height map and scale value.
-		HeightMap heightMap;
+		//HeightMap heightMap;
+		HillsHeightmap* heightMap;
 		float heightScale;
+		
 
       // A list of images used to generate terrain texture.
 		TerrainTiles tiles;
