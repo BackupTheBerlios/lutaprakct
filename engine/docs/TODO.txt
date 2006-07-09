@@ -16,3 +16,4 @@ TODO LIST
 14- fazer uma classe para tratar o frustum
 15- organizar a hierarquia dos meshes e renderer
 16- fazer o terreno ler .tga e .raw
+17- fazer texture tratar texture3d
