@@ -19,7 +19,7 @@ class image{
 	
 public:
 
-	image(){};
+	image(){imagedata = NULL;};
 	virtual ~image(){};
 	
 	

@@ -111,7 +111,7 @@ bool tgaimage::load(const char *filename, int loadingflags){
 	switch(encode){
 
 		case 2: // Raw RGB
-   		{
+   		
 			if((imagesize+18+imagedata[0])>filesize){
 				std::cout << "invalid file size" << std::endl;
 				return false;
@@ -128,8 +128,17 @@ bool tgaimage::load(const char *filename, int loadingflags){
 			}
 
 			BGRtoRGB(); 
-       break;
-      }
+       		break;
+      
+      case 3:
+      		std::cout << "carregando iimagem" << std::endl;
+ 			if (!loadRaw()){
+				std::cout << "cant load image" << std::endl;
+				return false;
+			}
+			std::cout << "pronto" << std::endl;
+			break;     
+      		
 
 		default:
 			std::cout << "tga invalido " << encode << std::endl;
@@ -230,7 +239,7 @@ bool tgaimage::write(const char* filename, short int width, short int height, un
 	// swap nos pixels do tga
 	unsigned char aux;
 	if (mode >= 3){
-		for (i=0; i < width * height * mode ; i+= mode) {
+		for (i=0; i < width * height * mode; i+= mode) {
 			aux = data[i];
 			data[i] = data[i+2];
 			data[i+2] = aux;
@@ -240,7 +249,6 @@ bool tgaimage::write(const char* filename, short int width, short int height, un
 	// salva a imagem toda
 	fwrite(data, sizeof(unsigned char), width * height * mode, file);
 	fclose(file);
-
 	return true;
 }
 
