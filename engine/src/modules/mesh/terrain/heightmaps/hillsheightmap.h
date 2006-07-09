@@ -7,10 +7,8 @@ class HillsHeightmap : public Heightmap{
 	
 	public:
 	
-		HillsHeightmap(){tempData = NULL;};
-		~HillsHeightmap(){ if (data){ free(data); data = NULL; }
-						   if (tempData){ delete tempData; tempData = NULL;}
-		};
+		HillsHeightmap(){tempData = NULL; data = NULL; };
+		~HillsHeightmap();
 		
 		void generate( unsigned short	 sizex, unsigned short sizey, float hillMin,
 						float hillMax, unsigned short numHills, 

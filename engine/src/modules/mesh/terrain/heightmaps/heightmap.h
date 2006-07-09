@@ -2,6 +2,7 @@
 #define _HEIGHTMAP_H_
 
 #include <string>
+#include <iostream>
 
 //essa classe GERA as imagens tga dos heightmaps
 
@@ -21,10 +22,11 @@ public:
 	void setSizeX(int x){ sizex = x; }
 	void setSizeY(int y){ sizey = y; }
 	
+	unsigned char* data;
+	
 protected:
 	
-	unsigned short sizex, sizey;
-	unsigned char* data;
+	short int sizex, sizey;
 	
 };
 

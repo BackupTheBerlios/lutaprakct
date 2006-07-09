@@ -1,6 +1,17 @@
 
 #include "hillsheightmap.h"
 
+HillsHeightmap::~HillsHeightmap(){
+	if (data){ 
+		delete []data;
+		data = NULL; 
+	}
+	if (tempData){ 
+		delete []tempData; 
+		tempData = NULL;
+	}
+}
+
 void HillsHeightmap::generate(unsigned short	 sizex, unsigned short sizey, float hillMin,
 						float hillMax, unsigned short numHills, 
 						unsigned short	flattening, bool isIsland){
@@ -13,31 +24,27 @@ void HillsHeightmap::generate(unsigned short	 sizex, unsigned short sizey, float
 	this->isIsland = isIsland;
 	this->flattening = flattening;
 	
-	//data teve que ser usado malloc por um bug estranho que ocorria quando usava new
-	data = (unsigned char *)malloc(sizeof(unsigned char) * sizex * sizey * 3);
+	data = new unsigned char[sizex * sizey * 3];
 	tempData = new float[sizex * sizey];
 	if (tempData == NULL)
 		return;
 	if (data == NULL)
 		return;
 	
-	for( int i = 1; i < numHills; i++ ){
+	for( int i = 1; i < numHills; i++ )
 		addHill();
-	}
 	
 	normalize();
 	flatten();
 	writeData();
-	
-	delete []tempData;
-	tempData = NULL;
+
 	
 }
 
 void HillsHeightmap::clearTempData(){
 
-	for(unsigned int x = 1; x <= sizex; x++ ){
-		for(unsigned int y = 1; y <= sizey; y++ ){
+	for( int x = 0; x < sizex; ++x ){
+		for( int y = 0; y < sizey; ++y ){
 			setCell( x, y, 0 );
 		}
 	}
@@ -128,7 +135,7 @@ void HillsHeightmap::normalize(){
 	float min = getCell( 0, 0 );
 	float max = getCell( 0, 0 );
 	
-	// find the min and max
+	// pega o maior eo menor
 	for( int x = 0; x < sizex; ++x ){
 		for( int y = 0; y < sizey; ++y ){
 			float z = getCell( x, y );
@@ -137,9 +144,9 @@ void HillsHeightmap::normalize(){
 		}
 	}
 
-	// avoiding divide by zero (unlikely with floats, but just in case)
+	// evita dividir por zero
 	if( max != min ){
-		// divide every height by the maximum to normalize to ( 0.0, 1.0 )
+		//divide cada altura pelo maior
 		for( int x = 0; x < sizex; ++x ){
 			for( int y = 0; y < sizey; ++y ){
 				setCell( x, y, ( getCell( x, y ) - min ) / ( max - min ) );
@@ -153,6 +160,8 @@ void HillsHeightmap::normalize(){
 }
 
 float HillsHeightmap::getCell(unsigned int x, unsigned int y){
+	if (tempData == NULL)
+		return 0;
 	return 	tempData[x + sizex*y];	
 }
 
@@ -165,7 +174,7 @@ void HillsHeightmap::flatten(){
 				
 				for( int i = 0; i < flattening; ++i )
 					flat *= original;
-				
+					
 				setCell( x, y, flat );
 			}
 		}
@@ -174,9 +183,9 @@ void HillsHeightmap::flatten(){
 
 void HillsHeightmap::writeData(){
 
-	for (int x = 1; x <= sizex; x++ )
-		for (int y = 1; y <= sizey; y++){
-			data[x + sizey*y] = (unsigned char) ( getCell(x, y)*255 );			
+	for (int x = 0; x < sizex; ++x )
+		for (int y = 0; y < sizey; ++y){
+			data[x + sizey*y] = (unsigned char) ( getCell(x, y)*255 );
 		}
 	
 }
