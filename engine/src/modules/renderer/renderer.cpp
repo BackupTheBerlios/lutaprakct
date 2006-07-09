@@ -62,9 +62,9 @@ void RenderOctreeNode(Octree* pNode)
        // t->enable();
        // t->bind();
 
-         glActiveTextureARB(GL_TEXTURE1_ARB);
-         glEnable(GL_TEXTURE_2D);
-         glBindTexture(GL_TEXTURE_2D, alpha->getId());
+         //glActiveTextureARB(GL_TEXTURE1_ARB);
+         //glEnable(GL_TEXTURE_2D);
+         //glBindTexture(GL_TEXTURE_2D, alpha->getId());
          
          glActiveTextureARB(GL_TEXTURE2_ARB);
          glEnable(GL_TEXTURE_2D);
@@ -81,9 +81,9 @@ void RenderOctreeNode(Octree* pNode)
          glVertexPointer(3, GL_FLOAT, 0, pVerts);
          glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
          
-         glClientActiveTextureARB(GL_TEXTURE1_ARB);
-         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-         glTexCoordPointer(2, GL_FLOAT, 0, pTC2);
+        // glClientActiveTextureARB(GL_TEXTURE1_ARB);
+        // glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        // glTexCoordPointer(2, GL_FLOAT, 0, pTC2);
          
          glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
@@ -148,10 +148,14 @@ bool Renderer::start(void* data){
     video->showCursor(false);
     
     //inicializacao dos flags que as texturas vao usar
+    std::cout << "Inicializando texture manager... ";
 	TEXTUREMANAGER::getInstance().setDefaultFlags();
+	std::cout << "Pronto" << std::endl;
 
 	//inicializacao das extensions
+	std::cout << "Inicializando OpenGL extensions... ";
 	initializeExtensions();
+	std::cout << "Pronto" << std::endl;
 
 	if(!terrain.loadMap("map.raw", 4))
 		std::cout << "Nao foi possivel ler o mapa" << std::endl;
@@ -191,11 +195,15 @@ bool Renderer::start(void* data){
 	
 	dome->setCoordinates(44.0, 36.0, 6.0, 180.0);
     dome->update(0);
-
+/*
+	std::cout << "inicializando tga" << std::endl;
 	HillsHeightmap* hm= new HillsHeightmap();
-	hm->generate(512, 512, 2.0, 40.0, 8000, 1);
-	hm->saveTga("hills3.tga", 512, 512, 8);
-	delete hm;
+	std::cout << "gerando tga" << std::endl;
+	hm->generate(128, 128, 2.0, 40.0, 200, 1);
+	std::cout << "salvando tga" << std::endl;
+	hm->saveTga("hills3.tga", 128, 128, 24);
+	std::cout << "deletando tga" << std::endl;
+	delete hm;*/
 	
 	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
