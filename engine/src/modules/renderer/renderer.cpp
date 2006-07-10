@@ -185,7 +185,7 @@ bool Renderer::start(void* data){
 */
 	f = new Fog(0.5, 0.5, 0.5, 1.0,  0.03, 0.0, 100.0,  FOG_EXP);
 	std::cout << "Inicializando Skydome...";
-	dome = new Skydome("sky2.tga", 32, 48, 1000.0, 0.8);
+	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY | ANIMATED_CLOUDS |SKY_ELEMENTS ,0.8);
 	std::cout << "Pronto!" << std::endl;
 	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	t2 = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
