@@ -9,24 +9,6 @@
 #define MAX_TILES 5
 
 
-class HeightMap{
-	
-	public:
-	
-		HeightMap() { data = 0; size = 0; }
-		
-		~HeightMap(){
-			size = 0;
-			if(data) delete []data;
-			data = 0;
-		}
-
-		int getSizeX(){return size; };
-		unsigned char *data;
-		int size;
-};
-
-
 enum TILE_TYPES
 {
 	LOWEST_TILE = 0,        // Dirt and anything under grass.
@@ -80,8 +62,6 @@ class Terrain{
 
 		void shutDown();
 
-      // Stores height map and scale value.
-		//HeightMap heightMap;
 		HillsHeightmap* heightMap;
 		float heightScale;
 		

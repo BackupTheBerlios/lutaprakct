@@ -28,42 +28,13 @@ bool Terrain::loadMap(char *filename, int detailRepeats){
 		return false;
 
 	heightMap = new HillsHeightmap();
-	std::cout << "gerando mapa" << std::endl;
-	heightMap->generate(256, 256, 2.0, 40.0, 800, 1);
-	std::cout << "salvando mapa" << std::endl;
+	heightMap->generate(256, 256, 2.0, 40.0, 1200, 1);
 	heightMap->saveTga("hills4.tga", 256, 256, 24);
-	std::cout << "mapa pronto" << std::endl;
-
-	
-	heightScale = 0.2;
-	//if(heightMap.mapData != NULL) 
-	//	shutDown();
-
-	/*
-	FILE *fp;
-	fp = fopen(filename, "rb");
-	if(!fp) 
-		return false;
-
-   // Read in the size and the scale values.
-	fread(&heightMap.size, 1, sizeof(heightMap.size), fp);
-	fread(&heightScale, 1, sizeof(heightScale), fp);
-
-   // Initialize the map data variable.
-	heightMap.mapData = new unsigned char[heightMap.size * heightMap.size];
-	if(heightMap.mapData == NULL) 
-		return false;
-
-   // Read in the entire file into the array.
-	fread(heightMap.mapData, 1, heightMap.size * heightMap.size, fp);
-	fclose(fp);*/
+	heightScale = 0.1;
 
 	numRepeats = detailRepeats;
-	std::cout << "criando mapa mesh" << std::endl;
 	createTerrainMesh();
-	std::cout << "mapa mesh criado" << std::endl;
 	delete heightMap;
-	std::cout << "mapa deletado" << std::endl;
 
 	return true;
 }
