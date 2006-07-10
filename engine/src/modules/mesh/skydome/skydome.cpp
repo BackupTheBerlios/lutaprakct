@@ -2,14 +2,9 @@
 #include<GL/gl.h>
 #include<GL/glu.h>
 #include <cmath>
-#include <iostream>
 #include "skydome.h"
 #include "../../renderer/camera/camera.h"
 
-#include "../../shaders/cloudShader.h"
-
-texture* nuvem;
-cloudShader* cshader;
 
 const char* cloudVertexSource2 =
 "//varying float intensity_sq, intensity;													\n"
@@ -50,26 +45,38 @@ const char* cloudFragmentSource2=
 Skydome::Skydome(){
 	vertices = NULL;
 	indices = NULL;
+	colors = NULL;
+	texcoords = NULL;
+	stars = NULL;
+	starColors = NULL;
+	
 }
 
-Skydome::Skydome(std::string filename, int sides, int slices,  float radius, float dampening = 0){
+Skydome::Skydome(std::string filename, int sides, int slices,  float radius, int flags, float dampening = 0){
 	vertices = NULL;
 	indices = NULL;
-	load(filename, sides, slices, radius, dampening);
+	colors = NULL;
+	texcoords = NULL;
+	stars = NULL;
+	starColors = NULL;
+	load(filename, sides, slices, radius, flags, dampening);
 }
 
 Skydome::~Skydome(){
 }
 
-void Skydome::load(std::string filename, int sides, int slices, float radius, float dampening = 0){
+void Skydome::load(std::string filename, int sides, int slices, float radius, int flags, float dampening = 0){
 	this->sides = sides;
 	this->slices = slices;
 	this->radius = radius;
 	this->dampening = dampening;
+	this->flags = flags;
 	
 	vertices = new vec3[ (slices+1) * (sides + 1) ];
-	texcoords = new vec2[(slices +1) * (sides + 1)];
-	colors = new vec4[(slices +1) * (sides + 1)];
+	if (flags &STATIC_CLOUDS)
+		texcoords = new vec2[(slices +1) * (sides + 1)];
+	if (flags &COLORED_SKY)
+		colors = new vec4[(slices +1) * (sides + 1)];
 		
 	//calcula delta Theta
 	float polyAngle = two_pi / sides; 
@@ -90,8 +97,10 @@ void Skydome::load(std::string filename, int sides, int slices, float radius, fl
 			vertices[j * (sides + 1) + i].y = vy * radius;
 			vertices[j * (sides + 1) + i].z = vz * radius;
 			
-			texcoords[j * (sides + 1 ) + i].x = (float)(i) / (float)(sides);
-			texcoords[j * (sides + 1 ) + i].y = (float)(j) / (float)(slices);
+			if (flags &STATIC_CLOUDS){
+				texcoords[j * (sides + 1 ) + i].x = (float)(i) / (float)(sides);
+				texcoords[j * (sides + 1 ) + i].y = (float)(j) / (float)(slices);
+			}
 		}
 	}
 	
@@ -105,33 +114,38 @@ void Skydome::load(std::string filename, int sides, int slices, float radius, fl
 		}
 	}
 
-	skytexture = TEXTUREMANAGER::getInstance().load((char*)filename.c_str(), texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
-	nuvem = TEXTUREMANAGER::getInstance().load("clouds.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, 0 );
-	cshader = new cloudShader(cloudVertexSource2, cloudFragmentSource2);
-	cshader->setInitialParameters();
-	std::cout << "shader log: " << cshader->getCompilerLog() << std::endl;
+	if (flags &STATIC_CLOUDS)
+		skytexture = TEXTUREMANAGER::getInstance().load((char*)filename.c_str(), texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	
-	sun = TEXTUREMANAGER::getInstance().load("flare0.tga", texture::TEXTURE_2D, texture::RGB, texture::RGBA8, 0);
-	moon = TEXTUREMANAGER::getInstance().load("moon.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, 0);
+	if (flags &ANIMATED_CLOUDS){
+		nuvem = TEXTUREMANAGER::getInstance().load("clouds.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, 0 );
+		cshader = new cloudShader(cloudVertexSource2, cloudFragmentSource2);
+		cshader->setInitialParameters();
+	}
 	
-	starsNum = 1000;
-	stars = new vec3[starsNum];
-	starColors = new vec4[starsNum];
-	
-	float st, sp, c; //star theta, star phi
-
-	for (int i = 0; i < starsNum; i++){
+	if (flags &SKY_ELEMENTS){
 		
-		st = (rand() % 90) / 180.0f * pi;
-		sp = (rand() % 360) / 180.0f * pi;
-
-		stars[i].x = cos(sp) * cos(st) * radius;
-		stars[i].y = sin(st) * radius * dampening;
-		stars[i].z = sin(sp) * cos(st) * radius;
+		sun = TEXTUREMANAGER::getInstance().load("flare0.tga", texture::TEXTURE_2D, texture::RGB, texture::RGBA8, 0);
+		moon = TEXTUREMANAGER::getInstance().load("moon.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, 0);
+	
+		starsNum = 1000;
+		stars = new vec3[starsNum];
+		starColors = new vec4[starsNum];
+	
+		float st, sp, c; //star theta, star phi
+		for (int i = 0; i < starsNum; i++){
 		
-		c = (rand() % 256) / 255.0f;
+			st = (rand() % 90) / 180.0f * pi;
+			sp = (rand() % 360) / 180.0f * pi;
 
-		starColors[i] = vec4(c, c, c, c);
+			stars[i].x = cos(sp) * cos(st) * radius;
+			stars[i].y = sin(st) * radius * dampening;
+			stars[i].z = sin(sp) * cos(st) * radius;
+		
+			c = (rand() % 256) / 255.0f;
+
+			starColors[i] = vec4(c, c, c, c);
+		}
 	}
 
 	
@@ -180,7 +194,8 @@ void Skydome::update(float deltatime){
 		for (num = 0; num <= sides; num++){
 			theta = half_pi - SliceAng * ind;
 			phi = num * SideAng;
-			skyColor.getVertexColor(theta, phi, sunPhi, &colors[index]);
+			if (flags &COLORED_SKY)
+				skyColor.getVertexColor(theta, phi, sunPhi, &colors[index]);
 			index++;
 		}
 	}
@@ -191,9 +206,11 @@ void Skydome::draw(){
 	
 	glPushMatrix();
 	
-	glDisable(GL_DEPTH_TEST);
-	drawElements(true); 
-	glEnable(GL_DEPTH_TEST);
+	if (flags &SKY_ELEMENTS){
+		glDisable(GL_DEPTH_TEST);
+		drawElements(true); 
+		glEnable(GL_DEPTH_TEST);
+	}
 	
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -201,16 +218,17 @@ void Skydome::draw(){
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
 	
-	int mode = 3;
-	if ( mode == 1)
-		skytexture->bind();
-	else if ( mode == 2){
-		glActiveTextureARB(GL_TEXTURE0 + 0);
+	if (flags &STATIC_CLOUDS){
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+		skytexture->bind();
+	}
+	if ( flags &ANIMATED_CLOUDS){
+		glActiveTextureARB(GL_TEXTURE0 + 0);
 		nuvem->bind();
 		cshader->bind();
-	}else if ( mode == 3 ){
+	}
+	if ( flags & COLORED_SKY ){
 		glEnableClientState(GL_COLOR_ARRAY);
 		glColorPointer(4, GL_FLOAT, 0, &colors[0]);
 	}
@@ -218,24 +236,27 @@ void Skydome::draw(){
 	for(int i = 0; i < slices; i++)
 		glDrawElements(GL_TRIANGLE_STRIP, (sides + 1) * 2, GL_UNSIGNED_SHORT, &indices[i * (sides + 1) * 2]);
 	
-	if (mode == 1)
-		skytexture->unbind();
-	else if (mode == 2){
-		glActiveTextureARB(GL_TEXTURE0 + 0);
+	if (flags &STATIC_CLOUDS){
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		skytexture->unbind();
+	}
+	if (flags &ANIMATED_CLOUDS){
+		glActiveTextureARB(GL_TEXTURE0 + 0);
 		cshader->setLoopParameters();
 		cshader->unbind();
 		nuvem->unbind();
-	}else if ( mode == 3 ){
-		glDisableClientState(GL_COLOR_ARRAY);
 	}
+	if ( flags &COLORED_SKY )
+		glDisableClientState(GL_COLOR_ARRAY);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisable(GL_BLEND);
 	
-	glDisable(GL_DEPTH_TEST);
-	drawElements(false);  
-	glEnable(GL_DEPTH_TEST);
+	if (flags &SKY_ELEMENTS){
+		glDisable(GL_DEPTH_TEST);
+		drawElements(false);  
+		glEnable(GL_DEPTH_TEST);
+	}
 	
 	glPopMatrix();
 }
@@ -276,7 +297,7 @@ void Skydome::drawElements(bool initial){
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 
-            	vec3 MoonPos(sin(moonTheta) * cos(moonPhi) * radius,
+        vec3 MoonPos(sin(moonTheta) * cos(moonPhi) * radius,
 			    		cos(moonTheta) * radius,
 			    		sin(moonTheta) * sin(moonPhi) * radius);
 

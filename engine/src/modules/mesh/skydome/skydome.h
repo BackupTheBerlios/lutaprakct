@@ -5,16 +5,25 @@
 #include "skyColor.h"
 #include "../../../util/math/algebra.h"
 #include "../../material/textures/texturemanager.h"
+#include "../../shaders/cloudShader.h"
+
+enum {
+	
+	ANIMATED_CLOUDS = 1 << 1,
+	STATIC_CLOUDS = 1 << 2,
+	COLORED_SKY = 1 << 3,
+	SKY_ELEMENTS = 1 << 4
+};
 
 class Skydome{
 	
 public:
 
 	Skydome();
-	Skydome(std::string filename, int sides, int slides, float radius, float dampening );
+	Skydome(std::string filename, int sides, int slides, float radius, int flags, float dampening );
 	~Skydome();
 
-	void load(std::string filename, int sides, int slides, float radius, float dampening );
+	void load(std::string filename, int sides, int slides, float radius, int flags, float dampening );
 	void update(float deltatime);
 	void draw();
 	void drawElements(bool initial);
@@ -40,7 +49,7 @@ public:
 
 private:
 
-	int slices, sides;
+	int slices, sides, flags;
 	float radius, dampening;
 	float timeOfDay, julianDay, latitude, longitude;
 	
@@ -56,6 +65,8 @@ private:
 	vec4* colors;
 	unsigned short* indices;
 	
+	cloudShader* cshader;
+	texture* nuvem;
 	texture* skytexture;
 	texture* moon;
 	texture* sun;
