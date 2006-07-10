@@ -7,6 +7,9 @@
 #include "../../material/textures/texturemanager.h"
 #include "../../shaders/cloudShader.h"
 
+/*se usar o flag ANIMATED_CLOUDS deve-se ativar o flag COLORED_SKY tambem. porque o shader
+ * que anima as nuvens pega a cor por vertice do skydome, entao as cores precisam ser
+ * calculadas e enviadas para o shader. */
 enum {
 	
 	ANIMATED_CLOUDS = 1 << 1,

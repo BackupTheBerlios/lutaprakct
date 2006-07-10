@@ -33,7 +33,7 @@ const char* cloudFragmentSource2=
 "void main(){																		\n"
 "   vec4 clouds_0 = texture2D(s_texture_0, gl_TexCoord[0].xy);						\n"
 " //  vec4 clouds_1 = texture2D(s_texture_1, gl_TexCoord[1].xy);						\n"
-"   vec4 clouds = (clouds_0 + clouds_0) * 0.6; //intensity_sq;								\n"
+"   vec4 clouds = (clouds_0 + clouds_0) * 0.4; //intensity_sq;								\n"
 "//   vec4 cloud_color = vec4((1.0 - intensity) * horizon.x, (1.0 - intensity) * horizon.y, intensity * horizon.z, 0.0);	\n"
 "//   vec4 cloud_color = vec4((1.0 - intensity), (1.0 - intensity) * horizon.y, intensity * horizon.z, 0.0);	\n"
 "//	vec4 cloud_color = mix(gl_Color, clouds, 1.5);										\n"
@@ -63,6 +63,18 @@ Skydome::Skydome(std::string filename, int sides, int slices,  float radius, int
 }
 
 Skydome::~Skydome(){
+	if (vertices)
+		delete vertices;
+	if (indices)
+		delete indices;
+	if (colors)
+		delete colors;
+	if (texcoords)
+		delete texcoords;
+	if (stars)
+		delete stars;
+	if (starColors)
+		delete starColors;
 }
 
 void Skydome::load(std::string filename, int sides, int slices, float radius, int flags, float dampening = 0){
@@ -212,9 +224,6 @@ void Skydome::draw(){
 		glEnable(GL_DEPTH_TEST);
 	}
 	
-    glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
 	
@@ -250,7 +259,9 @@ void Skydome::draw(){
 		glDisableClientState(GL_COLOR_ARRAY);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisable(GL_BLEND);
+	/*reseta a cor pro default 1, 1, 1, 1 ou todos os objetos vao ficar com
+	 * a ultima cor usada pelo skydome */
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	if (flags &SKY_ELEMENTS){
 		glDisable(GL_DEPTH_TEST);
@@ -336,8 +347,6 @@ void Skydome::drawElements(bool initial){
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_ONE, GL_ONE);
-
-		glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 			
 		glBegin(GL_QUADS);
 			glTexCoord2f(1.0f , 0.0f); 
