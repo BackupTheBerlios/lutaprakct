@@ -13,6 +13,9 @@
 
 void Engine::run(){
 	
+	//inicializa a seed para numeros random
+	srand((unsigned)time(NULL));
+	
 	if(!LOGGER::getInstance().initialize())return;
 
 	LOGGER::getInstance().write("start.log", "Inicializando engine");
@@ -38,9 +41,6 @@ void Engine::run(){
 	//set up the profiler with an output handler
 	ProfileLogHandler profileLogHandler;
 	ProfileSample::outputHandler=&profileLogHandler;
-
-	//inicializa a seed para numeros random
-	srand(time(0));
 
 	//main game loop
 	KERNEL::getInstance().execute();
