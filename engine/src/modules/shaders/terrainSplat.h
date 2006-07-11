@@ -12,10 +12,13 @@ class terrainSplat : public glslShader{
 		virtual ~terrainSplat(){kill();};
 			
 		void setInitialParameters();
-		void setLoopParameters();
+		void setLoopParameters(){};
 		
 	private:
 	
+		GLint alphamap;
+		GLint texture0;
+		GLint texture1;
 	
 };
 

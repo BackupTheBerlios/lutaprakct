@@ -10,7 +10,7 @@
 #include "../effects/fog/fog.h"
 #include "../mesh/skydome/skydome.h"
 
-#include "../mesh/terrain/heightmaps/hillsheightmap.h"
+#include "../shaders/terrainSplat.h"
 
 #include <iostream>
 
@@ -21,6 +21,18 @@ texture *t2;
 texture *alpha;
 
 Skydome *dome;
+terrainSplat *splat;
+
+const char* splatFragmentSource =
+"uniform sampler2D arido;																			\n"
+"uniform sampler2D grama;																			\n"
+"//uniform sampler2D alphamap;																			\n"
+"void main(){																						\n"
+"   // vec4  vectex0  = texture2D(tex0, gl_TexCoord[0].xy);										\n"
+"   // vec4  vectex1  = texture2D(tex1, gl_TexCoord[0].xy);										\n"
+"    //vec4  vecalphamap  = texture2D(alphamap, gl_TexCoord[2].xy);										\n"
+"    gl_FragColor = texture2D(grama, gl_TexCoord[0].xy)*2.0; // + vecalphamap*vectex1;																\n"
+"}																									\n\0";
 
 void RenderOctreeNode(Octree* pNode)
 {
@@ -56,41 +68,37 @@ void RenderOctreeNode(Octree* pNode)
          float *pTC2 = pNode->getTexCoord2();
 
          // Apply the textures.
-		glActiveTextureARB(GL_TEXTURE0_ARB);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, t->getId());
-       // t->enable();
-       // t->bind();
-
-         //glActiveTextureARB(GL_TEXTURE1_ARB);
-         //glEnable(GL_TEXTURE_2D);
-         //glBindTexture(GL_TEXTURE_2D, alpha->getId());
-         
-         glActiveTextureARB(GL_TEXTURE2_ARB);
+		 glActiveTextureARB(GL_TEXTURE0_ARB);
+		 glEnable(GL_TEXTURE_2D);
+		 glBindTexture(GL_TEXTURE_2D, t->getId());
+       
+         glActiveTextureARB(GL_TEXTURE1_ARB);
          glEnable(GL_TEXTURE_2D);
          glBindTexture(GL_TEXTURE_2D, t2->getId());
+                
+         //glActiveTextureARB(GL_TEXTURE2_ARB);
+         //glEnable(GL_TEXTURE_2D);
+         //glBindTexture(GL_TEXTURE_2D, alpha->getId());
 
+         glActiveTextureARB(GL_TEXTURE0_ARB);
          glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
          glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE_ARB, 2);
 
-         glActiveTextureARB(GL_TEXTURE0_ARB);
-         // Set pointers.
          glEnableClientState(GL_VERTEX_ARRAY);
          glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
+         
          glVertexPointer(3, GL_FLOAT, 0, pVerts);
          glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
+   
+         //glClientActiveTextureARB(GL_TEXTURE1_ARB);
+         //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+         //glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
+         //glClientActiveTextureARB(GL_TEXTURE0_ARB);
          
-        // glClientActiveTextureARB(GL_TEXTURE1_ARB);
-        // glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        // glTexCoordPointer(2, GL_FLOAT, 0, pTC2);
+//         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+ //        glTexCoordPointer(2, GL_FLOAT, 0, pTC2);
+ //        glClientActiveTextureARB(GL_TEXTURE0_ARB);
          
-         glClientActiveTextureARB(GL_TEXTURE0_ARB);
-
-         glClientActiveTextureARB(GL_TEXTURE2_ARB);
-         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-         glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
-
          // Draw the entire node's data.
          //glColor3f(1.0, 0.0, 0.0);
          glDrawArrays(GL_TRIANGLES, 0, numTris * 3);
@@ -98,23 +106,13 @@ void RenderOctreeNode(Octree* pNode)
          // Disable all the client states we enabled.
          glDisableClientState(GL_VERTEX_ARRAY);
          glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-         
-         //t->unbind();
-		glActiveTextureARB(GL_TEXTURE2_ARB);
-		glDisable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		
-		glActiveTextureARB(GL_TEXTURE1_ARB);
-		glDisable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 0);
-
-		glActiveTextureARB(GL_TEXTURE0_ARB);
-		glDisable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 0);
-        
-         glClientActiveTextureARB(GL_TEXTURE1_ARB);
-         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+         //glClientActiveTextureARB(GL_TEXTURE1_ARB);
+         //glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+         glDisable(GL_TEXTURE_2D);
          glClientActiveTextureARB(GL_TEXTURE0_ARB);
+         glDisable(GL_TEXTURE_2D);
+         
+         
       }
    else
       {
@@ -185,26 +183,19 @@ bool Renderer::start(void* data){
 */
 	f = new Fog(0.5, 0.5, 0.5, 1.0,  0.03, 0.0, 100.0,  FOG_EXP);
 	std::cout << "Inicializando Skydome...";
-	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY | ANIMATED_CLOUDS |SKY_ELEMENTS ,0.8);
+	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY | ANIMATED_CLOUDS ,0.4);
 	std::cout << "Pronto!" << std::endl;
 	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
-	t2 = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
+	t2 = TEXTUREMANAGER::getInstance().load("mid2.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	alpha = TEXTUREMANAGER::getInstance().load("alphamap4.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, texture::ANISOTROPIC_4);
 
    	CAMERA::getInstance().setPosition(100.07f, 124.641f, 50.5f, 108.0f, 124.0f, 50.0f, 0.0f, 1.0f, 0.0f);
 	
 	dome->setCoordinates(44.0, 36.0, 6.0, 180.0);
     dome->update(0);
-/*
-	std::cout << "inicializando tga" << std::endl;
-	HillsHeightmap* hm= new HillsHeightmap();
-	std::cout << "gerando tga" << std::endl;
-	hm->generate(128, 128, 2.0, 40.0, 200, 1);
-	std::cout << "salvando tga" << std::endl;
-	hm->saveTga("hills3.tga", 128, 128, 24);
-	std::cout << "deletando tga" << std::endl;
-	delete hm;*/
 	
+	splat = new terrainSplat(NULL, splatFragmentSource);
+	std::cout << "Splat shader: " << splat->getCompilerLog() << std::endl;
 	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
 	
@@ -230,8 +221,9 @@ void Renderer::update(void* data){
 	dome->draw();
 	//f->bind();
 	glTranslatef(0.0, 100.0, 0.0);
+	splat->bind();
 	RenderOctreeNode(terrain.rootNode);
-
+	splat->unbind();
 	//f->unbind();
 	video->unlock();
 	
