@@ -8,7 +8,8 @@ class terrainSplat : public glslShader{
 	public:
 		
 		terrainSplat(){};
-		terrainSplat(const char* vertexSource, const char* fragmentSource){ initialize(vertexSource, fragmentSource);};
+		terrainSplat(const char* vertexSource, const char* fragmentSource){ 
+			initialize(vertexSource,   fragmentSource);};
 		virtual ~terrainSplat(){kill();};
 			
 		void setInitialParameters();
@@ -22,4 +23,5 @@ class terrainSplat : public glslShader{
 	
 };
 
-#endif /*TERRAINSPLAT_H_*/
+#endif TERRAINSPLAT_H_
+
