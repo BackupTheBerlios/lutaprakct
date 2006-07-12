@@ -126,11 +126,11 @@ void RenderOctreeNode(Octree* pNode)
 
          glActiveTextureARB(GL_TEXTURE1_ARB);
          glEnable(GL_TEXTURE_2D);
-         glBindTexture(GL_TEXTURE_2D, alpha->getId());
-         
-         glActiveTextureARB(GL_TEXTURE2_ARB);
-         glEnable(GL_TEXTURE_2D);
          glBindTexture(GL_TEXTURE_2D, t2->getId());
+         
+         //glActiveTextureARB(GL_TEXTURE2_ARB);
+         //glEnable(GL_TEXTURE_2D);
+         //glBindTexture(GL_TEXTURE_2D, t2->getId());
 
         // glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
          //glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE_ARB, 2);
@@ -149,9 +149,9 @@ void RenderOctreeNode(Octree* pNode)
          
          glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
-         glClientActiveTextureARB(GL_TEXTURE2_ARB);
-         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-         glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
+         //glClientActiveTextureARB(GL_TEXTURE2_ARB);
+         //glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+         //glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
 
          // Draw the entire node's data.
          //glColor3f(1.0, 0.0, 0.0);
@@ -162,9 +162,9 @@ void RenderOctreeNode(Octree* pNode)
          glDisableClientState(GL_TEXTURE_COORD_ARRAY);
          
          //t->unbind();
-		glActiveTextureARB(GL_TEXTURE2_ARB);
-		glDisable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		//glActiveTextureARB(GL_TEXTURE2_ARB);
+		//glDisable(GL_TEXTURE_2D);
+		//glBindTexture(GL_TEXTURE_2D, 0);
 		
 		glActiveTextureARB(GL_TEXTURE1_ARB);
 		glDisable(GL_TEXTURE_2D);
