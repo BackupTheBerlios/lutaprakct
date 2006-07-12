@@ -224,6 +224,10 @@ void Skydome::draw(){
 		glEnable(GL_DEPTH_TEST);
 	}
 	
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
 	
@@ -260,8 +264,9 @@ void Skydome::draw(){
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	/*reseta a cor pro default 1, 1, 1, 1 ou todos os objetos vao ficar com
-	 * a ultima cor usada pelo skydome */
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	 * a ultima cor usada pelo skydome */ 	
+	glDisable(GL_BLEND);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 	
 	if (flags &SKY_ELEMENTS){
 		glDisable(GL_DEPTH_TEST);
