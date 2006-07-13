@@ -40,11 +40,19 @@ void cgShader::unbind(){
 
 void cgShader::compile(){
 	
-	cgCompileProgram(vertexprogram);
-	cgCompileProgram(fragmentprogram);
+	if (hasvertex){
+		if (!cgIsProgramCompiled(vertexprogram)){
+			cgCompileProgram(vertexprogram);
+			cgCompileProgram(fragmentprogram);
+		}
+	}
 	
-	cgGLLoadProgram(vertexprogram);
-	cgGLLoadProgram(fragmentprogram);
+	if (hasfrag){
+			if (!cgIsProgramCompiled(fragmentprogram)){
+				cgGLLoadProgram(vertexprogram);
+				cgGLLoadProgram(fragmentprogram);
+			}
+	}
 	
 }
 

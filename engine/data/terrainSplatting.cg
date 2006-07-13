@@ -1,0 +1,29 @@
+struct fragment
+{
+	float4 position  : POSITION;
+	float4 color0    : COLOR0;
+	float2 texcoord0 : TEXCOORD0;
+	float2 texcoord1 : TEXCOORD2;
+};
+
+struct pixel
+{
+	float4 color : COLOR;
+};
+
+pixel main( fragment IN,
+            uniform sampler2D testTexture    : TEXUNIT0,
+            uniform sampler2D checkerTexture : TEXUNIT1,
+	    uniform sampler2D alphaTexture   : TEXUNIT2
+)
+{
+	pixel OUT;
+
+	float4 texelColor0 = tex2D( testTexture, IN.texcoord0 );
+	float4 texelColor1 = tex2D( checkerTexture, IN.texcoord0 );
+	float4 texelAlpha  = tex2D( alphaTexture,   IN.texcoord1 );
+
+	OUT.color = lerp(texelColor0, texelColor1, texelAlpha  );
+
+	return OUT;
+}
