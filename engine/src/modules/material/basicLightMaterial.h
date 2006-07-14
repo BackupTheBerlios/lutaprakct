@@ -2,7 +2,7 @@
 #define _BASICLIGHTMATERIAL_H_
 
 #include "material.h"
-#include "../shaders/pixelLightShader.h"
+#include "../shaders/cgshaders/pixelLightShader.h"
 
 /*
  * esse material eh o tipo basico de per pixel light

@@ -5,13 +5,12 @@
 #include "../timer/timer.h"
 #include "../../util/logger/logger.h"
 #include "../../util/math/algebra.h"
-#include "../../util/glext/glextensions.h"
+#include "../../util/glhelper/glextensions.h"
 
 #include "../effects/fog/fog.h"
 #include "../mesh/skydome/skydome.h"
 
-#include "../shaders/terrainSplat.h"
-#include "../shaders/cgTerrainSplat.h"
+#include "../shaders/cgshaders/cgTerrainSplat.h"
 
 #include <iostream>
 
@@ -22,7 +21,6 @@ texture* t2;
 texture* alpha;
 
 Skydome* dome;
-terrainSplat* splat;
 cgTerrainSplat* splatcg;
 
 const char* splatFragmentSource =
@@ -312,7 +310,7 @@ bool Renderer::start(void* data){
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512,
 	             0, GL_RGB, GL_UNSIGNED_BYTE, image);
 */
-	f = new Fog(0.5, 0.5, 0.5, 1.0,  0.03, 0.0, 100.0,  FOG_EXP);
+	f = new Fog(58.0f / 255, 68.0f / 255, 184.0f / 255, 1.0,  0.03, 0.0, 100.0,  FOG_EXP2);
 	std::cout << "Inicializando Skydome...";
 	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY/* | ANIMATED_CLOUDS*/ ,0.4);
 	dome->setCoordinates(44.0, 36.0, 6.0, 180.0);
@@ -354,11 +352,11 @@ void Renderer::update(void* data){
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
              
   //  std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
-//	f->bind();
+/*	f->bind();*/
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glTranslatef(0.0, 0.0, 0.0);
 	dome->draw();
-	///f->bind();
+	//f->bind();
 	glTranslatef(0.0, 100.0, 0.0);
 	splatcg->bind();
 	RenderOctreeNode(terrain.rootNode);

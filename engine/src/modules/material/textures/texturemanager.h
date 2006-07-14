@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 #include "../../../util/patterns/singleton.h"
-#include "texture.h"
+#include "../../../util/glhelper/texture.h"
 
 /* essa classe faz uma associacao usando map entre o nome do file da textura
  * e a textura carregada na memoria, assim ele fica sempre com as texxturas 

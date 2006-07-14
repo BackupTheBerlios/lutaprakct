@@ -3,7 +3,7 @@
 
 #include "../../math/algebra.h"
 #include "../nvMeshIO.h"
-#include "../../../modules/material/textures/texture.h"
+#include "../../glhelper/texture.h"
 #include "../../../modules/material/textures/texturemanager.h"
 
 #define MD2_OK         0x0

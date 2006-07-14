@@ -1,7 +1,7 @@
 
 #include "pixelLightShader.h"
-#include "../renderer/camera/camera.h"
-#include "../../util/math/algebra.h"
+#include "../../renderer/camera/camera.h"
+#include "../../../util/math/algebra.h"
 
 #include <iostream>
 

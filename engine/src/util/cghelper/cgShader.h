@@ -4,7 +4,7 @@
 #include <Cg/cg.h>
 #include <Cg/cgGL.h>
 
-#include "../material/materialData.h"
+#include "../../modules/material/materialData.h"
 
 /* interface basica para shader em Cg
  */

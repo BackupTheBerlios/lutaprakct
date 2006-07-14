@@ -1,7 +1,7 @@
 #ifndef _PIXELLIGHTSHADER_H_
 #define _PIXELLIGHTSHADER_H_
 
-#include "cgShader.h"
+#include "../../../util/cghelper/cgShader.h"
 #include <cstdio>
 
 

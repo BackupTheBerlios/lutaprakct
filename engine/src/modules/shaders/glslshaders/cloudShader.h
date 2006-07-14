@@ -1,7 +1,7 @@
 #ifndef CLOUDSHADER_H_
 #define CLOUDSHADER_H_
 
-#include "glslShader.h"
+#include "../../../util/glhelper/glslShader.h"
 
 class cloudShader : public glslShader{
 	

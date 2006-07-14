@@ -1,6 +1,6 @@
 
 #include "texture.h"
-#include "../../../util/glext/glextensions.h"
+#include "glextensions.h"
 #include <cstdlib>
 #include <iostream>
 

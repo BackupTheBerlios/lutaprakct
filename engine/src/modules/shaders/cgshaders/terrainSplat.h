@@ -1,7 +1,7 @@
 #ifndef TERRAINSPLAT_H_
 #define TERRAINSPLAT_H_
 
-#include "glslShader.h"
+#include "../../../util/glhelper/glslShader.h"
 
 class terrainSplat : public glslShader{
 	
@@ -23,5 +23,4 @@ class terrainSplat : public glslShader{
 	
 };
 
-#endif TERRAINSPLAT_H_
-
+#endif 

@@ -2,7 +2,7 @@
 #define GLSLSHADER_H_
 
 #include <GL/gl.h>
-#include "../../util/glext/glextensions.h"
+#include "../../util/glhelper/glextensions.h"
 
 class glslShader{
 	

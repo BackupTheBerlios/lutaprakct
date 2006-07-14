@@ -1,7 +1,7 @@
 #ifndef CGTERRAINSPLAT_H_
 #define CGTERRAINSPLAT_H_
 
-#include "cgShader.h"
+#include "../../../util/cghelper/cgShader.h"
 
 class cgTerrainSplat : public cgShader{
 	

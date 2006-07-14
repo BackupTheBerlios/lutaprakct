@@ -1,7 +1,7 @@
 
 #include "noise.h"
 #include "noisetexture.h"
-#include "../glext/glextensions.h"
+#include "../glhelper/glextensions.h"
 #include <cstdlib>
 #include <iostream>
 

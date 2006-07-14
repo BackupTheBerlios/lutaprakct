@@ -5,7 +5,7 @@
 #include "skyColor.h"
 #include "../../../util/math/algebra.h"
 #include "../../material/textures/texturemanager.h"
-#include "../../shaders/cloudShader.h"
+#include "../../shaders/glslshaders/cloudShader.h"
 
 /*se usar o flag ANIMATED_CLOUDS deve-se ativar o flag COLORED_SKY tambem. porque o shader
  * que anima as nuvens pega a cor por vertice do skydome, entao as cores precisam ser
