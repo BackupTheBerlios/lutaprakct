@@ -371,6 +371,11 @@ void mult_matrix_vec( vec3 & src_and_dst, mat4 &mat) ;
 const vec3      vec3_null(0,0,0);
 
 float length(quat q);
+quat normalize(quat &q);
+quat conjugate(quat q);
+quat axisToQuaternion(float angle, vec3& axis);
+quat mult(quat A, quat B);
+
 float dot(const vec3 & v, const vec3 & w);
 vec3 & normalize(vec3 & u);
 // Computes u = u * s

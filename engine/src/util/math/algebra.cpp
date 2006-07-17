@@ -73,6 +73,18 @@ quat axisToQuaternion(float angle, vec3& axis){
 	
 }
 
+quat mult(quat A, quat B){
+	
+  quat C;
+
+  C.x = A.w*B.x + A.x*B.w + A.y*B.z - A.z*B.y;
+  C.y = A.w*B.y - A.x*B.z + A.y*B.w + A.z*B.x;
+  C.z = A.w*B.z + A.x*B.y - A.y*B.x + A.z*B.w;
+  C.w = A.w*B.w - A.x*B.x - A.y*B.y - A.z*B.z;
+  
+  return C;
+}
+
 mat4::mat4(const float* mat){
     memcpy(mat_array, mat, sizeof(float) * 16);
 }
