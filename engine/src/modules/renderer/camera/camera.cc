@@ -87,48 +87,28 @@ void Camera::calculateStrafe(){
 	zStrafe = zCross;
 }
 
-
+//W = R * V * R'
+//W o quaternion final
+//V o quaternion representando a View
+//R o quaternion representando o eixo que se vai girar
 void Camera::rotate(float AngleDir, float xSpeed, float ySpeed, float zSpeed){
 	
-	float xNewLookDirection = 0, yNewLookDirection = 0, zNewLookDirection = 0;
-	float xLookDirection = 0, yLookDirection = 0, zLookDirection = 0;
-	float CosineAngle = 0, SineAngle = 0;
+	quat quatAxis, quatView, quatResult;
+	vec3 rotationAxis = vec3(xSpeed, ySpeed, zSpeed);
+	quatAxis = axisToQuaternion(AngleDir, rotationAxis);
 
-	CosineAngle = (float)cos(AngleDir);
-	SineAngle = (float)sin(AngleDir);
+	quatView.x = xView - xPos;
+	quatView.y = yView - yPos;
+	quatView.z = zView - zPos;
+	quatView.w = 0;
 
-	xLookDirection = xView - xPos;
-	yLookDirection = yView - yPos;
-	zLookDirection = zView - zPos;
+	quatResult = mult(mult(quatAxis, quatView), conjugate(quatAxis));
 
-	float dp = 1 /(float)sqrt(xLookDirection * xLookDirection + yLookDirection * yLookDirection +
-                             zLookDirection * zLookDirection);
-	xLookDirection *= dp;
-	yLookDirection *= dp;
-	zLookDirection *= dp;
-
-	// Calculate the new X position.
-	xNewLookDirection = (CosineAngle + (1 - CosineAngle) * xSpeed) * xLookDirection;
-	xNewLookDirection += ((1 - CosineAngle) * xSpeed * ySpeed - zSpeed * SineAngle)* yLookDirection;
-	xNewLookDirection += ((1 - CosineAngle) * xSpeed * zSpeed + ySpeed * SineAngle) * zLookDirection;
-
-	// Calculate the new Y position.
-	yNewLookDirection = ((1 - CosineAngle) * xSpeed * ySpeed + zSpeed * SineAngle) * xLookDirection;
-	yNewLookDirection += (CosineAngle + (1 - CosineAngle) * ySpeed) * yLookDirection;
-	yNewLookDirection += ((1 - CosineAngle) * ySpeed * zSpeed - xSpeed * SineAngle) * zLookDirection;
-
-	// Calculate the new Z position.
-	zNewLookDirection = ((1 - CosineAngle) * xSpeed * zSpeed - ySpeed * SineAngle) * xLookDirection;
-	zNewLookDirection += ((1 - CosineAngle) * ySpeed * zSpeed + xSpeed * SineAngle) * yLookDirection;
-	zNewLookDirection += (CosineAngle + (1 - CosineAngle) * zSpeed) * zLookDirection;
-
-
-	// Last we add the new rotations to the old view to correctly rotate the camera.
-	xView = xPos + xNewLookDirection;
-	yView = yPos + yNewLookDirection;
-	zView = zPos + zNewLookDirection;
+	xView = xPos + quatResult.x;
+	yView = yPos + quatResult.y;
+	zView = zPos + quatResult.z;
+	
 }
-
 
 void Camera::rotateByMouse(int mousePosX, int mousePosY, int midX, int midY){
 
@@ -141,20 +121,20 @@ void Camera::rotateByMouse(int mousePosX, int mousePosY, int midX, int midY){
 		return;
 
 	// pega a direcao que se moveu e divide por 1000.0
-	// TODO esse 1000.0 é a sensibilidade do mouse
+	// TODO esse 1000.0 ? a sensibilidade do mouse
 	yDirection = (float)((midX - mousePosX)) / 1000.0f;		
 	yRotation = (float)((midY - mousePosY)) / 1000.0f;		
 
 	currentRotationAngle -= yRotation;  
 	// limite da camera para cima
-	if(currentRotationAngle > 1.0f){
-		currentRotationAngle = 1.0f;
+	if(currentRotationAngle > 30.0f){
+		currentRotationAngle = 30.0f;
 		return;
 	}
 
 	// limite da camera pra baixo
-	if(currentRotationAngle < -1.0f){
-		currentRotationAngle = -1.0f;
+	if(currentRotationAngle < -30.0f){
+		currentRotationAngle = -30.0f;
 		return;
 	}
 
@@ -186,8 +166,6 @@ void Camera::rotateByMouse(int mousePosX, int mousePosY, int midX, int midY){
 void Camera::handleEvent(const event &e){
 
 	switch (e.type){
-		//case E_MOUSE_ROTATE_X: rotate(e.arg1, vec3(0.0, 1.0, 0.0)); break;
-		//case E_MOUSE_ROTATE_Y: rotate(e.arg1, vec3(1.0, 0.0, 0.0)); break;
 		case E_KEY_UP:         move(0.1); break;
 	    case E_KEY_DOWN:       move(-0.1); break;
 	    case E_KEY_LEFT:       strafe(-0.1); break;
