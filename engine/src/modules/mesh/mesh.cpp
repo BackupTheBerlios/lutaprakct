@@ -8,6 +8,17 @@ Mesh::Mesh(){
 Mesh::~Mesh(){
 }
 
+/*  If the translation is defined by the vector [X Y Z ], then the 4x4
+  matrix to implement translation is as follows:
+        | 1  0  0  X |
+        |            |
+        | 0  1  0  Y |
+    M = |            |
+        | 0  0  1  Z |
+        |            |
+        | 0  0  0  1 |
+  If the vector is [0 0 0] then the vertex list will remain as before.*/
+
 void Mesh::translateTo(float x, float y, float z){
 
 	mat4 translation;
@@ -44,6 +55,18 @@ void Mesh::translateAdd(float x, float y, float z){
 	
 }
 
+/*  A scaling matrix is used to enlarge or shrink the size of a 3D model.
+  If the scaling vector is [X Y Z] then the matrix to perform this is
+  as follows:
+        | X  0  0  0 |
+        |            |
+        | 0  Y  0  0 |
+    M = |            |
+        | 0  0  Z  0 |
+        |            |
+        | 0  0  0  1 |
+  If the scaling vector is [1 1 1], then this generates the identity
+  matrix and vertex geometry will remain unchanged.*/
 void Mesh::scale(float x, float y, float z){
 
 	mat4 scale;
