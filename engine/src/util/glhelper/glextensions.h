@@ -37,8 +37,20 @@ bool haveExtension(const char* extension);
 #define COMPRESSED_RGBA_S3TC_DXT5_EXT	0x83F3
 
 //point sprite
-extern PFNGLPOINTPARAMETERFARBPROC glPointParameterfARB;
+extern PFNGLPOINTPARAMETERFARBPROC  glPointParameterfARB;
 extern PFNGLPOINTPARAMETERFVARBPROC glPointParameterfvARB;
+
+//vertex buffer object
+extern PFNGLBINDBUFFERARBPROC           glBindBufferARB;
+extern PFNGLGENBUFFERSARBPROC           glGenBuffersARB;
+extern PFNGLDELETEBUFFERSARBPROC        glDeleteBuffersARB;
+extern PFNGLBUFFERDATAARBPROC           glBufferDataARB;
+extern PFNGLBUFFERSUBDATAARBPROC        glBufferSubDataARB;
+extern PFNGLMAPBUFFERARBPROC            glMapBufferARB;
+extern PFNGLUNMAPBUFFERARBPROC          glUnmapBufferARB;
+extern PFNGLGETBUFFERSUBDATAARBPROC     glGetBufferSubDataARB;
+extern PFNGLGETBUFFERPARAMETERIVARBPROC glGetBufferParameterivARB;
+extern PFNGLGETBUFFERPOINTERVARBPROC    glGetBufferPointervARB;
 
 //multi texture
 
