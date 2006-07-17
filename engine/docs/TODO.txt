@@ -1,7 +1,7 @@
 TODO LIST
 
-1- colocar o profiler pra funcionar
-2- refazer a camera usando quaternion
+1- colocar o profiler pra funcionar 
+2- refazer a camera usando quaternion - DONE
 3- remover a factory pra imagem e pra videosystem - DONE
 4- fazer o sistema de GUI usando opengl
 5- fazer o skydome com nuvens geradas por shaders - DONE
@@ -15,5 +15,5 @@ TODO LIST
 13- adicionar noise para dar detalhe ao terreno ou usar detail textures
 14- fazer uma classe para tratar o frustum
 15- organizar a hierarquia dos meshes e renderer
-16- fazer o terreno ler .tga e .raw
+16- fazer o terreno ler .tga e .raw - DONE: nao vai ser mais usado .raw
 17- fazer texture tratar texture3d
