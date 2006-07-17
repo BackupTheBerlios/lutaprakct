@@ -312,13 +312,13 @@ bool Renderer::start(void* data){
 */
 	f = new Fog(58.0f / 255, 68.0f / 255, 184.0f / 255, 1.0,  0.03, 0.0, 100.0,  FOG_EXP2);
 	std::cout << "Inicializando Skydome...";
-	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY/* | ANIMATED_CLOUDS*/ ,0.4);
+	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY | ANIMATED_CLOUDS ,0.4);
 	dome->setCoordinates(44.0, 36.0, 6.0, 180.0);
     dome->update(0);
 	std::cout << "Pronto!" << std::endl;
 	
 	std::cout << "Inicializando texturas... ";
-	t = TEXTUREMANAGER::getInstance().load("Grass_mountain2.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
+	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	t2 = TEXTUREMANAGER::getInstance().load("mid2.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 	alpha = TEXTUREMANAGER::getInstance().load("alphamap4.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, 0);
 	std::cout << "Pronto." <<std::endl;
