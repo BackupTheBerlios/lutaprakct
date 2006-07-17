@@ -140,47 +140,45 @@ void Camera::rotateByMouse(int mousePosX, int mousePosY, int midX, int midY){
 	if((mousePosX == midX) && (mousePosY == midY)) 
 		return;
 
-	// Next we get the direction of each axis.  We divide by 1000 to get a smaller value back.
+	// pega a direcao que se moveu e divide por 1000.0
+	// TODO esse 1000.0 é a sensibilidade do mouse
 	yDirection = (float)((midX - mousePosX)) / 1000.0f;		
 	yRotation = (float)((midY - mousePosY)) / 1000.0f;		
 
-	// We use curentRotX to help use keep the camera from rotating too far in either direction.
 	currentRotationAngle -= yRotation;  
-
-	// Stop the camera from going to high...
+	// limite da camera para cima
 	if(currentRotationAngle > 1.0f){
 		currentRotationAngle = 1.0f;
 		return;
 	}
 
-	// Stop the camera from going to low...
+	// limite da camera pra baixo
 	if(currentRotationAngle < -1.0f){
 		currentRotationAngle = -1.0f;
 		return;
 	}
 
-   // Next we get the axis which is a perpendicular vector of the view direction and up values.
-   // We use the cross product of that to get the axis then we normalize it.
+   //a partir daqui pega-se o vetor perpendicular ao view e o up
 	float xAxis = 0, yAxis = 0, zAxis = 0;
 	float xDir = 0, yDir = 0, zDir = 0;
 
-   // Get the Direction of the view.
+   //Pega o vetor direcao
 	xDir = xView - xPos;
 	yDir = yView - yPos;
 	zDir = zView - zPos;
 
-   // Get the cross product of the direction and the up.
+   // cross entre direcao e up
 	xAxis = (yDir * zUp) - (zDir * yUp);
 	yAxis = (zDir * xUp) - (xDir * zUp);
 	zAxis = (xDir * yUp) - (yDir * xUp);
 
-   // Normalize it.
+   //normaliza
 	float len = 1 /(float)sqrt(xAxis * xAxis + yAxis * yAxis + zAxis * zAxis);
 	xAxis *= len;
 	yAxis *= len;
 	zAxis *= len;
 
-   // Rotate the camera.
+   // rotaciona
 	rotate(yRotation, xAxis, yAxis, zAxis);
 	rotate(yDirection, 0, 1, 0);
 }

@@ -19,30 +19,30 @@ float vec3::normalize(){
 	
 }
 
-float length(quat quat){
+float length(quat q){
 	
-	return sqrt(quat.x * quat.x + quat.y * quat.y + quat.z * quat.z + quat.w * quat.w);
+	return sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
 	
 }
 
-quat normalize(quat &quat){
+quat normalize(quat &q){
 	
-  float L = length(quat);
+  float L = length(q);
   if (L >0){
   	  float invL = 1/L;
-	  quat.x *= invL;
-	  quat.y *= invL;
-	  quat.z *= invL;
-	  quat.w *= invL;
+	  q.x *= invL;
+	  q.y *= invL;
+	  q.z *= invL;
+	  q.w *= invL;
   }
-  return quat;
+  return q;
 }
 
-quat conjugate(quat quat){
-  quat.x = -quat.x;
-  quat.y = -quat.y;
-  quat.z = -quat.z;
-  return quat;
+quat conjugate(quat q){
+  q.x = -q.x;
+  q.y = -q.y;
+  q.z = -q.z;
+  return q;
 }
 
 const quat operator*(const quat& a, const quat& b)
@@ -55,6 +55,7 @@ const quat operator*(const quat& a, const quat& b)
 	);
 }
 
+//usado para criar o quaternion de rotacao a redor do eixo axis e angulo angle
 quat axisToQuaternion(float angle, vec3& axis){
 	
 	angle *= 0.5;

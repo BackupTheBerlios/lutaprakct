@@ -1,47 +1,32 @@
 #ifndef _MESH_H_
 #define _MESH_H_
 
-#include "../math/algebra.h"
+#include "../../util/math/algebra.h"
 
-typedef struct {
-	unsigned char v[3];
-	unsigned char normalIndex;
-}framePoint;
-
-typedef struct {
-	float scale[3];
-	float translate[3];
-	char name [16];
-	framePoint fp[1];
-} frame;
-
-class mesh{
-	
-public:
-	unsigned short 	meshIndex[3];
-	unsigned short texIndex[3];
-	
-};
-
-class model{
+class Mesh{
 	
 public:
 
-	int numVertices;
-	int numFaces;
-	int numTexCoords;
+	Mesh();
+	virtual ~Mesh();
 	
-	mesh *triIndex;
-	vec2 *texCoordsList;
-	vec3 *vertexList;
+	void rotate();
 	
-	//keyframe animation info
-	int numFrames;
-	int frameSize;
-	int currentFrame;
-	int nextFrame;
-	float interpol;
+	void translateAdd(float x, float y, float z );
+	void translateTo(float amount, vec3 axis);
+	void translateTo(float x, float y, float z);
+	
+	void scale(float x, float y, float z);
+	void scaleAdd(float x, float y, float z);
+
+	vec3 getPosition();
+	vec3 getScale();
+
+private:
+
+	mat4 modelview;
 	
 };
+
 
 #endif //_MESH_H_
