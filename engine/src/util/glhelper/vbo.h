@@ -8,6 +8,17 @@
  * de maneira semelhante a uma textura
  * */
 
+enum {
+	ARRAY,
+	ELEMENT_ARRAY
+};
+
+enum{
+	STATIC_DRAW,
+	DYNAMIC_DRAW,
+	STREAM_DRAW
+};
+
 class Vbo{
 	
 	public:
@@ -26,6 +37,8 @@ class Vbo{
 	private:
 	
 		GLuint id;
+		GLenum target;
+		GLenum usage;
 	
 };
 
