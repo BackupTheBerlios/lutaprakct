@@ -180,67 +180,80 @@ void RenderOctreeNode(Octree* pNode)
          glDisableClientState(GL_TEXTURE_COORD_ARRAY);
          glClientActiveTextureARB(GL_TEXTURE0_ARB);
 */         
-		glActiveTextureARB(GL_TEXTURE0_ARB);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, t->getId());
+
+
+
+
+//		glActiveTextureARB(GL_TEXTURE0_ARB);
+//		glEnable(GL_TEXTURE_2D);
+		//glBindTexture(GL_TEXTURE_2D, t->getId());
        // t->enable();
        // t->bind();
 
-         glActiveTextureARB(GL_TEXTURE1_ARB);
-         glEnable(GL_TEXTURE_2D);
-         glBindTexture(GL_TEXTURE_2D, t2->getId());
+//        glActiveTextureARB(GL_TEXTURE1_ARB);
+//         glEnable(GL_TEXTURE_2D);
+        // glBindTexture(GL_TEXTURE_2D, t2->getId());
          
-         glActiveTextureARB(GL_TEXTURE2_ARB);
-         glEnable(GL_TEXTURE_2D);
-         glBindTexture(GL_TEXTURE_2D, alpha->getId());
+//         glActiveTextureARB(GL_TEXTURE2_ARB);
+//         glEnable(GL_TEXTURE_2D);
+         //glBindTexture(GL_TEXTURE_2D, alpha->getId());
 
         // glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE_ARB);
          //glTexEnvi(GL_TEXTURE_ENV, GL_RGB_SCALE_ARB, 2);
 
-         glActiveTextureARB(GL_TEXTURE0_ARB);
+//         glActiveTextureARB(GL_TEXTURE0_ARB);
          // Set pointers.
          glEnableClientState(GL_VERTEX_ARRAY);
-         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-         glVertexPointer(3, GL_FLOAT, 0, pVerts);
-         glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
+  //     glVertexPointer(3, GL_FLOAT, 0, pVerts);
+         pNode->vert.bind();
+         glVertexPointer(3, GL_FLOAT, 0, NULL);
+//         glTexCoordPointer(2, GL_FLOAT, 0, NULL);
          
-         glClientActiveTextureARB(GL_TEXTURE1_ARB);
-         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-         glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
+//         glClientActiveTextureARB(GL_TEXTURE1_ARB);
+//         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+         //glTexCoordPointer(2, GL_FLOAT, 0, pTC1);
+//         pNode->texcoord2.bind();
+//         glTexCoordPointer(2, GL_FLOAT, 0, NULL);
          
-         glClientActiveTextureARB(GL_TEXTURE0_ARB);
+//         glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
-         glClientActiveTextureARB(GL_TEXTURE2_ARB);
-         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-         glTexCoordPointer(2, GL_FLOAT, 0, pTC2);
+//         glClientActiveTextureARB(GL_TEXTURE2_ARB);
+//         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+         //glTexCoordPointer(2, GL_FLOAT, 0, pTC2);
+//         pNode->texcoord2.bind();
+//		glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
          // Draw the entire node's data.
          //glColor3f(1.0, 0.0, 0.0);
+
+
          glDrawArrays(GL_TRIANGLES, 0, numTris * 3);
+         pNode->vert.unbind();
 
          // Disable all the client states we enabled.
          glDisableClientState(GL_VERTEX_ARRAY);
-         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
          
          //t->unbind();
-		glActiveTextureARB(GL_TEXTURE2_ARB);
-		glDisable(GL_TEXTURE_2D);
+//		glActiveTextureARB(GL_TEXTURE2_ARB);
+//		glDisable(GL_TEXTURE_2D);
 		//glBindTexture(GL_TEXTURE_2D, 0);
 		
-		glActiveTextureARB(GL_TEXTURE1_ARB);
-		glDisable(GL_TEXTURE_2D);
+//		glActiveTextureARB(GL_TEXTURE1_ARB);
+//		glDisable(GL_TEXTURE_2D);
 		//glBindTexture(GL_TEXTURE_2D, 0);
 
-		glActiveTextureARB(GL_TEXTURE0_ARB);
-		glDisable(GL_TEXTURE_2D);
+//		glActiveTextureARB(GL_TEXTURE0_ARB);
+//		glDisable(GL_TEXTURE_2D);
 		//glBindTexture(GL_TEXTURE_2D, 0);
         
-         glClientActiveTextureARB(GL_TEXTURE1_ARB);
-         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-         glClientActiveTextureARB(GL_TEXTURE2_ARB);
-         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-         glClientActiveTextureARB(GL_TEXTURE0_ARB);
+//         glClientActiveTextureARB(GL_TEXTURE1_ARB);
+//         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//         glClientActiveTextureARB(GL_TEXTURE2_ARB);
+//         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//         glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
       }
    else
@@ -353,14 +366,14 @@ void Renderer::update(void* data){
              
   //  std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
 /*	f->bind();*/
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glTranslatef(0.0, 0.0, 0.0);
-	dome->draw();
+	//dome->draw();
 	//f->bind();
 	glTranslatef(0.0, 100.0, 0.0);
-	splatcg->bind();
+	//splatcg->bind();
 	RenderOctreeNode(terrain.rootNode);
-	splatcg->unbind();
+	//splatcg->unbind();
 	
 	//f->unbind();
 	video->unlock();

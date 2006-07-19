@@ -1,5 +1,6 @@
 
 #include "vbo.h"
+#include <iostream>
 
 Vbo::Vbo(){
 }
@@ -28,7 +29,7 @@ void Vbo::initialize(int target, int size, void* data, int usage){
 
 	glGenBuffersARB(1, &id);
 	glBindBufferARB(this->target, id);
-	glBufferDataARB(this->target, sizeof(data), data, this->usage);
+	glBufferDataARB(this->target, size, data, this->usage);
 }
 
 void Vbo::kill(){

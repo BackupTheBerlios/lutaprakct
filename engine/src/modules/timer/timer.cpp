@@ -28,8 +28,9 @@ void Timer::update(void* data ){
 	
 	//calculo do fps. sempre que passarem 100 frames divide 100 pelo tempo dos 100 (em media)
 	static int ticks;
-	if(ticks >= 100) {
-		fps = ticks / (float)(elapsedTime*100.0);
+	if(ticks >= 1000) {
+		fps = ticks / (float)(elapsedTime*1000.0);
+		std::cout << "fps " << fps << std::endl;
 		ticks = 0;
 	}
 	ticks++;

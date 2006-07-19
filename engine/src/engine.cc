@@ -9,7 +9,7 @@
 
 #include "modules/renderer/renderer.h"
 #include "modules/core/kernel.h"
-//#include "modules/timer/timer.h"
+#include "modules/timer/timer.h"
 
 void Engine::run(){
 	
@@ -33,9 +33,7 @@ void Engine::run(){
 	inputTask->priority=20;
 	KERNEL::getInstance().addTask(MemoryManagedPointer<Task>(inputTask));
 
-/*	globalTimer=new Timer();
-	globalTimer->priority=10;
-	KERNEL::getInstance().addTask(MemoryManagedPointer<Task>(globalTimer));*/
+	TIMER::getInstance().start(NULL);
 
 	LOGGER::getInstance().write("start.log", "Inicializando profiler");
 	//set up the profiler with an output handler

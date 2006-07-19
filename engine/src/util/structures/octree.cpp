@@ -116,6 +116,25 @@ void Octree::createNode(float *vertexList, int numVerts, float *t1, float *t2,
 		memcpy(vertices, vertexList, sizeof(float) * numVerts * 3);
 		memcpy(texCoord1, t1, sizeof(float) * numVerts * 2);
 		memcpy(texCoord2, t2, sizeof(float) * numVerts * 2);
+		
+//		glEnableClientState(GL_VERTEX_ARRAY);
+		vert.initialize(ARRAY, sizeof(float) * numVerts * 3, (void*) vertices, STATIC_DRAW);
+//		glVertexPointer(3, GL_FLOAT, 0, vertices);
+//		glDisableClientState(GL_VERTEX_ARRAY);
+		
+		//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//		texcoord1.initialize(ARRAY, sizeof(float) * numVerts * 2, (void*) vertices, STATIC_DRAW);
+        //glTexCoordPointer(2, GL_FLOAT, 0, texCoord1);
+		//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		
+		//glClientActiveTextureARB(GL_TEXTURE1_ARB);
+		//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//		texcoord2.initialize(ARRAY, sizeof(float) * numVerts * 2, (void*) vertices, STATIC_DRAW);
+        /*glTexCoordPointer(2, GL_FLOAT, 0, texCoord2);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glClientActiveTextureARB(GL_TEXTURE0_ARB);		*/
+		vert.unbind();
+		
 	}else{
 		isLeaf = false;
 

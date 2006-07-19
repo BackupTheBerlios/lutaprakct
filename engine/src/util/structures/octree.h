@@ -2,6 +2,7 @@
 #define OCTREE_H_
 
 #include <iostream>
+#include "../glhelper/vbo.h"
 
 enum NODE_ID
 {
@@ -40,6 +41,10 @@ class Octree{
 		}
 
 		Octree **getSubNodes() { return subNodes; }
+
+		Vbo vert;
+		Vbo texcoord1;
+		Vbo texcoord2;
 
 	private:
    
