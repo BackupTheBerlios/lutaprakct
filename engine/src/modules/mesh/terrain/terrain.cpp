@@ -57,6 +57,9 @@ void Terrain::createTerrainMesh(){
 	int size = ((heightMap->getSizeX() - 1) * (heightMap->getSizeX() - 1) * 6) * 3;
 	int tSize = ((heightMap->getSizeX() - 1) *(heightMap->getSizeX() - 1) * 6) * 2;
 
+	std::cout << "size " << size << std::endl;
+	std::cout << "tsize " << tSize << std::endl;
+
 	vertex = new float[size];
 	texCoords = new float[tSize];
 	texCoords2 = new float[tSize];
@@ -142,6 +145,8 @@ void Terrain::createTerrainMesh(){
 			totalTriangles += 2;
 		}
 	}
+
+	std::cout << "total triangles " << totalTriangles << std::endl;
 
 	if(rootNode) { 
 		rootNode->shutdown(); 
