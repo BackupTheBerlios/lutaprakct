@@ -12,6 +12,8 @@
 
 #include "../shaders/cgshaders/cgTerrainSplat.h"
 
+#include "../../util/meshio/md2/md2IO.h"
+
 #include <iostream>
 
 GLuint terrainTexID;
@@ -22,6 +24,8 @@ texture* alpha;
 
 Skydome* dome;
 cgTerrainSplat* splatcg;
+
+MD2Obj ogre;
 
 const char* splatFragmentSource =
 "uniform sampler2D tex0;																			\n"
@@ -192,6 +196,7 @@ bool Renderer::start(void* data){
 	splatcg->compile();
 	std::cout << "Pronto." << std::endl;
 	
+	ogre.load("ogro.md2");
 	
 	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
@@ -220,6 +225,8 @@ void Renderer::update(void* data){
 	splatcg->bind();
 	RenderOctreeNode(terrain.rootNode);
 	splatcg->unbind();
+	
+	ogre.draw(1);
 	
 	//f->unbind();
 	video->unlock();

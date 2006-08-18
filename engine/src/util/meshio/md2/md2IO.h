@@ -74,21 +74,24 @@ class MD2Obj{
 	public:
 		MD2Obj();
 		~MD2Obj();
-		int Load(char* filename);
-		int GetFrameCount();
-		char* GetTexName();
-		void SetTexture(GLuint TexNum);
-		void Draw(int Frame);
+		int load(char* filename);
+		
+		int getFrameCount();
+		char* getTexName();
+		void setTexture(GLuint TexNum);
+		
+		void draw(int Frame);
  
 	private:
-		int nFrames,nTri,nVtx,nUV;
-		MD2Face *Face;
+	
+		int totalFrames, totalTri, totalVertices, totalTexcoords;
+		MD2Face *face;
 		MD2Frame *frame;
-		Mesh_UV *UV;
-		char TexName[64];
-		GLuint TexID;
+		Mesh_UV *texcoords;
+		char texName[64];
+		GLuint texID;
  
-		void CalcNormal(Mesh_Vtx v1,Mesh_Vtx v2,Mesh_Vtx v3,Mesh_Vtx* Result);
+		void calcNormal(Mesh_Vtx v1, Mesh_Vtx v2, Mesh_Vtx v3, Mesh_Vtx* Result);
 };
 
 #endif //_MD2IO_H_
