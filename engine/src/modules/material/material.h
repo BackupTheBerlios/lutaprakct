@@ -28,7 +28,7 @@ public:
 	
 	void addBaseTexture(std::string filename, int flags){ 
 		texture *t;
-		//t = TextureManager::getInstance().load( (char *) filename.c_str(), texture::TEXTURE_2D, flags);   
+		t = TEXTUREMANAGER::getInstance().load((char*)filename.c_str(), texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 		baseTextures.push_back(t);
 	};
 	
