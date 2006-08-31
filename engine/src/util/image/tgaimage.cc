@@ -26,8 +26,10 @@ bool tgaimage::processHeader(){
 	short x1,y1,x2,y2;
 
 
-	if(imagedata[1] > 1)    // 0 (RGB) and 1 (Indexed) are the only types we know about
+	if(imagedata[1] > 1){    // 0 (RGB) and 1 (Indexed) are the only types we know about
+		std::cout << "imagedata[1] > 1 " << std::endl;
 		return false;
+	}
 
 	encode = imagedata[2];     // Encoding flag  1 = Raw indexed image
                       //                2 = Raw RGB
@@ -37,18 +39,20 @@ bool tgaimage::processHeader(){
                       //               11 = RLE greyscale
                       //               32 & 33 Other compression, indexed
 
-	if(encode > 11)  
+	if(encode > 11)  {
+		std::cout << "encode > 11 " << std::endl;
 		return false;
+	}
 
 
   memcpy(&ColMapStart,&imagedata[3], 2);
   memcpy(&ColMapLen,&imagedata[5], 2);
 
   // Reject indexed images if not a VGA palette (256 entries with 24 bits per entry)
-	if(imagedata[1]==1){ // Indexed{
-		if(ColMapStart!=0 || ColMapLen!=256 || imagedata[7]!=24)
-			return false;
-    }
+	//if(imagedata[1]==1){ // Indexed{
+	//	if(ColMapStart!=0 || ColMapLen!=256 || imagedata[7]!=24)
+			//return false;
+   // }
 
 	memcpy(&x1, &imagedata[8],2);
 	memcpy(&y1, &imagedata[10],2);
@@ -58,14 +62,18 @@ bool tgaimage::processHeader(){
 	width=(x2-x1);
 	height=(y2-y1);
 
-	if(width < 1 || height < 1)
+	if(width < 1 || height < 1){
+		std::cout << "width or height < 1" << std::endl;
 		return false;
+	}
 
 	bpp = imagedata[16];
 
   // Check flip / interleave byte
-	if(imagedata[17] > 32) // Interleaved data
+	if(imagedata[17] > 32){ // Interleaved data
+		std::cout << "interleaved data" << std::endl;
 		return false;
+	}
 
 	imagesize=(width * height * (bpp/8));
 
@@ -110,6 +118,26 @@ bool tgaimage::load(const char *filename, int loadingflags){
 
 	switch(encode){
 
+		//raw indexed
+		case 1:
+			if((imagesize+18+imagedata[0])>filesize){
+				std::cout << "invalid file size" << std::endl;
+				return false;
+			}
+			
+			if(imagedata[1] != 1){
+				std::cout << "invalid header" << std::endl;
+				return false;
+			}
+
+			if (!loadRaw()){
+				std::cout << "cant load image" << std::endl;
+				return false;
+			}
+			
+			if (!loadPalette())
+				return false;
+
 		case 2: // Raw RGB
    		
 			if((imagesize+18+imagedata[0])>filesize){
@@ -141,7 +169,7 @@ bool tgaimage::load(const char *filename, int loadingflags){
       		
 
 		default:
-			std::cout << "tga invalido " << encode << std::endl;
+			std::cout << "tga invalido " << (int) encode << std::endl;
 			return false;
     }
 
@@ -250,5 +278,34 @@ bool tgaimage::write(const char* filename, short int width, short int height, un
 	fwrite(data, sizeof(unsigned char), width * height * mode, file);
 	fclose(file);
 	return true;
+}
+
+bool tgaimage::loadPalette(){
+
+	unsigned char bTemp;
+	short iIndex,iPalPtr;
+  
+   // Delete old palette if present
+	if(palette){
+		delete [] palette;
+		palette = NULL;
+	}
+ 
+  // Create space for new palette
+	palette = new unsigned char[768];
+ 
+	if(palette == NULL)
+		return false;
+ 
+  // VGA palette is the 768 bytes following the header
+	memcpy(palette, &imagedata[imagedata[0]+18], 768);
+ 
+  // Palette entries are BGR ordered so we have to convert to RGB
+	for(iIndex = 0,iPalPtr = 0; iIndex != 256; ++iIndex, iPalPtr += 3){
+		bTemp = palette[iPalPtr];               // Get Blue value
+		palette[iPalPtr] = palette[iPalPtr+2]; // Copy Red to Blue
+		palette[iPalPtr+2] = bTemp;             // Replace Blue at the end
+	}
+	
 }
 
