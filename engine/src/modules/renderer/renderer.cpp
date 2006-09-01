@@ -13,6 +13,7 @@
 #include "../shaders/cgshaders/cgTerrainSplat.h"
 
 #include "../../util/meshio/md2/md2IO.h"
+#include "../material/basicTextureMaterial.h"
 
 #include <iostream>
 
@@ -26,8 +27,9 @@ Skydome* dome;
 cgTerrainSplat* splatcg;
 
 MD2Obj ogre;
+BasicTextureMaterial knightskin;
 
-const char* splatFragmentSource =
+/*const char* splatFragmentSource =
 "uniform sampler2D tex0;																			\n"
 "uniform sampler2D tex1;																			\n"
 "void main(){																						\n"
@@ -35,7 +37,7 @@ const char* splatFragmentSource =
 "    vec3  vectex1  = vec3(texture2D(tex1, gl_TexCoord[0].xy));										\n"
 "    gl_FragColor = vec4(vectex0, 1.0);																\n"
 "}																									\n\0";
-
+*/
 void RenderOctreeNode(Octree* pNode)
 {
    if(pNode == NULL) return;
@@ -196,7 +198,8 @@ bool Renderer::start(void* data){
 	splatcg->compile();
 	std::cout << "Pronto." << std::endl;
 	
-	ogre.load("ogro.md2");
+	ogre.load("knight.md2");
+	knightskin.initialize("knightskin2.tga");
 	
 	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
@@ -225,8 +228,12 @@ void Renderer::update(void* data){
 	splatcg->bind();
 	RenderOctreeNode(terrain.rootNode);
 	splatcg->unbind();
-	
+
+	glTranslatef(0.0, 50.0, 0.0);	
+	glRotatef(-90, 1.0, 0.0, 0.0);
+	knightskin.bind();
 	ogre.draw(1);
+	knightskin.unbind();
 	
 	//f->unbind();
 	video->unlock();
