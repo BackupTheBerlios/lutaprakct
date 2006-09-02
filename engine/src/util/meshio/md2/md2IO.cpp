@@ -35,7 +35,7 @@ MD2Obj::~MD2Obj(){
 }
  
  
-int MD2Obj::load(char *filename){
+bool MD2Obj::load(const char *filename){
 	
 	ifstream fIn;
 	unsigned long fSize;
@@ -66,7 +66,7 @@ int MD2Obj::load(char *filename){
 	fIn.open(filename, ios::binary);
     
 	if(fIn==NULL)
-		return MD2_ERR_FILE;
+		return false;
  
   // pega o tamanho do arquivo
 	fIn.seekg(0,ios_base::end);
@@ -76,7 +76,7 @@ int MD2Obj::load(char *filename){
 	data = new unsigned char[fSize];
 	if(data == NULL){
 		fIn.close();
-		return MD2_ERR_MEM;
+		return false;
 	}
   // joga o arquivo na memoria e fecha o arquivo
 	fIn.read((char*)data,fSize);
@@ -108,13 +108,13 @@ int MD2Obj::load(char *filename){
  
   //testa se ? um md2
 	if(Head.id != 844121161) 
-		return MD2_ERR_FORMAT;
+		return false;
  
 	if(Head.version != 8)
-		return MD2_ERR_FORMAT;
+		return false;
  
 	if(Head.EOFOffset != fSize)
-		return MD2_ERR_FORMAT;
+		return false;
  
  
   // pega agluma info sobre a quantidade de vertices, etc
@@ -130,7 +130,7 @@ int MD2Obj::load(char *filename){
  
 	if(!frame){
 		delete []data;
-		return MD2_ERR_MEM;
+		return false;
 	}
  
   // Frame components
@@ -141,7 +141,7 @@ int MD2Obj::load(char *filename){
  
 		if(!frame[FrameLoop].Vtx || !frame[FrameLoop].Norm){
 			delete []data;
-			return MD2_ERR_MEM;
+			return false;
 		}
 	}
  
@@ -158,7 +158,7 @@ int MD2Obj::load(char *filename){
   // verifica se as arrays estao ok
 	if(!vtx || !face || !texcoords || !MD2_UV){
 		delete []data;
-		return MD2_ERR_MEM;
+		return false;
 	}
  
  
@@ -206,7 +206,7 @@ int MD2Obj::load(char *filename){
  
 		}
 	}*/
-	return MD2_OK;
+	return true;
  }
  
  

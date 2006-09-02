@@ -1,11 +1,24 @@
 
 #include "mesh.h"
+#include "meshManager.h"
 
 Mesh::Mesh(){
 	identity(modelview);
 }
 
+Mesh::Mesh(std::string filename){
+	identity(modelview);
+	initialize(filename);
+}
+
 Mesh::~Mesh(){
+}
+
+bool Mesh::initialize(std::string filename){
+
+	meshdata = MESHMANAGER::getInstance().load(const_cast<char*>(filename.c_str()));
+
+	return true;	
 }
 
 /*  If the translation is defined by the vector [X Y Z ], then the 4x4

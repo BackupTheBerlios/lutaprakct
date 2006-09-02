@@ -2,15 +2,22 @@
 #define _MESH_H_
 
 #include "../../util/math/algebra.h"
+#include "meshData.h"
+#include <string>
 
 class Mesh{
 	
 public:
 
 	Mesh();
+	Mesh(std::string filename);
 	virtual ~Mesh();
 	
-	void rotate();
+	bool initialize(std::string filename);
+	
+	//as funcoes abaixo modificam a matriz do objeto
+	void rotate(float angle, float x, float y, float z);
+	void rotate(float angle, vec3 axis);
 	
 	void translateAdd(float x, float y, float z );
 	void translateTo(float amount, vec3 axis);
@@ -24,6 +31,7 @@ public:
 
 private:
 
+	MeshData* meshdata;
 	mat4 modelview;
 	
 };

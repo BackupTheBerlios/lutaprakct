@@ -5,6 +5,7 @@
 #include "../nvMeshIO.h"
 #include "../../glhelper/texture.h"
 #include "../../../modules/material/textures/texturemanager.h"
+#include "../../../modules/mesh/meshData.h"
 
 #define MD2_OK         0x0
 #define MD2_ERR_MEM    0x1
@@ -69,12 +70,13 @@ struct MD2TexCoord{
   short u,v;
 };	 
  
-class MD2Obj{
+class MD2Obj : public MeshData{
 	
 	public:
 		MD2Obj();
-		~MD2Obj();
-		int load(char* filename);
+		virtual ~MD2Obj();
+		bool load(const char* filename);
+		void unload(){};
 		
 		int getFrameCount();
 		char* getTexName();
