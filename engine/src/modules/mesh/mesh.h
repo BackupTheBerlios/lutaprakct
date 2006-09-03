@@ -3,6 +3,7 @@
 
 #include "../../util/math/algebra.h"
 #include "meshData.h"
+#include "meshRenderer.h"
 #include <string>
 
 class Mesh{
@@ -32,6 +33,7 @@ public:
 private:
 
 	MeshData* meshdata;
+	MeshRenderer* renderer;
 	mat4 modelview;
 	
 };

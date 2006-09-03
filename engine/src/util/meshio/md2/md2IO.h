@@ -79,17 +79,21 @@ class MD2Obj : public MeshData{
 		void unload(){};
 		
 		int getFrameCount();
+		int getTotalFaces(){return totalTri; };
 		char* getTexName();
 		void setTexture(GLuint TexNum);
 		
 		void draw(int Frame);
+
+		//zomg
+		MD2Frame *frame;
+		Mesh_UV *texcoords;
+		MD2Face *face;
  
 	private:
 	
 		int totalFrames, totalTri, totalVertices, totalTexcoords;
-		MD2Face *face;
-		MD2Frame *frame;
-		Mesh_UV *texcoords;
+
 		char texName[64];
 		GLuint texID;
  

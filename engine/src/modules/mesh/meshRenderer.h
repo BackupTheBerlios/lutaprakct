@@ -3,6 +3,16 @@
 
 #include "meshData.h"
 
+/*mesh renderer ? uma interface pro tipo de renderer, que pode variar
+ * de acordo com o tipo de modelo e como ele vai ser desenhado
+ * pelo opengl
+ * */
+
+enum {
+	MD2RENDERER = 1,
+	OBJRENDERER = 2
+};
+
 class MeshRenderer{
 	
 public:
@@ -10,9 +20,11 @@ public:
 	MeshRenderer(){};
 	virtual ~MeshRenderer(){};
 	
-	void draw(MeshData* data) = 0;
-	void draw(MeshData* data, int frame) = 0;
+	virtual void draw(MeshData* data) = 0;
+	virtual void draw(MeshData* data, int frame) = 0;
 	
 };
+
+MeshRenderer* getMeshRenderer(int rendererType);
 
 #endif /*MESHRENDERER_H_*/
