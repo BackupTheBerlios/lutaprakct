@@ -16,13 +16,22 @@ class Font{
 		bool initialize(std::string filename);
 		void shutdown();
 		
-		void print(int x, int y, int set, const char* text, ... );
+		void print(int x, int y, const char* text, ... );
+		
+		void setColor(float r, float g, float b, float a);
+		void setColor(float r, float g, float b);
+		void setFontSet(int i);
+		void setCharacterWidth(float w);
+		void setCharacterHeight(float h);
+		void setScale(float x, float y, float z);
 		
 	private:
 		
 		texture* fontTexture;
 		float color[4];
-		int position[2];
+		float scale[3];
+		float width, height;
+		int fontset;
 		int listID;
 	
 };

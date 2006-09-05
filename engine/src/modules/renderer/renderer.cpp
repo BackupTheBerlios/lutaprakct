@@ -269,7 +269,7 @@ void Renderer::setup2dRendering(){
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();			
 					
-		testfont.print(10, 10, 1, "que porra eh essa");	
+		testfont.print(10, 10, "que porra eh essa");	
 		
 		glPopMatrix();
 		glPopAttrib();

@@ -7,14 +7,14 @@
 
 Font::Font(){
 	fontTexture = NULL;
+	fontset = 0;
 	color[0] = color[1] = color[2] = color[3] = 1.0;
-	position[0] = position[1] = 0;
 }
 
 Font::Font(std::string filename){
 	fontTexture = NULL;
+	fontset = 0;
 	color[0] = color[1] = color[2] = color[3] = 1.0;
-	position[0] = position[1] = 0;
 	initialize(filename);
 }
 
@@ -22,9 +22,40 @@ Font::~Font(){
 	shutdown();
 }
 
+void Font::setColor(float r, float g, float b){
+	color[0] = r;
+	color[1] = g;
+	color[2] = b;
+}
+
+void Font::setColor(float r, float g, float b, float a){
+	color[0] = r;
+	color[1] = g;
+	color[2] = b;
+	color[3] = a;
+}
+
+void Font::setFontSet(int i){
+	fontset = i;
+}
+
+void Font::setCharacterWidth(float w){
+	width = w;
+}
+
+void Font::setCharacterHeight(float h){
+	height = h;
+}
+
+void Font::setScale(float x, float y, float z){
+	scale[0] = x;
+	scale[1] = y;
+	scale[2] = z;
+}
+
 bool Font::initialize(std::string filename){
 
-	fontTexture = TEXTUREMANAGER::getInstance().load( /*const_cast<char*>(filename.c_str())*/ "font.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
+	fontTexture = TEXTUREMANAGER::getInstance().load( /*const_cast<char*>(filename.c_str())*/ "font.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGB8, texture::ANISOTROPIC_4);
 
 	listID = glGenLists(256);
 	fontTexture->bind();
@@ -56,7 +87,7 @@ void Font::shutdown(){
 	glDeleteLists(listID, 256);	
 }
 
-void Font::print(int x, int y, int set, const char* texto, ...){
+void Font::print(int x, int y, const char* texto, ...){
 	
 	char	 text[1024];
 	va_list	ap;	
@@ -66,10 +97,7 @@ void Font::print(int x, int y, int set, const char* texto, ...){
 
 	va_start(ap, texto);		
 	    vsprintf(text, texto, ap);		
-	va_end(ap);				
-
-	if (set > 1)
-		set = 1;	
+	va_end(ap);	
 
 	glPushAttrib(GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT);
 	glColor4fv(color);
@@ -81,11 +109,11 @@ void Font::print(int x, int y, int set, const char* texto, ...){
 	fontTexture->bind(); //ativa a textura da fonte	
 	
 	glTranslated(x, y, 0); //posiciona o texto da vonte
-	glListBase(listID - 32 + (128 * set));
+	glListBase(listID - 32 + (128 * fontset));
 	glCallLists( strlen(text), GL_UNSIGNED_BYTE, text);	
 	
-	fontTexture->unbind();	
-	glPopAttrib(); 
+	fontTexture->unbind();
+	glPopAttrib();
 	glPopMatrix();
 	glDisable(GL_BLEND);
 }
