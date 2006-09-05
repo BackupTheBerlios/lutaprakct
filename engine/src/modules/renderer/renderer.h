@@ -16,6 +16,8 @@ public:
 	void stop(void* data);
 	void update(void* data);
 	
+	void setup2dRendering();
+	
 	AUTO_SIZE;
 	
 private:

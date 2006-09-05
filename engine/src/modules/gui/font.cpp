@@ -3,12 +3,18 @@
 #include <GL/gl.h>
 #include	 <stdarg.h>	
 
+#include <iostream>
+
 Font::Font(){
 	fontTexture = NULL;
+	color[0] = color[1] = color[2] = color[3] = 1.0;
+	position[0] = position[1] = 0;
 }
 
 Font::Font(std::string filename){
 	fontTexture = NULL;
+	color[0] = color[1] = color[2] = color[3] = 1.0;
+	position[0] = position[1] = 0;
 	initialize(filename);
 }
 
@@ -18,7 +24,7 @@ Font::~Font(){
 
 bool Font::initialize(std::string filename){
 
-	fontTexture = TEXTUREMANAGER::getInstance().load( const_cast<char*>(filename.c_str()), texture::TEXTURE_2D, texture::RGB, texture::RGB8, 0);
+	fontTexture = TEXTUREMANAGER::getInstance().load( /*const_cast<char*>(filename.c_str())*/ "font.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
 
 	listID = glGenLists(256);
 	fontTexture->bind();
@@ -50,29 +56,37 @@ void Font::shutdown(){
 	glDeleteLists(listID, 256);	
 }
 
-void Font::print(int x, int y, int set, const char *fmt, ...){
+void Font::print(int x, int y, int set, const char* texto, ...){
 	
-	char	text[1024];
+	char	 text[1024];
 	va_list	ap;	
 
-	if (fmt == NULL)		
+	if (texto == NULL)		
 		return;	
 
-	va_start(ap, fmt);		
-	    vsprintf(text, fmt, ap);		
+	va_start(ap, texto);		
+	    vsprintf(text, texto, ap);		
 	va_end(ap);				
 
 	if (set > 1)
 		set = 1;	
 
-	glEnable(GL_TEXTURE_2D);	
-	glLoadIdentity();//necessario isso?
-	glTranslated(x, y, 0);
+	glPushAttrib(GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT);
+	glColor4fv(color);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	glEnable(GL_BLEND); 
+
+	glPushMatrix(); 
+	glLoadIdentity(); //zera a modelview
+	fontTexture->bind(); //ativa a textura da fonte	
+	
+	glTranslated(x, y, 0); //posiciona o texto da vonte
 	glListBase(listID - 32 + (128 * set));
-
-	glScalef(1.0f, 2.0f, 1.0f);
-
 	glCallLists( strlen(text), GL_UNSIGNED_BYTE, text);	
-	glDisable(GL_TEXTURE_2D);
+	
+	fontTexture->unbind();	
+	glPopAttrib(); 
+	glPopMatrix();
+	glDisable(GL_BLEND);
 }
 

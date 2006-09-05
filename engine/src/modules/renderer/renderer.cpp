@@ -15,6 +15,8 @@
 #include "../../util/meshio/md2/md2IO.h"
 #include "../material/basicTextureMaterial.h"
 
+#include "../gui/font.h"
+
 #include <iostream>
 
 GLuint terrainTexID;
@@ -28,6 +30,8 @@ cgTerrainSplat* splatcg;
 
 MD2Obj ogre;
 BasicTextureMaterial knightskin;
+
+Font testfont;
 
 /*const char* splatFragmentSource =
 "uniform sampler2D tex0;																			\n"
@@ -201,6 +205,9 @@ bool Renderer::start(void* data){
 	ogre.load("knight.md2");
 	knightskin.initialize("knightskin2.tga");
 	
+	std::cout << "inicializando fonte " << std::endl;
+	testfont.initialize("font.tga");
+	
 	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
 }
@@ -229,13 +236,48 @@ void Renderer::update(void* data){
 	RenderOctreeNode(terrain.rootNode);
 	splatcg->unbind();
 
-	glTranslatef(0.0, 50.0, 0.0);	
+setup2dRendering();
+
+/*	glTranslatef(0.0, 50.0, 0.0);	
 	glRotatef(-90, 1.0, 0.0, 0.0);
 	knightskin.bind();
 	ogre.draw(1);
 	knightskin.unbind();
+*/
+	//testfont.print(100, 100, 1, "teste");
 	
 	//f->unbind();
 	video->unlock();
 	
 }
+
+void Renderer::setup2dRendering(){
+	
+		glPushAttrib(GL_ALL_ATTRIB_BITS); 
+		glPushMatrix();		
+		
+//		glGetFloatv( GL.GL_PROJECTION_MATRIX, matrixProjectionOld, 0 );
+	
+		glEnable(GL_TEXTURE_2D); 
+		glDisable(GL_LIGHTING);
+		glDisable(GL_DEPTH_TEST); 
+		
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glOrtho( 0, 800, 600, 0, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();			
+					
+		testfont.print(10, 10, 1, "que porra eh essa");	
+		
+		glPopMatrix();
+		glPopAttrib();
+		
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		
+		glMatrixMode(GL_MODELVIEW);
+	
+}
+

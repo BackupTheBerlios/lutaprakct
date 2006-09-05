@@ -85,12 +85,12 @@ bool tgaimage::load(const char *filename, int loadingflags){
 	std::ifstream fin;
 	unsigned long filesize;
 
-	//if (imagedata)
-		//delete [] imagedata;
+	if (imagedata)
+		delete [] imagedata;
 	
 	fin.open(filename, std::ios::binary);
     
-	if(fin==NULL){
+	if(fin == NULL){
 		std::cout << "no such file" << std::endl;
 		return false;
 	}
@@ -116,11 +116,12 @@ bool tgaimage::load(const char *filename, int loadingflags){
 		return false;
 	}
 
+
 	switch(encode){
 
 		//raw indexed
 		case 1:
-			if((imagesize+18+imagedata[0])>filesize){
+			if((imagesize + 18 + imagedata[0])>filesize){
 				std::cout << "invalid file size" << std::endl;
 				return false;
 			}
@@ -140,12 +141,12 @@ bool tgaimage::load(const char *filename, int loadingflags){
 
 		case 2: // Raw RGB
    		
-			if((imagesize+18+imagedata[0])>filesize){
+			if((imagesize + 18 + imagedata[0]) > filesize){
 				std::cout << "invalid file size" << std::endl;
 				return false;
 			}
 			
-			if(imagedata[1]!=0){
+			if(imagedata[1] != 0){
 				std::cout << "invalid header" << std::endl;
 				return false;
 			}
@@ -159,7 +160,7 @@ bool tgaimage::load(const char *filename, int loadingflags){
        		break;
       
       case 3:
-      		std::cout << "carregando iimagem" << std::endl;
+      		std::cout << "carregando imagem" << std::endl;
  			if (!loadRaw()){
 				std::cout << "cant load image" << std::endl;
 				return false;
@@ -187,15 +188,15 @@ bool tgaimage::loadRaw(){
 //	if(imagedata) // Clear old data if present
 //		delete [] imagedata;
 
-	auxdata=new unsigned char[imagesize];
+	auxdata = new unsigned char[imagesize];
 
-	if(auxdata==NULL)
+	if(auxdata == NULL)
 		return false;
 
-	offset=imagedata[0]+18; // Add header to ident field size
+	offset = imagedata[0] + 18; // Add header to ident field size
 
 	if(imagedata[1] == 1) // Indexed images
-		offset+= 768;  // Add palette offset
+		offset += 768;  // Add palette offset
 
 	memcpy(auxdata, &imagedata[offset], imagesize);
 //	delete imagedata;
@@ -215,12 +216,13 @@ void tgaimage::BGRtoRGB(){
 
 	numPixels = width*height;
 
-	pixelsize=bpp/8;
-
-	for(index=0; index!=numPixels; index++){
+	pixelsize = bpp/8;
+	
+	for(index = 0; index != numPixels; index++){
+		
 		temp = *current;      // Get Blue value
-		*current =* (current+2);  // Swap red value into first position
-		*(current+2) = temp;  // Write back blue to last position
+		*current = *(current + 2);  // Swap red value into first position
+		*(current + 2) = temp;  // Write back blue to last position
 
 		current += pixelsize; // Jump to next pixel
 	}

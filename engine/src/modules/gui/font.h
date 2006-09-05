@@ -21,6 +21,8 @@ class Font{
 	private:
 		
 		texture* fontTexture;
+		float color[4];
+		int position[2];
 		int listID;
 	
 };
