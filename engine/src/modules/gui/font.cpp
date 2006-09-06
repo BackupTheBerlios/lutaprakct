@@ -55,7 +55,7 @@ void Font::setScale(float x, float y, float z){
 
 bool Font::initialize(std::string filename){
 
-	fontTexture = TEXTUREMANAGER::getInstance().load( /*const_cast<char*>(filename.c_str())*/ "font.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGB8, texture::ANISOTROPIC_4);
+	fontTexture = TEXTUREMANAGER::getInstance().load( const_cast<char*>(filename.c_str()), texture::TEXTURE_2D, texture::RGBA, texture::RGB8, 0);
 
 	listID = glGenLists(256);
 	fontTexture->bind();
