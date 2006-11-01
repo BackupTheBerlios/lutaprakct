@@ -14,8 +14,9 @@ class TestAgentData{
 		int visionrange;
 		int id;
 		int alvoid;
+		int alvox;
+		int alvoy;
 		
-		bool alvoAtivo;
 		bool alvo;
 		bool direcoes[8]; 
 		bool caminhos[8];

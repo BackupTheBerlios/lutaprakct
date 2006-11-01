@@ -104,10 +104,10 @@ void LookAroundLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 		for (unsigned int i = 0; i < agentData->targets.size(); i++){
 			if ((agentData->targets[i])->getId() == agentData->alvoid){ //verifica se o alvo ainda esta na linha de visao
 			//	std::cout << "OBSERVAR alvoid " << e->alvoid << " e->targets[i]->id " << (e->targets[i])->id << std::endl;
-				agentData->alvoAtivo = true;
-				//e->alvox = (e->targets[i])->posx;
-				//e->alvoy = (e->targets[i])->posy;
-				//e->alvo = true;
+				alvoAtivo = true;
+				agentData->alvox = (agentData->targets[i])->getPositionX();
+				agentData->alvoy = (agentData->targets[i])->getPositionY();
+				agentData->alvo = true;
 			}
 		}
 		if (!alvoAtivo){
