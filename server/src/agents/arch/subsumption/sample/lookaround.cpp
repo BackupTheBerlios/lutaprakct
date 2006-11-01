@@ -3,6 +3,7 @@
 #include "../../../ambient/sample/testAmbient.h"
 #include "agentTest.h"
 #include "testAgentData.h"
+#include <algorithm>
 
 #include <list>
 #include <iostream>
@@ -24,15 +25,23 @@ void LookAroundLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 	//verifica quais agentes tao no campo de visao e como estao
 	//os espacos ao redor do agente
 	if (lista){
-		std::cout << "tem lista" << std::endl;
 		for (entityiter = lista->begin(); entityiter != lista->end() ; entityiter++){
-			if ( (abs( (*entityiter)->getPositionX() - (agentData->posx) ) <= agentData->visionrange) &&  (abs( (*entityiter)->getPositionY() - (agentData->posy) ) <= agentData->visionrange)){
-				std::cout << "tem agente no campo de visao" << std::endl;
-				std::cout << "myid: " << agentData->id << " alvo " << (*entityiter)->getId() << std::endl; 
+			if ( (abs( (*entityiter)->getPositionX() - (agentData->posx) ) <= agentData->visionrange) &&  (abs( (*entityiter)->getPositionY() - (agentData->posy) ) <= agentData->visionrange)){ 
 				if( (*entityiter)->getId() != agentData->id){
-					//TODO verificar se ja existe
-					agentData->targets.push_back( (*entityiter) );
-					std::cout << "target adicionado" << std::endl;
+					//verifica se ja existe o target
+					bool add = true;
+					int entityid = (*entityiter)->getId(); 
+					for (unsigned int i = 0; i < agentData->targets.size(); i++){
+						int targid = agentData->targets[i]->getId(); 
+						if ( entityid == targid ){
+							add = false;
+							break;
+						}
+					}
+					if ( add ){
+						agentData->targets.push_back( (*entityiter) );
+						std::cout << "target adicionado " << agentData->targets.size() << std::endl;
+					}	
 					x = (*entityiter)->getPositionX();
 					y = (*entityiter)->getPositionY();
 					distx = agentData->posx - x;
@@ -86,6 +95,10 @@ void LookAroundLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 		agentData->direcoes[4] = false;
 	}
 	
+	//essa parte apenas procura pelo alvo dentro do vector
+	//targets que o agente escolheu. no caso ele procura
+	// pelo id. se nao achar o alvoAtivo fica false e 
+	//o agente vai procurar outro alvo depois.
 	if (agentData->targets.size()){ //se tiver algum alvo perto, entao ele pode ser um obstaculo
 		bool alvoAtivo = false;
 		for (unsigned int i = 0; i < agentData->targets.size(); i++){

@@ -48,6 +48,7 @@ int main(int argc, char **argv){
 	
 	AgentTest* agent1 = new AgentTest();
 	agent1->initialize("");
+	agent1->setId(1);
 	agent1->setPositionX(10);
 	agent1->setPositionY(10);
 	agent1->start();
@@ -55,6 +56,7 @@ int main(int argc, char **argv){
 	
 	AgentTest* agent2 = new AgentTest();
 	agent2->initialize("");
+	agent2->setId(2);
 	agent2->setPositionX(9);
 	agent2->setPositionY(10);
 	agent2->start();
