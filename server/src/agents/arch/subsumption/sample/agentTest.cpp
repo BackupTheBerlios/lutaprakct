@@ -55,6 +55,27 @@ int AgentTest::getId(){
 		return -1;	
 }
 
+int AgentTest::getCor(){
+	if (specificAgentData)
+		return (static_cast<TestAgentData*>(specificAgentData))->cor;
+	else
+		return -1;	
+}
+
+int AgentTest::getGene0(){
+	if (specificAgentData)
+		return (static_cast<TestAgentData*>(specificAgentData))->genes[0];
+	else
+		return -1;	
+}
+
+int AgentTest::getGene1(){
+	if (specificAgentData)
+		return (static_cast<TestAgentData*>(specificAgentData))->genes[1];
+	else
+		return -1;	
+}
+
 void AgentTest::setId(int id){
 
 	if (specificAgentData)

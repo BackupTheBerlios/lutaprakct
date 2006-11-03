@@ -17,6 +17,10 @@ class AgentTest : public SubsumptionAgent {
 		void setPositionX(int x);
 		void setPositionY(int y);
 		
+		int getCor();
+		int getGene0();
+		int getGene1();
+		
 		int getId();
 		void setId(int id);
 	

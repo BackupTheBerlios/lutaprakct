@@ -10,16 +10,26 @@ class TestAgentData{
 		TestAgentData(){visionrange = 4;};
 		virtual ~TestAgentData(){};
 		
+		//caracteristicas do agente
 		int posx, posy;
+		int x, y;
 		int visionrange;
 		int id;
+		int genes[2];
+		int cor;	
+			
+		//caracteristicas do alvo do agente
+		int alvogenes[2];
+		bool alvo;
 		int alvoid;
 		int alvox;
 		int alvoy;
 		
-		bool alvo;
+		//outras variaveis usadas pelas competencias
 		bool direcoes[8]; 
 		bool caminhos[8];
+		bool resposta;
+		bool pedido;
 		
 		std::vector<AgentTest*> targets;
 };

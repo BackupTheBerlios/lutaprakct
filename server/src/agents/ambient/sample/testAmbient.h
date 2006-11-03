@@ -4,6 +4,8 @@
 #include "../ambient.h"
 #include "../../../util/patterns/singleton.h"
 #include "../../arch/subsumption/sample/agentTest.h"
+#include <map>
+
 
 template <class T>
 class TestAmbient : public Ambient<T>{
@@ -17,7 +19,8 @@ class TestAmbient : public Ambient<T>{
 		void shutdown(){};
 		void run(){};
 		
-	
+		std::map<int, int > msgs;
+		
 };
 
 typedef singleton < TestAmbient <AgentTest*> > AMBIENT;
