@@ -16,7 +16,10 @@ class TestAgentData{
 		int visionrange;
 		int id;
 		int genes[2];
-		int cor;	
+		int cor;
+		int espera_reproducao;
+		int wait;
+		int turnos;	
 			
 		//caracteristicas do alvo do agente
 		int alvogenes[2];
@@ -30,6 +33,7 @@ class TestAgentData{
 		bool caminhos[8];
 		bool resposta;
 		bool pedido;
+		bool reproduzindo;
 		
 		std::vector<AgentTest*> targets;
 };
