@@ -20,6 +20,10 @@ bool AgentTest::initialize(char* filename){
 	return true;
 }
 
+void AgentTest::pickColor(){
+	
+}
+
 int AgentTest::getPositionX(){
 	if (specificAgentData)
 		return (static_cast<TestAgentData*>(specificAgentData))->posx;
@@ -44,6 +48,20 @@ void AgentTest::setPositionX(int x){
 void AgentTest::setPositionY(int y){
 	if (specificAgentData)
 		(static_cast<TestAgentData*>(specificAgentData))->posy = y;
+	else
+		return;
+}
+
+void AgentTest::setScreenPositionX(int X){
+	if (specificAgentData)
+		(static_cast<TestAgentData*>(specificAgentData))->x = X;
+	else
+		return;
+}
+
+void AgentTest::setScreenPositionY(int Y){
+	if (specificAgentData)
+		(static_cast<TestAgentData*>(specificAgentData))->y = Y;
 	else
 		return;
 }
@@ -74,6 +92,20 @@ int AgentTest::getGene1(){
 		return (static_cast<TestAgentData*>(specificAgentData))->genes[1];
 	else
 		return -1;	
+}
+
+void AgentTest::setGene0(int gen){
+	if (specificAgentData)
+		(static_cast<TestAgentData*>(specificAgentData))->genes[0] = gen;
+	else
+		return;	
+}
+
+void AgentTest::setGene1(int gen){
+	if (specificAgentData)
+		(static_cast<TestAgentData*>(specificAgentData))->genes[1] = gen;
+	else
+		return;	
 }
 
 void AgentTest::setId(int id){

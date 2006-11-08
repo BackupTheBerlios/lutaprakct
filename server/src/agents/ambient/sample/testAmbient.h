@@ -12,7 +12,7 @@ class TestAmbient : public Ambient<T>{
 	
 	public:
 	
-		TestAmbient(){};
+		TestAmbient(){idcounter = 0;};
 		virtual ~TestAmbient(){};
 		
 		bool initialize(char* filename){return true;};
@@ -21,6 +21,11 @@ class TestAmbient : public Ambient<T>{
 		
 		std::map<int, int > msgs;
 		
+		int getLastId(){ idcounter++; return idcounter; };
+		
+	private:
+		
+		int idcounter;
 };
 
 typedef singleton < TestAmbient <AgentTest*> > AMBIENT;

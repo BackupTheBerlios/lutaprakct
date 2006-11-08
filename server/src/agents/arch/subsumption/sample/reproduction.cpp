@@ -1,11 +1,11 @@
 
-#include "lookaround.h"
 #include "../../../ambient/sample/testAmbient.h"
 #include "agentTest.h"
 #include "testAgentData.h"
+#include "reproduction.h"
 #include <iostream>
 
-void LookAroundLayer::run(SubsumptionAgentData* data, void* auxiliarData){
+void ReproductionLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 
 	TestAgentData* agentData = static_cast<TestAgentData*>(auxiliarData);
 	
@@ -91,33 +91,32 @@ void LookAroundLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 							x = x-10;
 		
 						}		
-					    novo->setx(x);
-						novo->sety(y);
-						novo->posx = x/10;
-						novo->posy = y/10;
+					    novo->setScreenPositionX(x);
+						novo->setScreenPositionY(y);
+						novo->setPositionX(x/10);
+						novo->setPositionY(y/10);
 						
 						if ( (rand()%100 +1) <= 50 ){ //pega o gene[0] do pai
-							novo->genes[0] = agentData->genes[0];
+							novo->setGene0(agentData->genes[0]);
 						}else{
-							novo->genes[0] = agentData->genes[1];
+							novo->setGene0(agentData->genes[1]);
 						}
 						  
 						if ( (rand()%100+1) <= 50) {
-							novo->genes[1] = agentData->alvogenes[0];
+							novo->setGene1(agentData->alvogenes[0]);
 						}else{
-							novo->genes[1] = agentData->alvogenes[1];
+							novo->setGene1(agentData->alvogenes[1]);
 						}
 
-						if ( (novo->genes[0] <= 101) && (novo->genes[1] <= 101) ){
-							novo->determinaCor();
+						if ( (novo->getGene0() <= 101) && (novo->getGene1() <= 101) ){
+							novo->pickColor();
 						//std::cout << "CRIOU NOVO EM: x " << x << " y " << y << " gene0 " << novo[0]->genes[0] << " gene1 " << novo[0]->genes[1]  <<  std::endl;
-							novo->setId(idcounter);
+							novo->setId(AMBIENT::getInstance().getLastId());
 							AMBIENT::getInstance().addAgent(novo);
 						//births++;
-						//idcounter++;
 							AMBIENT::getInstance().msgs.erase(agentData->id);
 							agentData->reproduzindo = false;
-							agen	tData->alvo = false;
+							agentData->alvo = false;
 							agentData->pedido = false;
 							agentData->resposta = false;
 							agentData->alvoid = 0;
@@ -126,7 +125,7 @@ void LookAroundLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 							agentData->turnos = 1;
 							agentData->alvogenes[0] = 0;
 							agentData->alvogenes[1] = 0;
-							novo->status = 0;
+							//novo->status = 0;
 						//novo[0]->thread = SDL_CreateThread( (*doAction), (void*) novo[0]);
 						//if (novo[0]->thread == NULL){
 							//trace("#ERROR: Unable to create thread.");
@@ -140,7 +139,7 @@ void LookAroundLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 			 	}
 			}
 			
-			AMBIENT::getInstance().msgs.erase(e->id);
+			AMBIENT::getInstance().msgs.erase(agentData->id);
 			agentData->reproduzindo = false;
 			agentData->alvo = false;
 			agentData->pedido = false;
