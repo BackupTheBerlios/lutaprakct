@@ -16,11 +16,13 @@
 #include "../material/basicTextureMaterial.h"
 
 #include "../gui/font.h"
+#include "../gui/windowimage.h"
+
+#include "../mesh/mesh.h"
 
 #include <iostream>
 
 GLuint terrainTexID;
-Fog* f;
 texture* t;
 texture* t2;
 texture* alpha;
@@ -28,10 +30,12 @@ texture* alpha;
 Skydome* dome;
 cgTerrainSplat* splatcg;
 
-MD2Obj ogre;
 BasicTextureMaterial knightskin;
 
-Font testfont;
+//Font testfont;
+//WindowImage testwin;
+
+Mesh knight;
 
 /*const char* splatFragmentSource =
 "uniform sampler2D tex0;																			\n"
@@ -187,7 +191,7 @@ bool Renderer::start(void* data){
 
 	terrain.loadMap("lol", 4);
 
-	f = new Fog(58.0f / 255, 68.0f / 255, 184.0f / 255, 1.0,  0.03, 0.0, 100.0,  FOG_EXP2);
+	//f = new Fog(58.0f / 255, 68.0f / 255, 184.0f / 255, 1.0,  0.03, 0.0, 100.0,  FOG_EXP2);
 	
 	std::cout << "Inicializando texturas... ";
 	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
@@ -202,11 +206,17 @@ bool Renderer::start(void* data){
 	splatcg->compile();
 	std::cout << "Pronto." << std::endl;
 	
-	ogre.load("knight.md2");
+	knight.initialize("knight.md2");
+	knight.translateTo(0.0, 100.0, 0.0);
+	
 	knightskin.initialize("knightskin2.tga");
 	
-	std::cout << "inicializando fonte " << std::endl;
-	testfont.initialize("font.tga");
+	//std::cout << "inicializando fonte " << std::endl;
+	//testfont.initialize("font.tga");
+	
+//	testwin.initialize(200, 400, 100, 100, false);
+//	testwin.setTexture("background.tga");
+//	testwin.setBorder("bottomgump.tga", "topgump.tga", "right.tga", "left.tga", "bottomright.tga", "bottomleft.tga", "topright.tga", "topleft.tga", 40);
 	
 	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
@@ -215,7 +225,6 @@ bool Renderer::start(void* data){
 void Renderer::update(void* data){
 
 	video->lock();
-//	std::cout << "renderer main loop" << std::endl;
 	/*loop em todas entidades visiveis pra desenha-las*/
 //	CAMERA::getInstance().update(0.1);
 //	std::cout << "fps " << TIMER::getInstance().getFPS() << " 1/fps " << 1.0/(TIMER::getInstance().getFPS()) << std::endl;
@@ -226,27 +235,19 @@ void Renderer::update(void* data){
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
              
   //  std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
-/*	f->bind();*/
 //	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glTranslatef(0.0, 0.0, 0.0);
-	dome->draw();
-	//f->bind();
+	//dome->draw();
 	glTranslatef(0.0, 100.0, 0.0);
 	splatcg->bind();
 	RenderOctreeNode(terrain.rootNode);
 	splatcg->unbind();
 
-setup2dRendering();
-
-/*	glTranslatef(0.0, 50.0, 0.0);	
-	glRotatef(-90, 1.0, 0.0, 0.0);
 	knightskin.bind();
-	ogre.draw(1);
+	knight.draw(10);
 	knightskin.unbind();
-*/
-	//testfont.print(100, 100, 1, "teste");
-	
-	//f->unbind();
+//setup2dRendering();
+
 	video->unlock();
 	
 }
@@ -269,7 +270,9 @@ void Renderer::setup2dRendering(){
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();			
 					
-		testfont.print(10, 10, "que porra eh essa");	
+		//testfont.print(10, 10, "Forge an Empire");	
+		//testwin.draw();
+		//testfont.print(80, 100, "Insane Races");
 		
 		glPopMatrix();
 		glPopAttrib();

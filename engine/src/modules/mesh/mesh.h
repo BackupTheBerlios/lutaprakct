@@ -6,6 +6,17 @@
 #include "meshRenderer.h"
 #include <string>
 
+/* mesh eh formado por mesh data (info geometrica do modelo) + renderer (de acordo
+ * com o tipo de mesh precisa de um renderer diferente) + material + gamedata.
+ * 
+ * meshdata: eh gerenciado por um singleton. so fica 1 na memoria para cada modelo
+ * renderer: eh criado um por objeto (talvez fazer 1 por modelo tbm)
+ * material: eh gerenciado e so cria 1 por modelo tbm, eh aplicado antes do draw
+ * gamedata: eh criado um por objeto. essa classe so possui o basico, eh aqui que
+ * fica informacoes sobre a posicao do objeto e status dele no mundo. precisa ser
+ * extendido dependendo do game
+ * */
+
 class Mesh{
 	
 public:
@@ -30,7 +41,12 @@ public:
 	vec3 getPosition();
 	vec3 getScale();
 
+	void draw();
+	void draw(int frame);
+
 private:
+
+	int discoverRenderType();
 
 	MeshData* meshdata;
 	MeshRenderer* renderer;

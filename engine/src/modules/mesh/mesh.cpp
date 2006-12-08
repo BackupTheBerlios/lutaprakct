@@ -1,13 +1,14 @@
 
 #include "mesh.h"
 #include "meshManager.h"
+#include "meshRenderer.h"
+#include <GL/gl.h>
 
 Mesh::Mesh(){
 	identity(modelview);
 }
 
 Mesh::Mesh(std::string filename){
-	identity(modelview);
 	initialize(filename);
 }
 
@@ -15,9 +16,16 @@ Mesh::~Mesh(){
 }
 
 bool Mesh::initialize(std::string filename){
-
-	meshdata = MESHMANAGER::getInstance().load(const_cast<char*>(filename.c_str()));
-
+	
+	identity(modelview);
+	meshdata = MESHMANAGER::getInstance().load( const_cast<char*>(filename.c_str()) );
+	
+	int rendertype = discoverRenderType();
+	if (rendertype)
+		renderer = getMeshRenderer(rendertype);
+	else
+		return false;
+	
 	return true;	
 }
 
@@ -111,4 +119,25 @@ vec3 Mesh::getScale(){
 	 return vec3( modelview[0], modelview[5], modelview[10] );
 }
 
+void Mesh::draw(){
+	//glLoadMatrixf(modelview.mat_array);
+	renderer->draw(meshdata);
+}
 
+void Mesh::draw(int frame){
+	//glLoadMatrixf(modelview.mat_array);
+	renderer->draw(meshdata, frame);
+}
+
+int Mesh::discoverRenderType(){
+
+	int meshtype = meshdata->getMeshType();
+	
+	if (meshtype == MD2MESH)
+		return MD2RENDERER;
+	else if (meshtype == OBJMESH)
+		return OBJRENDERER;
+	else
+		return 0;
+
+}
