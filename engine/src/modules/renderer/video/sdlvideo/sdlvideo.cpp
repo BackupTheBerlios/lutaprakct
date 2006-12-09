@@ -96,7 +96,7 @@ void sdlVideo::initializeOpenGl(){
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
     
-	gluPerspective(75.0, ratio, 1.0, 5000.0);
+	gluPerspective(75.0, ratio, 1.0, 300.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 

@@ -4,6 +4,8 @@
 #include "meshRenderer.h"
 #include <GL/gl.h>
 
+#include <iostream>
+
 Mesh::Mesh(){
 	identity(modelview);
 }
@@ -29,6 +31,22 @@ bool Mesh::initialize(std::string filename){
 	return true;	
 }
 
+//angulo em radianos
+void Mesh::rotate(float angle, float x, float y, float z){
+		
+/*		angle = angle*0.5;
+		quat rotation;
+		rotation.w = cos(angle);
+		rotation.y = x * sin(angle);
+		rotation.y = y * sin(angle);
+		rotation.z = z * sin(angle); 
+		
+		rotation = normalize(rotation);	
+
+		quat point = */
+	
+}
+
 /*  If the translation is defined by the vector [X Y Z ], then the 4x4
   matrix to implement translation is as follows:
         | 1  0  0  X |
@@ -49,6 +67,8 @@ void Mesh::translateTo(float x, float y, float z){
 	translation[13] = y;
 	translation[14] = z;
 	modelview = modelview*translation;
+	for ( int i = 0; i < 16; i++)
+		std::cout << "modelview[" << i << "]" << modelview[i] << std::endl;
 }
 
 void Mesh::translateTo(float amount, vec3 axis){
@@ -126,6 +146,7 @@ void Mesh::draw(){
 
 void Mesh::draw(int frame){
 	//glLoadMatrixf(modelview.mat_array);
+	glMultMatrixf(modelview.mat_array);
 	renderer->draw(meshdata, frame);
 }
 

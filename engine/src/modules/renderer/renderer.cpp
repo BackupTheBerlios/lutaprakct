@@ -34,7 +34,7 @@ BasicTextureMaterial knightskin;
 
 //Font testfont;
 //WindowImage testwin;
-
+	Frustum frustum;
 Mesh knight;
 
 /*const char* splatFragmentSource =
@@ -46,18 +46,23 @@ Mesh knight;
 "    gl_FragColor = vec4(vectex0, 1.0);																\n"
 "}																									\n\0";
 */
-void RenderOctreeNode(Octree* pNode)
-{
-   if(pNode == NULL) return;
+void RenderOctreeNode(Octree* pNode){
+	if(pNode == NULL) return;
 
-   if(pNode->isLeafNode())
-      {
-         if(!pNode->isVertices()) return;
+	float bbSize = pNode->getBoundingBoxSize();
+	float centerx, centery, centerz;
+	pNode->getBoundingBoxCenter(centerx, centery, centerz);
 
-         int numTris = pNode->getNumTriangles();
+	if (!frustum.cubeInFrustum(centerx, centery, centerz, bbSize))
+		return;
+
+	if(pNode->isLeafNode()){
+			
+		if(!pNode->isVertices()) return;
+
+		int numTris = pNode->getNumTriangles();
 
          // Get the min and max bounding box for this node.
-         float bbSize = pNode->getBoundingBoxSize();
 
          float bbMin[3];
          pNode->getBoundingBoxCenter(bbMin[0], bbMin[1], bbMin[2]);
@@ -142,10 +147,10 @@ void RenderOctreeNode(Octree* pNode)
          glDisableClientState(GL_TEXTURE_COORD_ARRAY);
          glClientActiveTextureARB(GL_TEXTURE0_ARB);
 
-      }
+      
+	}
    else
-      {
-
+   {
          Octree **pSubNodes = pNode->getSubNodes();
          RenderOctreeNode(pSubNodes[TOP_FRONT_LEFT]);
          RenderOctreeNode(pSubNodes[TOP_FRONT_RIGHT]);
@@ -156,7 +161,7 @@ void RenderOctreeNode(Octree* pNode)
          RenderOctreeNode(pSubNodes[BOTTOM_FRONT_RIGHT]);
          RenderOctreeNode(pSubNodes[BOTTOM_BACK_LEFT]);
          RenderOctreeNode(pSubNodes[BOTTOM_BACK_RIGHT]);
-      }
+    }
 }
 
 void Renderer::stop(void* data){
@@ -206,8 +211,12 @@ bool Renderer::start(void* data){
 	splatcg->compile();
 	std::cout << "Pronto." << std::endl;
 	
+	float  height = (float) terrain.getHeight(0, 100);
+	std::cout << "height: " << height << std::endl;
+	
 	knight.initialize("knight.md2");
 	knight.translateTo(0.0, 100.0, 0.0);
+//	knight.scale(0.1, 0.1, 0.1);
 	
 	knightskin.initialize("knightskin2.tga");
 	
@@ -233,19 +242,35 @@ void Renderer::update(void* data){
    gluLookAt(CAMERA::getInstance().xPos, CAMERA::getInstance().yPos, CAMERA::getInstance().zPos,
              CAMERA::getInstance().xView, CAMERA::getInstance().yView, CAMERA::getInstance().zView,
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
-             
+	//frustum.update();
   //  std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
 //	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glTranslatef(0.0, 0.0, 0.0);
 	//dome->draw();
-	glTranslatef(0.0, 100.0, 0.0);
-	splatcg->bind();
-	RenderOctreeNode(terrain.rootNode);
-	splatcg->unbind();
+	//mat4 modelview;
+	//modelview[13] = 100;
+	//glLoadMatrixf(modelview.mat_array);
+	//glTranslatef(0.0, 100.0, 0.0);
 
 	knightskin.bind();
 	knight.draw(10);
 	knightskin.unbind();
+
+	//necessario chamar o update sempre q a matriz muda
+	frustum.update();
+	
+	splatcg->bind();
+	RenderOctreeNode(terrain.rootNode);
+	splatcg->unbind();
+	
+/*	knightskin.bind();
+	knight.draw(10);
+	knightskin.unbind();
+*/
+	//glTranslatef(0.0, .0, 0.0);
+/*	knightskin.bind();
+	knight.draw(10);
+	knightskin.unbind();*/
 //setup2dRendering();
 
 	video->unlock();

@@ -13,6 +13,8 @@ enum FrustumPlanes
 	FRONT	= 5
 }; 
 
+//normaliza o plano: acha magnitude e divide cada componente por ela 
+// A = 0, B = 1, C = 2, D = 3
 void Frustum::normalizeFrustumPlane(int side){
 	float magnitude = (float)sqrt( planes[side][0] * planes[side][0] + 
 								   planes[side][1] * planes[side][1] + 
@@ -34,6 +36,8 @@ void Frustum::update(){
 	glGetFloatv( GL_PROJECTION_MATRIX, proj );
 	glGetFloatv( GL_MODELVIEW_MATRIX, modl );
 
+	//calcula o clipping plane pela multiplicacao as duas matrizes
+	//TODO usar algebra.h para representacao das matrizes e multiplicacao
 	clip[ 0] = modl[ 0] * proj[ 0] + modl[ 1] * proj[ 4] + modl[ 2] * proj[ 8] + modl[ 3] * proj[12];
 	clip[ 1] = modl[ 0] * proj[ 1] + modl[ 1] * proj[ 5] + modl[ 2] * proj[ 9] + modl[ 3] * proj[13];
 	clip[ 2] = modl[ 0] * proj[ 2] + modl[ 1] * proj[ 6] + modl[ 2] * proj[10] + modl[ 3] * proj[14];
@@ -54,7 +58,7 @@ void Frustum::update(){
 	clip[14] = modl[12] * proj[ 2] + modl[13] * proj[ 6] + modl[14] * proj[10] + modl[15] * proj[14];
 	clip[15] = modl[12] * proj[ 3] + modl[13] * proj[ 7] + modl[14] * proj[11] + modl[15] * proj[15];
 	
-
+	//hora de extrair os lados:
 	planes[RIGHT][0] = clip[ 3] - clip[ 0];
 	planes[RIGHT][1] = clip[ 7] - clip[ 4];
 	planes[RIGHT][2] = clip[11] - clip[ 8];
@@ -93,5 +97,56 @@ void Frustum::update(){
 	
 }
 
+//checa se a equacao da menor que 0. se sim significa que o ponto esta fora do
+//plano
+bool Frustum::pointInFrustum(float x, float y, float z){
+	
+	for(int i = 0; i < 6; i++ ){
+		if(planes[i][0]*x + planes[i][1]*y + planes[i][2]*z + planes[i][3] <= 0){
+			return false;
+		}
+	}
 
+	return true;
+}
+
+//verifica se o centro + radius eh menor que 0. se for esta fora do frustum
+bool Frustum::sphereInFrustum(float x, float y, float z, float radius){
+	
+	for(int i = 0; i < 6; i++ )	{
+		if( planes[i][0] * x + planes[i][1] * y + planes[i][2] * z + planes[i][3] <= -radius ){
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+//verifica se cada vertice do cubo esta dentro do frustum
+bool Frustum::cubeInFrustum(float x, float y, float z, float size){
+
+	for(int i = 0; i < 6; i++ ){
+		if(planes[i][0] * (x - size) + planes[i][1] * (y - size) + planes[i][2] * (z - size) + planes[i][3] > 0)
+		   continue;
+		if(planes[i][0] * (x + size) + planes[i][1] * (y - size) + planes[i][2] * (z - size) + planes[i][3] > 0)
+		   continue;
+		if(planes[i][0] * (x - size) + planes[i][1] * (y + size) + planes[i][2] * (z - size) + planes[i][3] > 0)
+		   continue;
+		if(planes[i][0] * (x + size) + planes[i][1] * (y + size) + planes[i][2] * (z - size) + planes[i][3] > 0)
+		   continue;
+		if(planes[i][0] * (x - size) + planes[i][1] * (y - size) + planes[i][2] * (z + size) + planes[i][3] > 0)
+		   continue;
+		if(planes[i][0] * (x + size) + planes[i][1] * (y - size) + planes[i][2] * (z + size) + planes[i][3] > 0)
+		   continue;
+		if(planes[i][0] * (x - size) + planes[i][1] * (y + size) + planes[i][2] * (z + size) + planes[i][3] > 0)
+		   continue;
+		if(planes[i][0] * (x + size) + planes[i][1] * (y + size) + planes[i][2] * (z + size) + planes[i][3] > 0)
+		   continue;
+
+		return false;
+	}
+
+	return true;
+	
+}
 

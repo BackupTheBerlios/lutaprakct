@@ -5,6 +5,7 @@
 #include "video/videosystem.h"
 #include "../mesh/terrain/terrain.h"
 #include "camera/camera.h"
+#include "frustum/frustum.h"
 
 class Renderer : public Task{
 	
