@@ -18,6 +18,8 @@ class TestAmbient : public Ambient<T>{
 		bool initialize(char* filename){return true;};
 		void shutdown(){};
 		void run(){};
+		void afterRun(){};
+		void beforeRun(){};
 		
 		std::map<int, int > msgs;
 		

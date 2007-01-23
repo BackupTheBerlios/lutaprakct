@@ -13,6 +13,8 @@ void LookAroundLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 	TestAgentData* agentData = static_cast<TestAgentData*>(auxiliarData);
 	std::list<AgentTest*> *lista = AMBIENT::getInstance().getAgents();
 	
+	std::cout << "OBSERVANDO " << std::endl;
+	
 	if (lista == NULL)
 		std::cout << "sem agentes no campo de visao" << std::endl;
 	
@@ -103,7 +105,7 @@ void LookAroundLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 		bool alvoAtivo = false;
 		for (unsigned int i = 0; i < agentData->targets.size(); i++){
 			if ((agentData->targets[i])->getId() == agentData->alvoid){ //verifica se o alvo ainda esta na linha de visao
-			//	std::cout << "OBSERVAR alvoid " << e->alvoid << " e->targets[i]->id " << (e->targets[i])->id << std::endl;
+				//std::cout << "OBSERVAR alvoid " << agentData->alvoid << " agentData->targets[i]->id " << (agentData->targets[i])->getId() << std::endl;
 				alvoAtivo = true;
 				agentData->alvox = (agentData->targets[i])->getPositionX();
 				agentData->alvoy = (agentData->targets[i])->getPositionY();

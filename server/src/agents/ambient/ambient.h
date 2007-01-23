@@ -14,6 +14,8 @@ class Ambient : public Agent{
 		virtual bool initialize(char* filename) = 0;
 		virtual void shutdown() = 0;
 		virtual void run() = 0;
+		virtual void afterRun() = 0;
+		virtual void beforeRun() = 0;
 		
 		std::list<T>* getAgents();
 		

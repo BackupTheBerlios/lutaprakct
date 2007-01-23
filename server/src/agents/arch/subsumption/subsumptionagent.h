@@ -15,7 +15,9 @@ class SubsumptionAgent : public Agent {
 			
 		bool initialize(char* filename);
 		void shutdown();
-		void run();	
+		void run();
+		void afterRun();
+		void beforeRun();	
 	
 	protected:
 	

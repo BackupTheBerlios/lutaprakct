@@ -6,7 +6,7 @@
 void WanderLayer::run(SubsumptionAgentData* data, void* auxiliarData){
 	
 	TestAgentData* agentData = static_cast<TestAgentData*>(auxiliarData);
-	std::cout << "evitanto obstaculos " << std::endl;
+	std::cout << "vagando" << std::endl;
 	
 	if (agentData->caminhos[0]){
 		agentData->x = agentData->x-10;

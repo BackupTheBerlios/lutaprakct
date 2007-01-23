@@ -15,6 +15,8 @@ class Agent{
 		virtual bool initialize(char* filename) = 0; //aloca memoria e inicializa os scripts e variaveis
 		virtual void shutdown() = 0; //desaloca memoria e finaliza o agent
 		virtual void run() = 0; //main loop do agente
+		virtual void beforeRun() = 0; 
+		virtual void afterRun() = 0; 
 		
 		void stop(){ running = false; }; //pausa a execucao do agente
 		void start() { running = true; };

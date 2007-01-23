@@ -1,6 +1,6 @@
 
 #include "subsumptionagent.h"
-
+#include <iostream>
 
 //TODO carregar os scriprs em lua
 bool SubsumptionAgent::initialize(char* filename){
@@ -13,7 +13,20 @@ void SubsumptionAgent::shutdown(){
 		delete internalData;
 }
 
+void SubsumptionAgent::beforeRun(){
+
+	return;
+}
+
+void SubsumptionAgent::afterRun(){
+	
+	std::cout << "subsumption agent" << std::endl;
+	return;	
+}
+
 void SubsumptionAgent::run(){
+
+	beforeRun();
 
 	if (isRunning()){
 
@@ -35,5 +48,7 @@ void SubsumptionAgent::run(){
 	}else{//se esta pausado
 		return;
 	}
+	
+	afterRun();
 	
 }

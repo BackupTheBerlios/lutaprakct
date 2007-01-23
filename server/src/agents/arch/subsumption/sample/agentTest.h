@@ -2,6 +2,7 @@
 #define AGENTTEST_H_
 
 #include "../subsumptionagent.h"
+#include <iostream>
 
 class AgentTest : public SubsumptionAgent {
 	
@@ -11,6 +12,8 @@ class AgentTest : public SubsumptionAgent {
 		virtual ~AgentTest(){ shutdown(); };
 			
 		bool initialize(char* filename);
+		void afterRun();
+		void beforeRun();
 	
 		int getPositionX();
 		int getPositionY();
