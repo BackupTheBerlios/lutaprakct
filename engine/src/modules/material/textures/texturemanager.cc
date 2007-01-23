@@ -45,7 +45,7 @@ void textureManager::freeAll(){
 
 void textureManager::setDefaultFlags(){
 
-	flags = texture::LINEAR_MIPMAP_LINEAR ;
+	flags = texture::LINEAR;
 	flags |= texture::MIPMAP_SGI;
 	flags |= texture::COMPRESSION_ARB;
 	

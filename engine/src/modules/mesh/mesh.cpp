@@ -67,8 +67,6 @@ void Mesh::translateTo(float x, float y, float z){
 	translation[13] = y;
 	translation[14] = z;
 	modelview = modelview*translation;
-	for ( int i = 0; i < 16; i++)
-		std::cout << "modelview[" << i << "]" << modelview[i] << std::endl;
 }
 
 void Mesh::translateTo(float amount, vec3 axis){

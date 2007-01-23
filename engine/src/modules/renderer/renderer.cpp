@@ -50,6 +50,7 @@ void RenderOctreeNode(Octree* pNode){
 	if(pNode == NULL) return;
 
 	float bbSize = pNode->getBoundingBoxSize();
+	bbSize /= 2.0;
 	float centerx, centery, centerz;
 	pNode->getBoundingBoxCenter(centerx, centery, centerz);
 
@@ -199,8 +200,8 @@ bool Renderer::start(void* data){
 	//f = new Fog(58.0f / 255, 68.0f / 255, 184.0f / 255, 1.0,  0.03, 0.0, 100.0,  FOG_EXP2);
 	
 	std::cout << "Inicializando texturas... ";
-	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
-	t2 = TEXTUREMANAGER::getInstance().load("mid2.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
+	t = TEXTUREMANAGER::getInstance().load("bottom.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, 0);
+	t2 = TEXTUREMANAGER::getInstance().load("mid2.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, 0);
 	alpha = TEXTUREMANAGER::getInstance().load("alphamap4.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, 0);
 	std::cout << "Pronto." <<std::endl;
 	

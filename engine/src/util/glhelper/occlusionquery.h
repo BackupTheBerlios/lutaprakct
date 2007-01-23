@@ -1,0 +1,4 @@
+#ifndef OCCLUSIONQUERY_H_
+#define OCCLUSIONQUERY_H_
+
+#endif /*OCCLUSIONQUERY_H_*/
