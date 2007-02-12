@@ -6,7 +6,7 @@
 
 Timer::Timer(){
 		
-	if (SDL_WasInit(SDL_INIT_TIMER))
+	if (!SDL_WasInit(SDL_INIT_TIMER))
 		SDL_InitSubSystem(SDL_INIT_TIMER);
 }
 
