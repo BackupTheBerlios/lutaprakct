@@ -28,13 +28,14 @@ bool Terrain::loadMap(char *filename, int detailRepeats){
 		return false;
 
 	heightMap = new HillsHeightmap();
-	heightMap->generate(256, 256, 2.0, 40.0, 1200, 1);
+	heightMap->generate(256, 256, 0.0, 40.0, 1200, 1);
+	//heightMap->generate(256, 256, 0.0, 0.0, 1, 1);
 	heightMap->saveTga("hills4.tga", 256, 256, 24);
 	heightScale = 0.1;
 
 	numRepeats = detailRepeats;
 	createTerrainMesh();
-	delete heightMap;
+	//delete heightMap;
 
 	return true;
 }
@@ -56,9 +57,6 @@ void Terrain::createTerrainMesh(){
    //Sizes we need for the points/color and tex coords.
 	int size = ((heightMap->getSizeX() - 1) * (heightMap->getSizeX() - 1) * 6) * 3;
 	int tSize = ((heightMap->getSizeX() - 1) *(heightMap->getSizeX() - 1) * 6) * 2;
-
-	std::cout << "size " << size << std::endl;
-	std::cout << "tsize " << tSize << std::endl;
 
 	vertex = new float[size];
 	texCoords = new float[tSize];
@@ -204,72 +202,52 @@ void Terrain::setHeight(unsigned char val, int x, int z){
 
 
 unsigned char Terrain::getHeight(int x, int z){
-   // Return the unscaled height value of the specified point.
    return heightMap->data[x + heightMap->getSizeX() * z];
 }
 
 
 float Terrain::getScaledHeight(int x, int z){
-   // Return the scaled height value of the specified point.
    return (heightMap->data[x + heightMap->getSizeX() * z] * heightScale);
 }
 
-
-float Terrain::regionPercent(int tileType, unsigned char height){
+float Terrain::getScaledInterpolatedHeight(float x, float z){
 	
-	float distance1 = 0, distance2 = 0;
+	float projCameraX, projCameraZ;
 
-   // First we test each tile and see if the test height is greater than its optimal height.
-   // We only test those that are the type we sent it.
-	if(tiles.textureTiles[LOWEST_TILE]){
-		if(tileType == LOWEST_TILE && height < tiles.regions[LOWEST_TILE].optimalHeight)
-			return 1.0f;
-	}else if(tiles.textureTiles[LOW_TILE]){
-		if(tileType == LOW_TILE && height < tiles.regions[LOW_TILE].optimalHeight)
-			return 1.0f;
-	}else if(tiles.textureTiles[HIGH_TILE]){
-		if(tileType == HIGH_TILE && height < tiles.regions[HIGH_TILE].optimalHeight)
-			return 1.0f;
-	}else if(tiles.textureTiles[HIGHEST_TILE]){
-		if(tileType == HIGHEST_TILE && height < tiles.regions[HIGHEST_TILE].optimalHeight)
-			return 1.0f;
-	}
+	projCameraX = x / 1.0;
+	projCameraZ = z / 1.0;
 
-	// If the height we are testing is below or above the choose tile type then we return 0.
-	if(height < tiles.regions[tileType].lowHeight)
-		return 0.0f;
-	else if(height > tiles.regions[tileType].highHeight)
-		return 0.0f;
 
-	// If the height is below the optimal height
-	if(height < tiles.regions[tileType].optimalHeight){
-		   // Get the distance between the tiles lowest height and the test height.
-		distance1 = (float)(height - tiles.regions[tileType].lowHeight);
+	int col0 = int(projCameraX);
+	int row0 = int(projCameraZ);
+	int col1 = col0 + 1;
+	int row1 = row0 + 1;
+		
+	if (col1 > heightMap->getSizeX())
+		col1 = 0;
+	if (row1 > heightMap->getSizeY())
+		row1 = 0;
 
-         // Get the distance between the optimal height and the lowest height.
-		distance2 = (float)(tiles.regions[tileType].optimalHeight -
-		               tiles.regions[tileType].lowHeight);
+	float h00 = heightScale * (float)heightMap->data[col0 + row0*heightMap->getSizeX()];
+	float h01 = heightScale * (float)heightMap->data[col1 + row0*heightMap->getSizeX()];
+	float h11 = heightScale * (float)heightMap->data[col1 + row1*heightMap->getSizeX()];
+	float h10 = heightScale * (float)heightMap->data[col0 + row1*heightMap->getSizeX()];
 
-         // return the percent.
-		return (distance1 / distance2);
-	}else if(height == tiles.regions[tileType].optimalHeight){
-         // Else if the height equals the optimal height we send in full color.
-		return 1.0f;
-	}else if(height > tiles.regions[tileType].optimalHeight){
-		   // Else if the height is greater than the optimal height.
-         // Get the distance between the max height from the optimal height.
-		distance1 = (float)(tiles.regions[tileType].highHeight -
-                         tiles.regions[tileType].optimalHeight);
+	//pega a margem de erro, do float x, z pro inteiro
+	float tx = projCameraX - float(col0);
+	float ty = projCameraZ - float(row0);
 
-         // Return the distance - the test height -
-         // optimal height / by the distance to get %.
-		return((distance1 - (height - tiles.regions[tileType].optimalHeight)) / distance1);
-	}
+	//interpolacao bilinear
+	float txty = tx * ty;
 
-   // Return 0 if we get here.
-	return 0.0f;
+	float final_height = h00 * (1.0f - ty - tx + txty)
+					+ h01 * (tx - txty)
+					+ h11 * txty
+					+ h10 * (ty - txty);
+
+	return final_height;
+	
 }
-
 
 void Terrain::getTexCoords(unsigned int texWidth, unsigned int texHeight,
                             unsigned int x, unsigned int z, float &tu, float &tv){
@@ -308,130 +286,8 @@ void Terrain::getTexCoords(unsigned int texWidth, unsigned int texHeight,
 	tv = (float)(z - (texHeight * totalHeightRepeats));
 }
 
-
-unsigned char Terrain::interpolateHeight(int x, int z, float textureMapRatio){
-
-	unsigned char low = 0, high = 0;
-	float interpolatedX = 0.0f, interpolatedZ = 0.0f;
-	float interpolation = 0.0f;
-	float scaledX = x * textureMapRatio;
-	float scaledZ = z * textureMapRatio;
-
-	// Set low as the height of this point.
-	low = getHeight((int)scaledX, (int)scaledZ);
-
-	// Set the high value.  If scaled x + 1 is greater than the entire size of the map then
-   // we send the low to return as default.  Else we grab the high x.
-   // This way we don't go out  of bounds in the array.
-	if((scaledX + 1) > heightMap->getSizeX())
-		return low;
-	else
-		high = getHeight((int)scaledX + 1, (int)scaledZ);
-
-	// Set the interpolation to be the remainder of scaled x - itself.
-	// This will give us a value between  0 and 0.99.  Then we interpolate
-	// the high and low.
-	interpolation = (scaledX - (int)scaledX);
-	interpolatedX = ((high - low) * interpolation) + low;
-
-	// Next we do the same thing for the z that we did for the x.
-	if((scaledZ + 1 ) > heightMap->getSizeX())
-		return low;
-	else
-		high = getHeight((int)scaledX, (int)scaledZ + 1);
-
-	// Calculate the interpolation for z.
-	interpolation = (scaledZ - (int)scaledZ);
-	interpolatedZ = ((high - low) * interpolation) + low;
-
-	// Average out the interpolation for the x and z.
-	return ((unsigned char)((interpolatedX + interpolatedZ) / 2));
-}
-
-
-unsigned char *Terrain::generateTextureMap(unsigned int imageSize){
-	
-	
-	unsigned char red = 0, green = 0, blue = 0;
-
-	float tu, tv;
-	int lastHeight = -1;
-
-	float totalRed = 0, totalGreen = 0, totalBlue = 0;
-	
-   //quantidade de blend para cada texture tile
-	float blendList[MAX_TILES] = {0};
-	float textureMapRatio = (float)heightMap->getSizeX() / (float)imageSize;
-
-	tiles.numTiles = 0;
-   
-   //ve quantas imagens tem.
-	for(int i = 0; i < MAX_TILES; i++){
-		if(tiles.textureTiles[i]) tiles.numTiles++;
-	}
-
-	if(tiles.numTiles == 0) 
-		return NULL;
-
-	for(int i = 0; i < MAX_TILES; i++){
-		if(tiles.textureTiles[i]){
-			tiles.regions[i].lowHeight = lastHeight + 1;
-			lastHeight += 255 / tiles.numTiles;
-			tiles.regions[i].optimalHeight = lastHeight;
-			tiles.regions[i].highHeight = (lastHeight - tiles.regions[i].lowHeight) + lastHeight;
-		}
-	}
-
-	unsigned char *image = new unsigned char[imageSize * imageSize * 3];
-	
-	for(unsigned int z = 0; z < imageSize; z++){
-		for(unsigned int x = 0; x < imageSize; x++){
-			
-			totalRed = 0.0f;
-			totalGreen = 0.0f;
-			totalBlue = 0.0f;
-
-			// Loop through all tiles and generate each final pixel color.
-			for(int i = 0; i < tiles.numTiles; i++){
-				// Calculate the texture coords.  This is used to
-				// get a pixel from  each tile.
-				getTexCoords(tiles.textureTiles[i]->getWidth(),
-					tiles.textureTiles[i]->getHeight(), x, z,
-					tu, tv);
-
-				// Get the color of the pixel for the set of texture coords.
-				int index = (((unsigned int)tv * imageSize) + (unsigned int)tu) * 3;
-				red = tiles.textureTiles[i]->img->imagedata[index + 0];
-				green = tiles.textureTiles[i]->img->imagedata[index + 1];
-				blue = tiles.textureTiles[i]->img->imagedata[index + 2];
-         
-				// Calculate the amount to blend this pixel with the rest.
-				blendList[i] = regionPercent(i, interpolateHeight(x, z, textureMapRatio));
-
-					      // Store the pixel from this tile to the total.
-				totalRed += red * blendList[i];
-				totalGreen += green * blendList[i];
-				totalBlue += blue * blendList[i];
-			}
-
-			      // Set a pixel in our final texture image.
-			image[((z * imageSize) + x) * 3] = (unsigned char)totalRed;
-			image[((z * imageSize) + x) * 3 + 1] = (unsigned char)totalGreen;
-			image[((z * imageSize) + x) * 3 + 2] = (unsigned char)totalBlue;
-		}
-	}
-
-	return image;
-}
-
-
 void Terrain::shutDown(){
-   // Release all resources used by the terrain.
 	heightScale = 0.0f;
-   //tiles.textureTiles[0].FreeImage();
-   //tiles.textureTiles[1].FreeImage();
-   //tiles.textureTiles[2].FreeImage();
-   //tiles.textureTiles[3].FreeImage();
    
 	if(vertex){
 		delete[] vertex;
