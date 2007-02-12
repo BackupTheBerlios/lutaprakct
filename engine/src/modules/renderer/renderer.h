@@ -6,8 +6,9 @@
 #include "../mesh/terrain/terrain.h"
 #include "camera/camera.h"
 #include "frustum/frustum.h"
+#include "../events/eventhandler.h"
 
-class Renderer : public Task{
+class Renderer : public Task, public eventHandler {
 	
 public:
 
@@ -16,6 +17,8 @@ public:
 	bool start(void* data);
 	void stop(void* data);
 	void update(void* data);
+	
+	void handleEvent(const event &e);
 	
 	void setup2dRendering();
 	

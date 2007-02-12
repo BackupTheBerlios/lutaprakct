@@ -32,6 +32,7 @@ void SdlInputCore::update(void* data){
     if ( keystate[SDLK_LEFT] ) sendEvent(E_KEY_LEFT);
     if ( keystate[SDLK_RIGHT] ) sendEvent(E_KEY_RIGHT);
     if ( keystate[SDLK_ESCAPE] ) sendEvent(E_KEY_ESC);
+    if ( keystate[SDLK_F1] ) sendEvent(E_KEY_F1);
     
     /* mouse input */
 	int x, y;

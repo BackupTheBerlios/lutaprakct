@@ -6,6 +6,7 @@
 #include "../../util/logger/logger.h"
 #include "../../util/math/algebra.h"
 #include "../../util/glhelper/glextensions.h"
+#include "../../util/image/tgaimage.h"
 
 #include "../effects/fog/fog.h"
 #include "../mesh/skydome/skydome.h"
@@ -13,6 +14,7 @@
 #include "../shaders/cgshaders/cgTerrainSplat.h"
 
 #include "../../util/meshio/md2/md2IO.h"
+#include "../../util/meshio/obj/objload.h"
 #include "../material/basicTextureMaterial.h"
 
 #include "../gui/font.h"
@@ -36,6 +38,21 @@ BasicTextureMaterial knightskin;
 //WindowImage testwin;
 	Frustum frustum;
 Mesh knight;
+
+//dados pro disco
+unsigned int nverts = 0;
+unsigned int nindices = 0;
+unsigned int *indices = NULL;
+float *vertexdata = NULL;
+float *normaldata = NULL;
+float *tangentdata = NULL;
+float *binormaldata = NULL;
+float *texcoords = NULL;
+
+GLfloat LightAmbient[]= { 0.5f, 0.5f, 0.5f, 1.0f };
+GLfloat LightDiffuse[]= { 1.0f, 0.0f, 0.0f, 1.0f };
+GLfloat LightPosition[]= { 0.0f, 0.0f, 2.0f, 1.0f };
+
 
 /*const char* splatFragmentSource =
 "uniform sampler2D tex0;																			\n"
@@ -186,7 +203,7 @@ bool Renderer::start(void* data){
 	initializeExtensions();
 
 	std::cout << "Inicializando Skydome...";
-	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY ,0.4);
+	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY | SKY_ELEMENTS, 0.1);
 	dome->setCoordinates(44.0, 36.0, 6.0, 180.0);
     dome->update(0);
 	std::cout << "Pronto!" << std::endl;
@@ -201,7 +218,7 @@ bool Renderer::start(void* data){
 	alpha = TEXTUREMANAGER::getInstance().load("alphamap4.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, 0);
 	std::cout << "Pronto." <<std::endl;
 	
-   	CAMERA::getInstance().setPosition(100.07f, 124.641f, 50.5f, 108.0f, 124.0f, 50.0f, 0.0f, 1.0f, 0.0f);
+   	CAMERA::getInstance().setPosition(100.07f, 24.641f, 50.5f, 108.0f, 24.0f, 50.0f, 0.0f, 1.0f, 0.0f);
 	
 	std::cout << "Inicializando terrain shader...";
 	splatcg = new cgTerrainSplat(NULL, 0, "terrainSplatting.cg", PROFILE_ARBFP1, 0);
@@ -214,16 +231,20 @@ bool Renderer::start(void* data){
 	
 	float height = (float)  terrain.getScaledHeight(50, 51);
 	knight.initialize("knight.md2");
-	//knight.translateTo(50.0, (100.0 + height), 51.0);
-//	knight.scale(0.1, 0.1, 0.1);
-	
 	knightskin.initialize("knightskin2.tga");
+	//knight.translateTo(50.0, (100.0 + height), 51.0);
+//	knight.scale(0.1, 0.1, 0.1);	
 	
 	//std::cout << "inicializando fonte " << std::endl;
 	//testfont.initialize("font.tga");
 //	testwin.initialize(200, 400, 100, 100, false);
 //	testwin.setTexture("background.tga");
 //	testwin.setBorder("bottomgump.tga", "topgump.tga", "right.tga", "left.tga", "bottomright.tga", "bottomleft.tga", "topright.tga", "topleft.tga", 40);
+	
+	LoadObjModel( "ufo.obj",nverts, nindices, indices, vertexdata, normaldata, tangentdata, binormaldata, texcoords );
+	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
+	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);		
 	
 	std::cout << "Renderer inicializado com sucesso." << std::endl;
 	return true;
@@ -237,9 +258,11 @@ void Renderer::update(void* data){
              CAMERA::getInstance().xView, CAMERA::getInstance().yView, CAMERA::getInstance().zView,
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
    // std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glTranslatef(0.0, 0.0, 0.0);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPushMatrix();
+	//glTranslatef(0.0, -150.0, 0.0);
 	//dome->draw();
+	//glPopMatrix();
 	//mat4 modelview;
 	//modelview[13] = 100;
 	//glLoadMatrixf(modelview.mat_array);
@@ -248,24 +271,87 @@ void Renderer::update(void* data){
 	glPushMatrix();
 	glScalef(0.1, 0.1, 0.1);
 	float height = (float)terrain.getScaledInterpolatedHeight(50, 50);
-	std::cout << "height " << height << std::endl;
+	//std::cout << "height " << height << std::endl;
 	glTranslatef(50, height+24, 50);
 	glRotatef(90, -1.0, 0.0, 0.0);
 	knightskin.bind();
-	knight.draw(1);
+	knight.draw(50);
 	knightskin.unbind();
 	glPopMatrix();
 
+	glPushMatrix();
+	glTranslatef(100, 30, 50);
+	glRotatef(30, 1.0, 1.0, 0.0);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT1);
+	glVertexPointer(3, GL_FLOAT, 0, vertexdata);
+	glNormalPointer(GL_FLOAT, 0, normaldata);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glDrawElements(GL_TRIANGLES, nindices, GL_UNSIGNED_INT, indices);
+	glDisable(GL_LIGHT1);
+	glDisable(GL_LIGHTING);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(105, 35, 60);
+	glRotatef(60, 1.0, 0.0, 0.0);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT1);
+	glVertexPointer(3, GL_FLOAT, 0, vertexdata);
+	glNormalPointer(GL_FLOAT, 0, normaldata);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glDrawElements(GL_TRIANGLES, nindices, GL_UNSIGNED_INT, indices);
+	glDisable(GL_LIGHT1);
+	glDisable(GL_LIGHTING);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(110, 35, 55);
+	glRotatef(20, 1.0, 1.0, 1.0);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT1);
+	glVertexPointer(3, GL_FLOAT, 0, vertexdata);
+	glNormalPointer(GL_FLOAT, 0, normaldata);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glDrawElements(GL_TRIANGLES, nindices, GL_UNSIGNED_INT, indices);
+	glDisable(GL_LIGHT1);
+	glDisable(GL_LIGHTING);
+	glPopMatrix();
+
 	//necessario chamar o update sempre q a matriz muda
+	glPushMatrix();
+	glTranslatef(0.0, 0.0, 0.0);
 	frustum.update();
-	
 	splatcg->bind();
 	RenderOctreeNode(terrain.rootNode);
 	splatcg->unbind();
+	glPopMatrix();
 	
 //setup2dRendering();
 
 	video->unlock();
+	
+}
+
+void Renderer::handleEvent(const event& e){
+	
+	switch (e.type){
+		case E_KEY_F1:
+				int viewport[4];
+				glGetIntegerv(GL_VIEWPORT, viewport);
+				unsigned char* data = NULL;
+				data =  new unsigned char[3 * viewport[2] * viewport[3]];
+				glPixelStorei(GL_PACK_ALIGNMENT,1);
+				glReadBuffer(GL_FRONT);
+				glReadPixels(0,0, viewport[2], viewport[3], GL_RGB, GL_UNSIGNED_BYTE, data);
+				tgaimage img;
+				img.write("screenshot.tga", viewport[2], viewport[3], 24, data);
+				delete data;
+			break;
+	}
 	
 }
 
