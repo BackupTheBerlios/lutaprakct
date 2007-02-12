@@ -143,9 +143,11 @@ void Mesh::draw(){
 }
 
 void Mesh::draw(int frame){
+	//glPushMatrix();
 	//glLoadMatrixf(modelview.mat_array);
 	glMultMatrixf(modelview.mat_array);
 	renderer->draw(meshdata, frame);
+	//glPopMatrix();
 }
 
 int Mesh::discoverRenderType(){

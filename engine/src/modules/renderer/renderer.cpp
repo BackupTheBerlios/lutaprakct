@@ -179,23 +179,19 @@ bool Renderer::start(void* data){
 	video->setWindowTitle("Engine");
     video->showCursor(false);
     
-    //inicializacao dos flags que as texturas vao usar
-    std::cout << "Inicializando texture manager... ";
+    //inicializacao dos flags que as texturas vao usar;
 	TEXTUREMANAGER::getInstance().setDefaultFlags();
-	std::cout << "Pronto" << std::endl;
 
 	//inicializacao das extensions
-	std::cout << "Inicializando OpenGL extensions... ";
 	initializeExtensions();
-	std::cout << "Pronto" << std::endl;
 
 	std::cout << "Inicializando Skydome...";
-	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY | ANIMATED_CLOUDS ,0.4);
+	dome = new Skydome("sky2.tga", 32, 48, 1000.0, COLORED_SKY ,0.4);
 	dome->setCoordinates(44.0, 36.0, 6.0, 180.0);
     dome->update(0);
 	std::cout << "Pronto!" << std::endl;
 
-	terrain.loadMap("lol", 4);
+	terrain.loadMap("lol", 8);
 
 	//f = new Fog(58.0f / 255, 68.0f / 255, 184.0f / 255, 1.0,  0.03, 0.0, 100.0,  FOG_EXP2);
 	
@@ -212,18 +208,19 @@ bool Renderer::start(void* data){
 	splatcg->compile();
 	std::cout << "Pronto." << std::endl;
 	
-	float  height = (float) terrain.getHeight(0, 100);
-	std::cout << "height: " << height << std::endl;
+//	for (int i = 0; i < 100; i++)
+//		for (int k = 0; k < 100; k++)
+//			std::cout << (float)  terrain.getHeight(i, k) << std::endl;
 	
+	float height = (float)  terrain.getScaledHeight(50, 51);
 	knight.initialize("knight.md2");
-	knight.translateTo(0.0, 100.0, 0.0);
+	//knight.translateTo(50.0, (100.0 + height), 51.0);
 //	knight.scale(0.1, 0.1, 0.1);
 	
 	knightskin.initialize("knightskin2.tga");
 	
 	//std::cout << "inicializando fonte " << std::endl;
 	//testfont.initialize("font.tga");
-	
 //	testwin.initialize(200, 400, 100, 100, false);
 //	testwin.setTexture("background.tga");
 //	testwin.setBorder("bottomgump.tga", "topgump.tga", "right.tga", "left.tga", "bottomright.tga", "bottomleft.tga", "topright.tga", "topleft.tga", 40);
@@ -236,16 +233,11 @@ void Renderer::update(void* data){
 
 	video->lock();
 	/*loop em todas entidades visiveis pra desenha-las*/
-//	CAMERA::getInstance().update(0.1);
-//	std::cout << "fps " << TIMER::getInstance().getFPS() << " 1/fps " << 1.0/(TIMER::getInstance().getFPS()) << std::endl;
-//	vec3 cameraPosition = CAMERA::getInstance().getPosition();
-//	std::cout <<  "camera position: " << cameraPosition.x << " " << cameraPosition.y << " " << cameraPosition.z << std::endl;
    gluLookAt(CAMERA::getInstance().xPos, CAMERA::getInstance().yPos, CAMERA::getInstance().zPos,
              CAMERA::getInstance().xView, CAMERA::getInstance().yView, CAMERA::getInstance().zView,
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
-	//frustum.update();
-  //  std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
-//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+   // std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glTranslatef(0.0, 0.0, 0.0);
 	//dome->draw();
 	//mat4 modelview;
@@ -253,9 +245,16 @@ void Renderer::update(void* data){
 	//glLoadMatrixf(modelview.mat_array);
 	//glTranslatef(0.0, 100.0, 0.0);
 
+	glPushMatrix();
+	glScalef(0.1, 0.1, 0.1);
+	float height = (float)terrain.getScaledInterpolatedHeight(50, 50);
+	std::cout << "height " << height << std::endl;
+	glTranslatef(50, height+24, 50);
+	glRotatef(90, -1.0, 0.0, 0.0);
 	knightskin.bind();
-	knight.draw(10);
+	knight.draw(1);
 	knightskin.unbind();
+	glPopMatrix();
 
 	//necessario chamar o update sempre q a matriz muda
 	frustum.update();
@@ -264,14 +263,6 @@ void Renderer::update(void* data){
 	RenderOctreeNode(terrain.rootNode);
 	splatcg->unbind();
 	
-/*	knightskin.bind();
-	knight.draw(10);
-	knightskin.unbind();
-*/
-	//glTranslatef(0.0, .0, 0.0);
-/*	knightskin.bind();
-	knight.draw(10);
-	knightskin.unbind();*/
 //setup2dRendering();
 
 	video->unlock();
