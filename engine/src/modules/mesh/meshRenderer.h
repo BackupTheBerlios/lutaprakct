@@ -22,6 +22,7 @@ public:
 	
 	virtual void draw(MeshData* data) = 0;
 	virtual void draw(MeshData* data, int frame) = 0;
+	virtual void draw(MeshData* data, float elapsedTime, int startFrame, int lastFrame) = 0;
 	
 };
 

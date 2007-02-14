@@ -100,7 +100,6 @@ void Mesh::rotate(float angle, float x, float y, float z){
 
 void Mesh::translateTo(float x, float y, float z){
 
-	std::cout << "y " << y << std::endl;
 	modelview[12] = x;
 	modelview[13] = y;
 	modelview[14] = z;
@@ -176,6 +175,13 @@ void Mesh::draw(int frame){
 	glPushMatrix();
 	glMultMatrixf(modelview.mat_array);
 	renderer->draw(meshdata, frame);
+	glPopMatrix();
+}
+
+void Mesh::draw(float elapsedTime, int startFrame, int endFrame){
+	glPushMatrix();
+	glMultMatrixf(modelview.mat_array);
+	renderer->draw(meshdata, elapsedTime, startFrame, endFrame);
 	glPopMatrix();
 }
 

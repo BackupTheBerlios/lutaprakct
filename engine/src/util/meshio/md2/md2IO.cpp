@@ -235,8 +235,6 @@ void MD2Obj::draw(int Frame){
 	if(Frame >= totalFrames)
 		Frame=0;
  
-  //glBindTexture(GL_TEXTURE_2D,TexID);
- 
 	glBegin(GL_TRIANGLES);  
  
 	for(Part=0; Part < totalTri; ++Part){

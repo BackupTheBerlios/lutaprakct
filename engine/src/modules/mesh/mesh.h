@@ -43,6 +43,7 @@ public:
 
 	void draw();
 	void draw(int frame);
+	void draw(float elapsedTime, int startframe, int endframe);
 
 private:
 

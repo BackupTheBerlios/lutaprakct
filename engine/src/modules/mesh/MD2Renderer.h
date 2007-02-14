@@ -7,11 +7,15 @@ class MD2Renderer : public MeshRenderer{
 	
 public:
 	
-	MD2Renderer(){};
-	~MD2Renderer(){};
+	MD2Renderer(){nextFrame = 0;};
+	virtual ~MD2Renderer(){};
 	
 	void draw(MeshData* data);
 	void draw(MeshData* data, int frame);
+	void draw(MeshData* data, float elapsedTime, int startFrame, int lastFrame);
+	
+	float nextFrame;
+	int curFrame;
 	
 };
 

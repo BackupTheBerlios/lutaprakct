@@ -246,18 +246,18 @@ bool Renderer::start(void* data){
 void Renderer::update(void* data){
 
 	video->lock();
-	/*loop em todas entidades visiveis pra desenha-las*/
-   gluLookAt(CAMERA::getInstance().xPos, CAMERA::getInstance().yPos, CAMERA::getInstance().zPos,
+	
+	float elapsedTime =  TIMER::getInstance().getElapsedTime();
+	
+	gluLookAt(CAMERA::getInstance().xPos, CAMERA::getInstance().yPos, CAMERA::getInstance().zPos,
              CAMERA::getInstance().xView, CAMERA::getInstance().yView, CAMERA::getInstance().zView,
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
-    std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
+ //   std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//glPushMatrix();
-	//glTranslatef(0.0, -150.0, 0.0);
 	//dome->draw();
 
 	knightskin.bind();
-	knight.draw(1);
+	knight.draw(elapsedTime, 40, 46);
 	knightskin.unbind();
 
 	glPushMatrix();

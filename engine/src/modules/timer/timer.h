@@ -14,6 +14,7 @@ public:
 
 	float getFPS(){ return fps; }
 	float getElapsedTime(){ return elapsedTime; }
+	unsigned long getCurrentTime() {return currentTime; }
 	
 	void  update(void* data );
 	void stop(void* data ) { }; //sem stop

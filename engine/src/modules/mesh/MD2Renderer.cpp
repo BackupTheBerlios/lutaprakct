@@ -1,11 +1,26 @@
 
 #include "MD2Renderer.h"
 #include "../../util/meshio/md2/md2IO.h"
+#include "../timer/timer.h"
 #include <GL/gl.h>
 
 void MD2Renderer::draw(MeshData* data){
 }
 
+void MD2Renderer::draw(MeshData* data, float elapsedTime, int startframe, int lastframe){
+	
+	unsigned long time1 = TIMER::getInstance().getCurrentTime();
+		
+	if(time1 > nextFrame)
+     {
+        curFrame++;
+        nextFrame = time1 + 200;
+         
+         if(curFrame >= lastframe)
+          curFrame = startframe;
+      }
+	draw(data, curFrame);
+}
 void MD2Renderer::draw(MeshData* data, int frame){
 	
 	MD2Obj* md2data = (MD2Obj*) data;
@@ -14,8 +29,6 @@ void MD2Renderer::draw(MeshData* data, int frame){
  
 	if(frame >= md2data->getFrameCount())
 		frame=0;
- 
-  //glBindTexture(GL_TEXTURE_2D,TexID);
  
 	glBegin(GL_TRIANGLES);  
  
