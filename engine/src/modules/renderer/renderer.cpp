@@ -187,7 +187,6 @@ void Renderer::stop(void* data){
 
 bool Renderer::start(void* data){
 
-	//inicializa??o basica do video
 	video =  initializeVideo(videoSystem::VIDEO_SDL);
 	if (video == NULL)
 		return false;
@@ -195,11 +194,7 @@ bool Renderer::start(void* data){
 		return false;
 	video->setWindowTitle("Engine");
     video->showCursor(false);
-    
-    //inicializacao dos flags que as texturas vao usar;
 	TEXTUREMANAGER::getInstance().setDefaultFlags();
-
-	//inicializacao das extensions
 	initializeExtensions();
 
 	std::cout << "Inicializando Skydome...";
@@ -225,15 +220,10 @@ bool Renderer::start(void* data){
 	splatcg->compile();
 	std::cout << "Pronto." << std::endl;
 	
-//	for (int i = 0; i < 100; i++)
-//		for (int k = 0; k < 100; k++)
-//			std::cout << (float)  terrain.getHeight(i, k) << std::endl;
-	
-	float height = (float)  terrain.getScaledHeight(50, 51);
-	knight.initialize("knight.md2");
-	knightskin.initialize("knightskin2.tga");
-	//knight.translateTo(50.0, (100.0 + height), 51.0);
-//	knight.scale(0.1, 0.1, 0.1);	
+	knight.initialize("ogro.md2");
+	std::cout << "lendo skin" << std::endl;
+	knightskin.initialize("ogroskin.tga");	
+	std::cout << "lendo skin" << std::endl;
 	
 	//std::cout << "inicializando fonte " << std::endl;
 	//testfont.initialize("font.tga");
@@ -257,7 +247,7 @@ void Renderer::update(void* data){
    gluLookAt(CAMERA::getInstance().xPos, CAMERA::getInstance().yPos, CAMERA::getInstance().zPos,
              CAMERA::getInstance().xView, CAMERA::getInstance().yView, CAMERA::getInstance().zView,
              CAMERA::getInstance().xUp, CAMERA::getInstance().yUp, CAMERA::getInstance().zUp);
-   // std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
+    std::cout << CAMERA::getInstance().xPos << " " << CAMERA::getInstance().yPos << " " << CAMERA::getInstance().zPos << " " << CAMERA::getInstance().xView << " " << CAMERA::getInstance().yView << " " << CAMERA::getInstance().zView <<" " << CAMERA::getInstance().xUp << " "<< CAMERA::getInstance().yUp << " "<< CAMERA::getInstance().zUp << std::endl;
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//glPushMatrix();
 	//glTranslatef(0.0, -150.0, 0.0);
@@ -269,14 +259,28 @@ void Renderer::update(void* data){
 	//glTranslatef(0.0, 100.0, 0.0);
 
 	glPushMatrix();
-	glScalef(0.1, 0.1, 0.1);
-	float height = (float)terrain.getScaledInterpolatedHeight(50, 50);
-	//std::cout << "height " << height << std::endl;
-	glTranslatef(50, height+24, 50);
+	float height = (float)terrain.getScaledInterpolatedHeight(1, 1);
+	height = height + 2.5;
+	glTranslatef(1, height, 1);
 	glRotatef(90, -1.0, 0.0, 0.0);
+	glScalef(0.1, 0.1, 0.1);
 	knightskin.bind();
-	knight.draw(50);
+	knight.draw(1);
 	knightskin.unbind();
+	glPopMatrix();
+
+	glPushMatrix();
+	height = (float)terrain.getScaledInterpolatedHeight(10, 10);
+	glTranslatef(10, height+0.6, 10);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT1);
+	glVertexPointer(3, GL_FLOAT, 0, vertexdata);
+	glNormalPointer(GL_FLOAT, 0, normaldata);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glDrawElements(GL_TRIANGLES, nindices, GL_UNSIGNED_INT, indices);
+	glDisable(GL_LIGHT1);
+	glDisable(GL_LIGHTING);
 	glPopMatrix();
 
 	glPushMatrix();
