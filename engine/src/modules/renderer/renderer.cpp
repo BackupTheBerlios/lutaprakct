@@ -221,9 +221,12 @@ bool Renderer::start(void* data){
 	std::cout << "Pronto." << std::endl;
 	
 	knight.initialize("ogro.md2");
-	std::cout << "lendo skin" << std::endl;
-	knightskin.initialize("ogroskin.tga");	
-	std::cout << "lendo skin" << std::endl;
+	knightskin.initialize("ogroskin.tga");
+	float height = (float)terrain.getScaledInterpolatedHeight(1, 1);
+	height = height + 2.5;
+	knight.scale(0.1, 0.1, 0.1);
+	knight.rotate(90, -1.0, 0.0, 0.0 );
+	knight.translateTo(1, height, 1);
 	
 	//std::cout << "inicializando fonte " << std::endl;
 	//testfont.initialize("font.tga");
@@ -252,25 +255,13 @@ void Renderer::update(void* data){
 	//glPushMatrix();
 	//glTranslatef(0.0, -150.0, 0.0);
 	//dome->draw();
-	//glPopMatrix();
-	//mat4 modelview;
-	//modelview[13] = 100;
-	//glLoadMatrixf(modelview.mat_array);
-	//glTranslatef(0.0, 100.0, 0.0);
 
-	glPushMatrix();
-	float height = (float)terrain.getScaledInterpolatedHeight(1, 1);
-	height = height + 2.5;
-	glTranslatef(1, height, 1);
-	glRotatef(90, -1.0, 0.0, 0.0);
-	glScalef(0.1, 0.1, 0.1);
 	knightskin.bind();
 	knight.draw(1);
 	knightskin.unbind();
-	glPopMatrix();
 
 	glPushMatrix();
-	height = (float)terrain.getScaledInterpolatedHeight(10, 10);
+	float height = (float)terrain.getScaledInterpolatedHeight(10, 10);
 	glTranslatef(10, height+0.6, 10);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT1);
