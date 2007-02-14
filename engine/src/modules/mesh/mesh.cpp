@@ -3,6 +3,7 @@
 #include "meshManager.h"
 #include "meshRenderer.h"
 #include <GL/gl.h>
+#include <cmath>
 
 #include <iostream>
 
@@ -31,20 +32,59 @@ bool Mesh::initialize(std::string filename){
 	return true;	
 }
 
-//angulo em radianos
-void Mesh::rotate(float angle, float x, float y, float z){
-		
-/*		angle = angle*0.5;
-		quat rotation;
-		rotation.w = cos(angle);
-		rotation.y = x * sin(angle);
-		rotation.y = y * sin(angle);
-		rotation.z = z * sin(angle); 
-		
-		rotation = normalize(rotation);	
-
-		quat point = */
+//angulo em graus
+void Mesh::rotate(float angle, vec3 axis){
 	
+	mat4 mat;
+	identity(mat);
+		
+	float rad = degtorad(angle);
+	float c = cos(rad);
+	float s = sin(rad);
+	vec3 v = axis;
+	normalize(v);
+	float xx = v.x * v.x;
+	float yy = v.y * v.y;
+	float zz = v.z * v.z;
+	float xy = v.x * v.y;
+	float yz = v.y * v.z;
+	float zx = v.z * v.x;
+	float xs = v.x * s;
+	float ys = v.y * s;
+	float zs = v.z * s;
+	mat[0] = (1.0f - c) * xx + c; mat[4] = (1.0f - c) * xy - zs; mat[8] = (1.0f - c) * zx + ys; mat[12] = 0.0;
+	mat[1] = (1.0f - c) * xy + zs; mat[5] = (1.0f - c) * yy + c; mat[9] = (1.0f - c) * yz - xs; mat[13] = 0.0;
+	mat[2] = (1.0f - c) * zx - ys; mat[6] = (1.0f - c) * yz + xs; mat[10] = (1.0f - c) * zz + c; mat[14] = 0.0;
+	mat[3] = 0.0; mat[7] = 0.0; mat[11] = 0.0; mat[15] = 1.0;
+	
+	modelview = modelview*mat;
+}
+
+void Mesh::rotate(float angle, float x, float y, float z){
+	
+	mat4 mat;
+	identity(mat);
+		
+	float rad = degtorad(angle);
+	float c = cos(rad);
+	float s = sin(rad);
+	vec3 v(x, y, z);
+	normalize(v);
+	float xx = v.x * v.x;
+	float yy = v.y * v.y;
+	float zz = v.z * v.z;
+	float xy = v.x * v.y;
+	float yz = v.y * v.z;
+	float zx = v.z * v.x;
+	float xs = v.x * s;
+	float ys = v.y * s;
+	float zs = v.z * s;
+	mat[0] = (1.0f - c) * xx + c; mat[4] = (1.0f - c) * xy - zs; mat[8] = (1.0f - c) * zx + ys; mat[12] = 0.0;
+	mat[1] = (1.0f - c) * xy + zs; mat[5] = (1.0f - c) * yy + c; mat[9] = (1.0f - c) * yz - xs; mat[13] = 0.0;
+	mat[2] = (1.0f - c) * zx - ys; mat[6] = (1.0f - c) * yz + xs; mat[10] = (1.0f - c) * zz + c; mat[14] = 0.0;
+	mat[3] = 0.0; mat[7] = 0.0; mat[11] = 0.0; mat[15] = 1.0;
+	
+	modelview = modelview*mat;
 }
 
 /*  If the translation is defined by the vector [X Y Z ], then the 4x4
@@ -60,37 +100,25 @@ void Mesh::rotate(float angle, float x, float y, float z){
 
 void Mesh::translateTo(float x, float y, float z){
 
-	mat4 translation;
-	identity(translation);
-	
-	translation[12] = x;
-	translation[13] = y;
-	translation[14] = z;
-	modelview = modelview*translation;
+	std::cout << "y " << y << std::endl;
+	modelview[12] = x;
+	modelview[13] = y;
+	modelview[14] = z;
 }
 
 void Mesh::translateTo(float amount, vec3 axis){
 	
-	mat4 translation;
-	identity(translation);
-	axis = (-amount)*axis;
-
-	translation[12] = axis.x;
-	translation[13] = axis.y;
-	translation[14] = axis.z;
-	modelview = modelview*translation;
+	modelview[12] = axis.x;
+	modelview[13] = axis.y;
+	modelview[14] = axis.z;
 	
 }
 
 void Mesh::translateAdd(float x, float y, float z){
-
-	mat4 translation;
-	identity(translation);
 	
-	translation[12] = modelview[12] + x;
-	translation[13] = modelview[13] + y;
-	translation[14] = modelview[14] + z;
-	modelview = modelview*translation;
+	modelview[12] = modelview[12] + x;
+	modelview[13] = modelview[13] + y;
+	modelview[14] = modelview[14] + z;
 	
 }
 
@@ -138,16 +166,17 @@ vec3 Mesh::getScale(){
 }
 
 void Mesh::draw(){
-	//glLoadMatrixf(modelview.mat_array);
+	glPushMatrix();
+	glMultMatrixf(modelview.mat_array);
 	renderer->draw(meshdata);
+	glPopMatrix();
 }
 
 void Mesh::draw(int frame){
-	//glPushMatrix();
-	//glLoadMatrixf(modelview.mat_array);
-	//glMultMatrixf(modelview.mat_array);
+	glPushMatrix();
+	glMultMatrixf(modelview.mat_array);
 	renderer->draw(meshdata, frame);
-	//glPopMatrix();
+	glPopMatrix();
 }
 
 int Mesh::discoverRenderType(){
