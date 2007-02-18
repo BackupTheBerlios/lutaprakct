@@ -2,15 +2,21 @@
 #define PARTICLESYSTEM_H_
 
 #include "particle.h"
+#include "simpleActionPolicy.h"
+#include "simpleInitPolicy.h"
+
 #include <list>
 
 class ParticleSystem{
 	
 	public:
 		
+		ParticleSystem(InitializePolicy* colorinit, InitializePolicy* sizeinit, InitializePolicy* velocityinit, InitializePolicy* lifeinit, InitializePolicy* positioninit, InitializePolicy* forceinit, ActionPolicy* coloraction, ActionPolicy* sizeaction, ActionPolicy* velocityaction, ActionPolicy* lifeaction, ActionPolicy* positionaction, ActionPolicy* forceaction );
 	
 	private:
 	
+		SimpleInitializePolicy* initPolicy;
+		SimpleActionPolicy* actionPolicy; 
 		//Cmaterial *material;
 		
 		std::list<Particle*> particles;
