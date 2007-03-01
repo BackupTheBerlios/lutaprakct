@@ -15,6 +15,9 @@ enum eventType
   E_KEY_LEFT,
   E_KEY_RIGHT,
   
+  E_KEY_W,
+  E_KEY_S,
+  
   E_KEY_ESC,
   
   E_KEY_F1,

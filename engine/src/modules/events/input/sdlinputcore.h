@@ -33,7 +33,11 @@ public:
 	AUTO_SIZE;
 private:
 
+	void emulateAditionalEvents();
+	long int nextEvent;
+
 	unsigned int winheight, winwidth;
+	unsigned int widthMiddle, heightMiddle;
 	float mouseVelocity;
 	
 };
