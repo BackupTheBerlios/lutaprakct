@@ -41,6 +41,26 @@ void Camera::move(float space){
 	update(xLookDirection, yLookDirection, zLookDirection, space);
 }
 
+void Camera::moveY(float space){
+
+	float xLookDirection = 0, yLookDirection = 0, zLookDirection = 0;
+
+	//acha o vetor direcao
+	xLookDirection = xView - xPos;
+	yLookDirection = yView - yPos;
+	zLookDirection = zView - zPos;
+
+	//normaliza
+	float dp = 1 /(float)sqrt(xLookDirection * xLookDirection + yLookDirection * yLookDirection +
+                             zLookDirection * zLookDirection);
+	xLookDirection *= dp;
+	yLookDirection *= dp;
+	zLookDirection *= dp;
+
+	yPos += yLookDirection * space;
+	yView += yLookDirection * space;
+	
+}
 
 void Camera::update(float xDir, float yDir, float zDir, float space){
 	
@@ -166,10 +186,12 @@ void Camera::rotateByMouse(int mousePosX, int mousePosY, int midX, int midY){
 void Camera::handleEvent(const event &e){
 
 	switch (e.type){
-		case E_KEY_UP:         move(0.1); break;
-	    case E_KEY_DOWN:       move(-0.1); break;
-	    case E_KEY_LEFT:       strafe(-0.1); break;
-	    case E_KEY_RIGHT:      strafe(0.1); break;
+		case E_KEY_UP:         move(1.0); break;
+	    case E_KEY_DOWN:       move(-1.0); break;
+	    case E_KEY_W:		   moveY(1.0); break;
+	    case E_KEY_S:		   moveY(-1.0); break;
+	    case E_KEY_LEFT:       strafe(-1.0); break;
+	    case E_KEY_RIGHT:      strafe(1.0); break;
 	}	
 	
 }

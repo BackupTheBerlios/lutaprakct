@@ -24,6 +24,7 @@ public:
                      float xu, float yu, float zu);
 
 	void move(float direction);
+	void moveY(float direction);
 	void update(float xDir, float yDir,
                         float zDir, float dir);
 	void strafe(float direction);
