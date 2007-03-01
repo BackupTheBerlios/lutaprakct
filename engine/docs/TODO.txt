@@ -11,7 +11,6 @@ TODO LIST
 10- fazer os mesh groups para as transformacoes*
 11- otimizar o shader de splatting
 12- adicionar suporte ao collada
-13- colisao com o terreno *
 14- algoritmos de erosao do terreno
 15- occlusion queries + octree
 
@@ -24,3 +23,4 @@ Done List
 6- organizar a hierarquia dos meshes e renderer - DONE
 7- fazer o terreno ler .tga e .raw - DONE: nao vai ser mais usado .raw
 8- testar o carregamendo de modelos md2 com animacao e se necessario refazer - DONE
+9- colisao com o terreno - DONE (basta pegar o height do terreno)
