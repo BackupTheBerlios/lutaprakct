@@ -22,10 +22,10 @@ class Mesh{
 public:
 
 	Mesh();
-	Mesh(std::string filename);
+	Mesh(std::string filename, int flags = 0);
 	virtual ~Mesh();
 	
-	bool initialize(std::string filename);
+	bool initialize(std::string filename, int flags = 0);
 	
 	//as funcoes abaixo modificam a matriz do objeto
 	void rotate(float angle, float x, float y, float z);

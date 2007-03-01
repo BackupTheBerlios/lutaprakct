@@ -11,14 +11,14 @@ Mesh::Mesh(){
 	identity(modelview);
 }
 
-Mesh::Mesh(std::string filename){
-	initialize(filename);
+Mesh::Mesh(std::string filename, int flags){
+	initialize(filename, flags);
 }
 
 Mesh::~Mesh(){
 }
 
-bool Mesh::initialize(std::string filename){
+bool Mesh::initialize(std::string filename, int flags){
 	
 	identity(modelview);
 	meshdata = MESHMANAGER::getInstance().load( const_cast<char*>(filename.c_str()) );
