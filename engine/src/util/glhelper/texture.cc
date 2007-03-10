@@ -25,7 +25,9 @@ void texture::disable(){
 }
 
 void texture::unbind(){
+	//glBindTexture(target, 0);
 	glDisable(target);
+	glActiveTextureARB(GL_TEXTURE0_ARB);
 }
 
 void texture::bind(){
@@ -199,12 +201,12 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 		char *facenames[] = {"posx", "negx", "posy", "negy", "posz", "negz" };
 		for (int i = 0; i < 6; i++){
 			sprintf(buff, filename, facenames[i]);
-			img = loadImage(filename);
+			img = loadImage(buff);
 			width = img->getWidth();
 			height = img->getHeight();
 			glTexImage2D(facetargets[i],0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
 			if (img->imagedata){
-				delete img;
+				delete img->imagedata;
 				img = NULL;
 			}
 		}

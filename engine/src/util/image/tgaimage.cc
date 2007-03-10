@@ -84,14 +84,13 @@ bool tgaimage::load(const char *filename, int loadingflags){
 
 	std::ifstream fin;
 	unsigned long filesize;
-
 	if (imagedata)
 		delete [] imagedata;
 	
 	fin.open(filename, std::ios::binary);
     
 	if(fin == NULL){
-		std::cout << "no such file" << std::endl;
+		std::cout << "no such file " << filename  << std::endl;
 		return false;
 	}
 
