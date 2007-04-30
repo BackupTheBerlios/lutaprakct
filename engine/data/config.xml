@@ -1,0 +1,129 @@
+<engine>
+
+	<window title="Engine" showcursor="0" />
+	
+	<opengl>
+		<buffers redsize="8" greensize="8" bluesize="8" alphasize="8" depthsize="24" stencilsize="8" />
+		<viewport width="800" height="600" fovy="45.0" znear="1.0" zfar="6000.0" />
+		<clearcolor r="0.6" g="0.6" b="0.6" a="1.0" />
+		<extension name="GL_ARB_vertex_program" />
+		<extension name="GL_NV_vertex_program" />
+		<extension name="GL_ARB_imaging" />
+		<extension name="GL_ARB_point_parameters" />
+		<extension name="GL_EXT_framebuffer_object" />
+		<extension name="GL_ARB_vertex_buffer_object" />
+		<extension name="GL_ARB_multitexture" />
+		<extension name="GL_EXT_texture3D" />
+		<extension name="GL_ARB_shading_language_100" />
+	</opengl>
+
+	<camera>
+		<config printvectors="0" />
+		<vectors xpos="103.13" ypos="30.3865" zpos="51.9579" xview="108.863" yview="29.2545" zview="46.0957"  />
+	</camera>
+
+	
+	<scene>
+		<sky> 
+			<skybox defaultbackground="hills_%s.tga" followcamera="1" size="10.0" enabled="1" />
+		</sky>
+		
+		<map>
+			<heightmap filename="hills4.tga" texrepeat="8" />
+			<files material="terrainMaterial.xml" />
+		</map>
+		
+		<lights>
+		
+			<light id="0">
+				<position x="0.0" y="30.0" z="0.0" w="1.0" />
+				<ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+				<diffuse r="1.0" g="0.0" b="0.0" a="1.0" />
+			</light>
+		</lights>
+		
+		<meshes>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material="" />
+				<translate x= "105.0" y="30.0" z= "50.0" />
+				<rotate angle="10.0" x="0.0" y="1.0" z="0.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material="" />
+				<translate x= "105.0" y="35.0" z= "50.0" />
+				<rotate angle="30.0" x="1.0" y="0.0" z="1.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material="" />
+				<translate x= "105.0" y="30.0" z= "55.0" />
+				<rotate angle="30.0" x="1.0" y="-1.0" z="0.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material="" />
+				<translate x= "105.0" y="35.0" z= "60.0" />
+				<rotate angle="60.0" x="1.0" y="0.0" z="0.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material="" />
+				<translate x= "110.0" y="35.0" z= "50.0" />
+				<rotate angle="20.0" x="1.0" y="1.0" z="1.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material="" />
+				<translate x= "115.0" y="25.0" z= "55.0" />
+				<rotate angle="20.0" x="1.0" y="1.0" z="1.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material="" />
+				<translate x= "110.0" y="25.0" z= "55.0" />
+				<rotate angle="20.0" x="1.0" y="1.0" z="1.0" />
+			</mesh>
+		
+			<mesh>
+				<files geometryfile="ufo.obj" material=""/>
+				<translate x= "105.0" y="25.0" z= "55.0" />
+				<rotate angle="20.0" x="1.0" y="1.0" z="1.0" />
+			</mesh>
+	
+			<mesh>
+				<files geometryfile="ufo.obj" material=""/>
+				<translate x= "105.0" y="25.0" z= "50.0" />
+				<rotate angle="20.0" x="1.0" y="1.0" z="1.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material=""/>
+				<translate x= "105.0" y="25.0" z= "60.0" />
+				<rotate angle="20.0" x="1.0" y="1.0" z="1.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material=""/>
+				<translate x= "120.0" y="25.0" z= "50.0" />
+				<rotate angle="20.0" x="1.0" y="1.0" z="1.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material=""/>
+				<translate x= "125.0" y="25.0" z= "50.0" />
+				<rotate angle="20.0" x="1.0" y="1.0" z="1.0" />
+			</mesh>
+			
+			<mesh>
+				<files geometryfile="ufo.obj" material=""/>
+				<translate x= "125.0" y="25.0" z= "55.0" />
+				<rotate angle="20.0" x="1.0" y="1.0" z="1.0" />
+			</mesh>
+		
+		</meshes>
+		
+	</scene>
+	
+</engine>

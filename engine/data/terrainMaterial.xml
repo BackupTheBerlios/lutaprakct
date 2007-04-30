@@ -1,0 +1,10 @@
+<material>
+
+	<materialclass name="terrainsplatting" />
+	
+	<texture id="0" filename="mid2.tga" type="texture2d" format="rgb" internalformat="rgb8" flags="" />
+	<texture id="1" filename="bottom.tga" type="texture2d" format="rgb" internalformat="rgb8" flags="" />
+	<texture id="2" filename="alphamap4.tga" type="texture2d" format="rgba" internalformat="rgba8" flags="" />
+
+
+</material>
