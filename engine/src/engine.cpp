@@ -11,6 +11,8 @@
 #include "modules/core/kernel.h"
 #include "modules/timer/timer.h"
 
+#include <iostream>
+
 void Engine::run(){
 	
 	//inicializa a seed para numeros random
@@ -19,9 +21,6 @@ void Engine::run(){
 	if(!LOGGER::getInstance().initialize())return;
 
 	LOGGER::getInstance().write("start.log", "Inicializando engine");
-
-	//parse the 'settings.eng' file
-	//SETTINGS::getInstance().parseFile("settings.esf");
 
 	LOGGER::getInstance().write("start.log", "Inicializando renderer");	
 	rendererTask = new Renderer();
