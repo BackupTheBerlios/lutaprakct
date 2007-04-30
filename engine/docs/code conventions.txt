@@ -26,9 +26,11 @@ class foo{
 
 };
 
-6- Use espa?o entre operadores aritimeticos e entre parametros passados em funcoes:
+6- Use espaco entre operadores aritimeticos e entre parametros passados em funcoes:
 
 a = b + c; e nao a=b+c; e nem a = b+c;
 
+7- nao use notacao hungara, aqueles m_, etc nos atributos private.
 
+8- o nome do arquivo tem o mesmo nome da classe, mas em minusculo
 

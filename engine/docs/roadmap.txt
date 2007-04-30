@@ -1,17 +1,3 @@
-Release 1
-- excelente design do codigo. é muito facil adicionar novas funcionalidades.
-- sistema de eventos, entidades da engine podem enviar ou receber eventos de outras entidades ou de qualquer periferico ligado ao pc.
-- sistema de gui com janelas e fontes e alguns widgets simples.
-- sistema de material completo, eh possivel criar materials com varias texturas, shaders em cg, cgfx, glsl. eh possivel criar um material com o FXComposer e importa-lo diretamente na engine.
-- materials prontos: simple texture, bump mapping, normal mapping, per pixel light, glass, refraction, fresnel, thin film.
-- hierarquia de mesh simples e funcional, carrega .ase, .obj, .md2 e o formato proprio da engine. meshes com ou sem animação.
-- skydome com cor fisicamente correta.
-- terreno usando texture splatting na gpu e geraçao do terreno utilizando hills algorithm.
-- varias funções auxiliares pro opengl, como framebuffers, extensions, occlusion queries, etc
-- formato de imagens suportado: tga com ou sem rle.
-- ampla biblioteca de rotinas matematicas
-- funções pra geração de noise 2d e 3d.
-
 Release 2
 
 - integrar engine de fisica

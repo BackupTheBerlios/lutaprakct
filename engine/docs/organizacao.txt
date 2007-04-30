@@ -2,85 +2,104 @@ A pasta engine tem as seguintes pastas:
 
 /data: onde ficam os meshes e texturas
 /docs: onde ficam a documentacao
-/libs: as libs que estao sendo utilizadas (atualmente nenhuma)
+/libs: as libs que estao sendo utilizadas (so a tinyxml a newton esta la mas nao eh usada)
 /src: o codigo
 /src/modules: codigo necessario pra rodar a engine.
 /src/util: classes e fun?oes auxiliares utilizadas pos outros modules ou util
 
 Lista de Modulos:
 
-core: eh o principal da arquitetura da engine. contem a interface Task e a classe kernel,
-que eh responsavel por executar todas as tasks. (talvez mudar o nome kernel pra gamecore)
+A engine tem que fazer 3 coisas:
+- gerenciar os dados lidos como texturas, modelos, etc
+- gerenciar a cena a ser renderizada
+- gerenciar a chamada das funcoes na ordem certa
 
-events: sistema de eventos da engine, aqui existe a pasta input/ que tem as fun?oes do SDL
-pra pegar o input do mouse e teclado, essa classe eh a sdlInputCore.
-Alem disso existe a interface eventHandler que todas as classes que precisam receber
-eventos tem que herdar (por exemplo a classe camera). A classe eventDispatcher ? um
-singleton que possui eh chamado pelo construtor do eventHandler. Logo, quando um eventhandler
-eh instanciado, ele eh adicionado em uma fila no eventDispatcher. Quando algum evento ?
-enviado pelo sdlInputCore ou pela funcao sendEvent() de algum eventHandler, essa fun??o
-eh enviada para o eventDispacther que percorre a lista de eventHandlers.
-Toda classe que herdar de eventHandler tem q implementar o metodo handleEvent onde deve
-ser implementado o codigo para tratamento do evento. (por exemplo o metodo handleEvent da
-camera deve tratar o input das teclas de se mover e o mouse)
+O 1 eh feito com a ajuda de varios "manegers". quando um arquivo eh carregado ele so
+eh carregado uma vez. por exemplo nas texturas eh associado em um map o nome da textura
+com a instancia dela. dessa forma se nao tiver o nome da textura no map ela sera
+carregada, caso ja tenha retorna a instancia do objeto. assim se for carregado duas texturas
+com mesmo nome apenas a primeira eh lida do hd e instanciada, a segunda eh um ponteiro pra
+essa textura. os modelos tambem sao assim, talvez os shaders e os material deveriam ser tbm.
+Apesar deles possuirem a mesma "data" eles possuem informacoes logicas diferentes, por
+exemplo, se voce carrega dois modelos iguais, com texturas iguais, mas os coloca em posicoes
+diferentes, teremos so 1 modelo e textura na memoria mas dois meshes com estado diferente.
 
-light: ainda nao foi feito. Esse sistema vai controlar quais luzes estao visiveis na cena.
-Entao para cada luz, para cada objeto visivel,  desenhe esse objeto.
+o 2 eh feito utilizando uma octree para definir o quais geometrias estao no frustum.
+porem essa implementação esta incompleta no sentido de que:
+1- tem-se apenas o terreno na octree os meshes esntao numa lista. eles tem q ser 
+colocados na octree
+2- esse é apenas frustum culling, tentei implementar occlusion culling com occlusion
+queries como tem no gpu gems 2 mas ficou mais lento :/
+3- tem que ser feito alguma especia de light occlusion em breve
 
-material: o sistema de material ? formado por textura + shader. A classe material ? uma
-interface tambem com os metodos virtuais initialize, bind e unbind. esses metodos sao
-virtuais pq dependendo do material eles sao inicializados e setados de maneira diferente.
-dentro desse module tem a pasta /textures, que contem duas classes: texture e textureManager
-que ? um singleton. use sempre TextureManager::getInstance.load() pra carregar uma textura
+o 3 eh o mais simples, a engine funciona seguindo a logica apresentada no Engenuity,
+existe um kernel que eh o mainloop da engine e ele tem varias tasks e fica executando elas
+em cada frame. as tasks sao coisas que precisam executar a todo frame, como por exemplo
+o renderer, o timer, o sistema de eventos, etc
 
-mesh: classe que trata todos os meshes. por enquanto so tem a pasta terreno.
-/terreno: o terreno ? gerado lendo um heightmap e por bruteforce mesmo, mas ele usa uma
-octree para nao desenhar toda a cena.
+Descricao das classes:
 
-renderer: classe que tem o mainloop de desenho da engine. basicamente ele percorre todos
-os objetos e desenha eles, aplica o material, etc
-/camera: classe que trata a camera. precisa ser refeita.
-/video: classe simples que trata da inicializa??o da janela usando sdl. a inicializa??o
-do opengl fica aqui tbm.
+Algumas coisas estao meio padronizadas, algumas classes possuem metodos bind(), unbind()
+e initialize() como shaders, materials, texturas, etc. 
 
-settings: classe que por enquanto so guarda informa??es e nao esta sendo usada. depois 
-ela sera utilizada para descobrir recursos do pc de quem esta rodando a maquina e configurar
-o game pra aquela maquina.
+As mais importantes sao:
 
-shaders: contem os wrapers pra tratar os shaders. eh uma interface e algumas funcoes basicas.
-os outros shaders devem herdar dessa classe.
+events: existem alguns eventos que sao enviados por algumas classes para se comunicarem
+com outras classes, por exemplo quando o input detecta que apertou a tecla seta pra cima
+esse evento eh enviado para a camera fazer o movimento. para uma classe poder ouvir e
+enviar eventos ela precisa herdar da interface EventHandler, a partir dai eh so implementar
+o metodo handleEvent() para tratar os eventos que a classe receber.
 
-timer: classe simples, eh um singleton que fica contando o tempo que passou entre 2 frames
-e os FPS
+material: aqui existe a interface Material, na qual todos os outros materials herdam. na
+pasta materials tem alguns exemplos prontos (so 2, um do terreno e um so com textura).
+pra fazer um novo material eh so herdar de Material e implementar os metodos initialize(),
+bind() e unbind() e adicionar o material no MaterialFactory. O metodo initialize() recebe
+uma string que seria o xml que descreve as caracteristicas do material.
+Alem disso essa pasta possui a pasta textures, com o TextureManager, para utiliza-lo eh simples
+pois ele eh um singleton e basta escrever: TEXTUREMANAGER::getInstance().load(); e passar
+os parametros corretos no metodo load.
 
-effects: essa pasta talvez mude de lugar. por enquanto so tem a fog que eh um wraper
-sobre as fun?oes de fog do opengl.
+mesh: aqui tem a classe mesh, ele possui dois atributos, o meshdata e o meshrenderer. A ideia
+por tras disso eh que se crie diversos meshdatas e diversosmeshrenderes, por exemplo, para
+ler um arquivo .nd2 cria-se um meshdata, para ler um .3ds cria-se outro. e os meshrenderes
+sao responsaveis por renderizar esses modelos lidos, pode ter um meshrenderer que utilize
+vbo ou que utilize displaylist ou vertexarray, etc 
+a classe Mesh tem dois metodos mto importantes, o draw() e o update(). o update recebe o
+tempo que passou entre um frame e outro e deve atualizar a fisica do mesh, se ele estiver
+em movimento, é calculado para onde ele se move e coisa do tipo. a fisica nao esta implementada
+mas quandpo for a ideia eh que ela deve ser calculada no metodo update
+existem outras classes aqui como o skybox e skudome e terreno.
 
-Lista de Utils:
+renderer: na pasta renderer possui as classes: camera que serve pra posicionar a camera (duh)
+frustum, que eh usado no frustum culling
+video que inicializa a janela e o opengl usando SDL.
+e o Renderer, que possui 2 metodos importantes:
+start() onde ele le o xml com as configuracoes da "cena" como meshes, luzes, materials e
+carrega tudo nas estruturas de dados.
+e update() que ele faz:
+ativa as luzes, percorre a lista de meshes e chama o metodo update() do mesh e depois
+o metodo draw() do mesh. depois disso ele desenha o terreno na octree.
+o que deve ser feito no futuro eh colocar os meshes na octree tbm e renderizar so a octree
+de uma vez. tambem pode ser necessario mudar a maneira que eh renderizado, por exemplo
+ao inves de ser:
+ativa luzes
+  para cada mesh
+    desenha o mesh
+    
+pode ser necessario ser assim:
+para cada luz
+	para cada objeto
+		desenha objeto
 
-glext: inicializacao das extensions do opengl.
+sempre que uma nova funcionalidade for adicionada na engine, o renderer deve ser
+capaz de ler o xml e "entende-la" entao seria necessario sempre atualizar o metodo
+start() do renderer, ou no futuro caso ele fique muito grande, criar uma classe
+so para ler o xml e escrever nas estruturas de dados do renderer a cena.
 
-image: classe pra ler imagens. por enquanto so tga.
+shaders: possui duas pastas glslshaders e cgshaders. sao simples de usar, basta herdar
+da interface GlslShader ou CgShader e implementar os metodos virtuais.
 
-interfaces: interfaces genericas. talvez obsoletas.
-
-logger: logger eh um singleton. use pra debugar.
-
-math: varias classes pra tratar vetores, matrizes e quaternions e outras operacoes 
-matematicas.
-
-memory: garbage colector e smart pointers.
-
-meshio: classes e fun??es responsaveis por carregar formatos de meshes como .ase, .obj e
-outros. algumas fun?oes sao do SDK da nvidia. implementar para ler collada no futuro.
-
-patterns: classes de padroes de projeto. talvez as factories estejam obsoletas e seja
-melhor fazer uma fun??o que retorna a interface. o singleton ? o padrao mais utilizado,
-leia o comentario para saber como utiliza-lo. alem disso tem uma classe pra functors,
-mas talvez seja melhor usar os functors implementados no STL e o dator (uma classe generica
-para guardar qualquer tipo basico).
-
-profiler: faz os calculos de como esta o uso da engine. precisa de reparos.
-
-structures: estruturas de dados usadas na engine. apesar de usar muitas estruturas da STL
-algumas precisam ser implementadas como octrees, dentre outras.
+na pasta util tem algumas funcoes auxiliares, as mais uteis sao: glhelper onde tem alguns
+wrapers pra alguns comandos do opengl, math onde tem algumas classes pra vec e mat, meshio
+que tem as classes que leem os modelos e escrevem nos meshdata e structures onde ta o codigo
+da octree.

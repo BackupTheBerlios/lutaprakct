@@ -1,5 +1,2 @@
 
-manipular meshes
-- scale
-- rotate
-- translate
+:0

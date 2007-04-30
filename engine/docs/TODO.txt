@@ -13,6 +13,14 @@ TODO LIST
 12- adicionar suporte ao collada
 14- algoritmos de erosao do terreno
 15- occlusion queries + octree
+16- colocar pros meshes serem adicionados na octree
+17- fazer sistema de desenhar cena em um xml
+
+material no mesh de terreno
+material nos outros meshes
+luz
+animacao dos meshes e fisica e metodo update
+occlusion culling
 
 Done List
 1- refazer a camera usando quaternion - DONE
