@@ -6,7 +6,7 @@
 #include "../../util/memory/memoryManagedObject.h"
 #include "../events/eventhandler.h"
 
-class Kernel : public eventHandler{
+class Kernel : public EventHandler{
 	
 	public:
 		Kernel();
@@ -27,6 +27,6 @@ class Kernel : public eventHandler{
 		std::list< MemoryManagedPointer<Task> > pausedTaskList;
 };
 
-typedef singleton<Kernel> KERNEL;
+typedef Singleton<Kernel> KERNEL;
 
 #endif /*KERNEL_H_*/

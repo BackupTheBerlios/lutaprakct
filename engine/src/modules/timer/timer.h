@@ -31,6 +31,6 @@ private:
 	float fps;
 };
 
-typedef singleton<Timer> TIMER;
+typedef Singleton<Timer> TIMER;
 
 #endif //_TIMER_H_

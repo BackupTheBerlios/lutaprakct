@@ -24,7 +24,7 @@ public:
 	void freeAll();
 };
 
-typedef singleton<MeshManager> MESHMANAGER;
+typedef Singleton<MeshManager> MESHMANAGER;
 
 
 #endif /*MESHMANAGER_H_*/

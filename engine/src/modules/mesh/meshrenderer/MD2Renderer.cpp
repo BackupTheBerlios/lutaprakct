@@ -1,7 +1,7 @@
 
 #include "MD2Renderer.h"
-#include "../../util/meshio/md2/md2IO.h"
-#include "../timer/timer.h"
+#include "../../../util/meshio/md2/md2IO.h"
+#include "../../timer/timer.h"
 #include <GL/gl.h>
 
 void MD2Renderer::draw(MeshData* data){

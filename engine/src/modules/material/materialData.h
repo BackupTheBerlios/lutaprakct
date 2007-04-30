@@ -1,7 +1,7 @@
 #ifndef _MATERIALDATA_H_
 #define _MATERIALDATA_H_
 
-struct materialData{
+struct MaterialData{
 	
 	float color[4];
 	float secundaryColor[4];

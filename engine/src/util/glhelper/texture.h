@@ -9,7 +9,7 @@
 
 //TODO fazer texture 3d
 
-class texture{
+class Texture{
 	
 public:
 
@@ -64,15 +64,15 @@ public:
 		TEXTURE_RECTANGLENV = GL_TEXTURE_RECTANGLE_NV
 	};
 
-    texture(char* filename, int target, int format, int internalformat, int flags);
-    ~texture();
+    Texture(std::string& filename, int target, int format, int internalformat, int flags);
+    ~Texture();
     
-	bool load(char* filename, int target, int format, int internalformat, int flags);
+	bool load(std::string& filename, int target, int format, int internalformat, int flags);
 	void unload();
 	
 	void enable();
 	void disable();
-	void bind();
+	void bind(int slot=0);
 	void unbind();
 	
 	int getWidth(){return width;}
@@ -80,7 +80,7 @@ public:
 	int getId(){ return id; }
 	std::string name;
 
-	image *img;
+	Image* img;
 	
 private:
 

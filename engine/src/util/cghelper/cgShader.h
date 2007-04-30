@@ -27,21 +27,21 @@ enum {
 	
 };
 
-class cgShader{
+class CgShader{
 	
 public:
 
-	cgShader(){};
-	cgShader(char *vertexfile, int vertex, char * fragmentfile, int fragment, int flags) { initialize(vertexfile, vertex, fragmentfile , fragment, flags); };
-	virtual ~cgShader() { kill(); };
+	CgShader(){};
+	CgShader(char *vertexfile, int vertex, char * fragmentfile, int fragment, int flags) { initialize(vertexfile, vertex, fragmentfile , fragment, flags); };
+	virtual ~CgShader() { kill(); };
 	
 	bool initialize(char *vertexfile, int vertex, char * fragmentfile, int fragment, int flags );
 	void kill();
 	void bind();
 	void unbind();
 	void compile();
-	virtual void setInitialParameters(materialData *config) = 0;
-	virtual void setLoopParameters(materialData *config) = 0;
+	virtual void setInitialParameters(void* config) = 0;
+	virtual void setLoopParameters(void* config) = 0;
 
 	CGcontext getContext(){return context; };
 

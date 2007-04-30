@@ -1,7 +1,7 @@
 
 #include "mesh.h"
 #include "meshManager.h"
-#include "meshRenderer.h"
+#include "meshrenderer/meshRenderer.h"
 #include <GL/gl.h>
 #include <cmath>
 
@@ -29,6 +29,7 @@ bool Mesh::initialize(std::string filename, int flags){
 	else
 		return false;
 	
+	time = 0.0;
 	return true;	
 }
 
@@ -183,6 +184,14 @@ void Mesh::draw(float elapsedTime, int startFrame, int endFrame){
 	glMultMatrixf(modelview.mat_array);
 	renderer->draw(meshdata, elapsedTime, startFrame, endFrame);
 	glPopMatrix();
+}
+
+void Mesh::update(float elapsedTime){
+
+	time += elapsedTime;
+//teste pro objeto se mover
+//	translateAdd(elapsedTime*3, 0.0, 0.0);
+	
 }
 
 int Mesh::discoverRenderType(){

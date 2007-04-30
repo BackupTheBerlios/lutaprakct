@@ -68,11 +68,11 @@ private:
 	vec4* colors;
 	unsigned short* indices;
 	
-	cloudShader* cshader;
-	texture* nuvem;
-	texture* skytexture;
-	texture* moon;
-	texture* sun;
+	CloudShader* cshader;
+	Texture* nuvem;
+	Texture* skytexture;
+	Texture* moon;
+	Texture* sun;
 };
 
 

@@ -1,15 +1,15 @@
 #include "texturemanager.h"
 #include <iostream>
  
-texture* textureManager::load(char *name, int target, int format, int internalformat, int flags){
+Texture* TextureManager::load(std::string& filename, int target, int format, int internalformat, int flags){
   
 	//cria o iterator para o map e procura pelo nome da textura
-	std::map<std::string, texture*>::iterator iter = ids.find(name);
+	std::map<std::string, Texture*>::iterator iter = ids.find(filename);
 	//se nao tiver a textura, entao carrega e adiciona no map
 	if ( iter == ids.end()){
 		flags |= this->flags;
-		texture *tex = new texture(name, target, format, internalformat, flags); 
-		ids[name] = tex;
+		Texture *tex = new Texture(filename, target, format, internalformat, flags); 
+		ids[filename] = tex;
 		return tex;
 	}
 	else{
@@ -32,9 +32,9 @@ void CtextureManager::free(int id){
  
 }
 */
-void textureManager::freeAll(){
+void TextureManager::freeAll(){
 
-	 std::map<std::string, texture*>::iterator iter;
+	 std::map<std::string, Texture*>::iterator iter;
 	 
 	 for( iter = ids.begin(); iter != ids.end(); iter++){
 		(*iter).second->unload();
@@ -43,10 +43,10 @@ void textureManager::freeAll(){
 	 ids.clear();
 }
 
-void textureManager::setDefaultFlags(){
+void TextureManager::setDefaultFlags(){
 
-	flags = texture::LINEAR;
-	flags |= texture::MIPMAP_SGI;
-	flags |= texture::COMPRESSION_ARB;
+	flags = Texture::LINEAR;
+	flags |= Texture::MIPMAP_SGI;
+	flags |= Texture::COMPRESSION_ARB;
 	
 }

@@ -21,34 +21,38 @@ bool WindowImage::initialize(int height, int width, int x, int y, bool useAlpha)
 	return true;
 }
 
-void WindowImage::setTexture(std::string filename){
+void WindowImage::setTexture(std::string& filename){
 	
 	int format;
 	if (alpha)
-		format = texture::RGBA;
+		format = Texture::RGBA;
 	else
-		format = texture::RGB;
+		format = Texture::RGB;
 	
-	tex = TEXTUREMANAGER::getInstance().load( const_cast<char*>(filename.c_str()), texture::TEXTURE_2D, format, texture::RGB8, 0);
+	tex = TEXTUREMANAGER::getInstance().load( filename, Texture::TEXTURE_2D, format, Texture::RGB8, 0);
 	
 }
 
-void WindowImage::setBorder(std::string toptexfile, std::string bottomtexfile, std::string righttexfile, std::string lefttexfile, std::string toprightexfile, std::string toplefttexfile, std::string bottomrighttexfile, std::string bottomlefttexfile, int bordersize){
+void WindowImage::setBorder(std::string& toptexfile, std::string& bottomtexfile, 
+							std::string& righttexfile, std::string& lefttexfile, 
+							std::string& toprightexfile, std::string& toplefttexfile, 
+							std::string& bottomrighttexfile, std::string& bottomlefttexfile,
+							 int bordersize){
 
 	int format;
 	if (alpha)
-		format = texture::RGBA;
+		format = Texture::RGBA;
 	else
-		format = texture::RGB;
+		format = Texture::RGB;
 		
-	toptex = TEXTUREMANAGER::getInstance().load( const_cast<char*>(toptexfile.c_str()), texture::TEXTURE_RECTANGLE, format, texture::RGB8, 0);
-	bottomtex = TEXTUREMANAGER::getInstance().load( const_cast<char*>(bottomtexfile.c_str()), texture::TEXTURE_RECTANGLE, format, texture::RGB8, 0);
-	righttex = TEXTUREMANAGER::getInstance().load( const_cast<char*>(righttexfile.c_str()), texture::TEXTURE_RECTANGLE, format, texture::RGB8, 0);
-	lefttex = TEXTUREMANAGER::getInstance().load( const_cast<char*>(lefttexfile.c_str()), texture::TEXTURE_RECTANGLE, format, texture::RGB8, 0);
-	toprightex = TEXTUREMANAGER::getInstance().load( const_cast<char*>(toprightexfile.c_str()), texture::TEXTURE_RECTANGLE, format, texture::RGB8, 0);
-	toplefttex = TEXTUREMANAGER::getInstance().load( const_cast<char*>(toplefttexfile.c_str()), texture::TEXTURE_RECTANGLE, format, texture::RGB8, 0);
-	bottomrighttex = TEXTUREMANAGER::getInstance().load( const_cast<char*>(bottomrighttexfile.c_str()), texture::TEXTURE_RECTANGLE, format, texture::RGB8, 0);
-	bottomlefttex = TEXTUREMANAGER::getInstance().load( const_cast<char*>(bottomlefttexfile.c_str()), texture::TEXTURE_RECTANGLE, format, texture::RGB8, 0);
+	toptex = TEXTUREMANAGER::getInstance().load( toptexfile, Texture::TEXTURE_RECTANGLE, format, Texture::RGB8, 0);
+	bottomtex = TEXTUREMANAGER::getInstance().load( bottomtexfile, Texture::TEXTURE_RECTANGLE, format, Texture::RGB8, 0);
+	righttex = TEXTUREMANAGER::getInstance().load( righttexfile, Texture::TEXTURE_RECTANGLE, format, Texture::RGB8, 0);
+	lefttex = TEXTUREMANAGER::getInstance().load( lefttexfile, Texture::TEXTURE_RECTANGLE, format, Texture::RGB8, 0);
+	toprightex = TEXTUREMANAGER::getInstance().load( toprightexfile, Texture::TEXTURE_RECTANGLE, format, Texture::RGB8, 0);
+	toplefttex = TEXTUREMANAGER::getInstance().load( toplefttexfile, Texture::TEXTURE_RECTANGLE, format, Texture::RGB8, 0);
+	bottomrighttex = TEXTUREMANAGER::getInstance().load( bottomrighttexfile, Texture::TEXTURE_RECTANGLE, format, Texture::RGB8, 0);
+	bottomlefttex = TEXTUREMANAGER::getInstance().load( bottomlefttexfile, Texture::TEXTURE_RECTANGLE, format, Texture::RGB8, 0);
 	
 	this->bordersize = bordersize;
 	

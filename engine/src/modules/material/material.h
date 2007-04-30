@@ -13,12 +13,12 @@
 
 #include <list>
 
-class material {
+class Material {
 	
 public:
 
-	material() : materialConfig(NULL) { materialConfig = new materialData; };
-	virtual ~material() { if (!baseTextures.empty()) baseTextures.clear(); };
+	Material() : materialConfig(NULL) { materialConfig = new MaterialData; };
+	virtual ~Material() { if (!baseTextures.empty()) baseTextures.clear(); };
 	
 	void setEmissiveConstant(float *ke) { materialConfig->kEmissive[0] = ke[0]; materialConfig->kEmissive[1] = ke[1]; materialConfig->kEmissive[2] = ke[2];  };
 	void setAmbientConstant(float *ka) { materialConfig->kAmbient[0] = ka[0]; materialConfig->kAmbient[1] = ka[1]; materialConfig->kAmbient[2] = ka[2]; };
@@ -26,25 +26,25 @@ public:
 	void setSpecularConstant(float *ks) { materialConfig->kSpecular[0] = ks[0]; materialConfig->kSpecular[1] = ks[1]; materialConfig->kSpecular[2] = ks[2]; };
 	void setShininess(float s) {materialConfig->shininess = s; };
 	
-	void addBaseTexture(std::string filename, int flags){ 
-		texture *t;
-		t = TEXTUREMANAGER::getInstance().load((char*)filename.c_str(), texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
+	void addBaseTexture(std::string& filename, int flags){ 
+		Texture *t;
+		t = TEXTUREMANAGER::getInstance().load(filename, Texture::TEXTURE_2D, Texture::RGB, Texture::RGB8, Texture::ANISOTROPIC_4);
 		baseTextures.push_back(t);
 	};
 	
-	virtual void initialize(std::string filename) = 0;
+	virtual void initialize(std::string& filename) = 0;
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 	
 protected:
 
-	materialData *materialConfig;
+	MaterialData *materialConfig;
 	
 	std::string name;
 	std::string shadername;
 	bool hasShader;
 
-	std::list<texture *> baseTextures;
+	std::list<Texture *> baseTextures;
 	
 	
 };

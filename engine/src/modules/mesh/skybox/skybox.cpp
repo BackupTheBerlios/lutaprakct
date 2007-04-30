@@ -1,15 +1,21 @@
 
 #include "skybox.h"
+#include "../../../../libs/tinyxml/tinyxml.h"
 #include "../../../util/glhelper/shapes.h"
+#include <iostream>
 
-bool Skybox::initialize(char* filename){
+bool Skybox::initialize(std::string& filename, float size, int followcamera, int enabled ){
 
-	int flags = texture::CLAMP_TO_EDGE;
-	flags |= texture::LINEAR_MIPMAP_LINEAR;
-	flags |= texture::MIPMAP_SGI;
-	flags |= texture::COMPRESSION_ARB;
-	cube = new texture(filename, texture::TEXTURE_CUBEMAP, texture::RGB, texture::RGB8, flags );
+	int flags = Texture::CLAMP_TO_EDGE;
+	flags |= Texture::LINEAR_MIPMAP_LINEAR;
+	flags |= Texture::MIPMAP_SGI;
+	flags |= Texture::COMPRESSION_ARB;
 
+	this->size = size;
+	this->followcamera = followcamera;
+	this->enabled = enabled;
+	
+	cube = new Texture( filename, Texture::TEXTURE_CUBEMAP, Texture::RGB, Texture::RGB8, flags );
 	return true;
 }
 
@@ -36,12 +42,15 @@ void Skybox::draw(){
 	
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	float mat[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, mat);
-	mat[12] = mat[13] = mat[14] = 0.0;
-	glLoadMatrixf(mat);
-	
-	solidCube( 10.0 );
+		
+		if (followcamera){
+			float mat[16];
+			glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+			mat[12] = mat[13] = mat[14] = 0.0;
+			glLoadMatrixf(mat);
+		}
+		
+		solidCube( size );
 	
 	glPopMatrix();
 	

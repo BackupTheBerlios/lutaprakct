@@ -6,31 +6,32 @@
 
 #include <SDL/SDL.h>
 
-texture::~texture(){
+Texture::~Texture(){
 	if (img)
 		delete img;
 }
 
-texture::texture(char* filename, int target, int format, int internalformat, int flags) : img(NULL), flags(flags){
+Texture::Texture(std::string& filename, int target, int format, int internalformat, int flags) : img(NULL), flags(flags){
 	img = NULL;
 	load(filename, target, format, internalformat, flags);
 }
 
-void texture::enable(){
+void Texture::enable(){
 	glEnable(target);
 }
 
-void texture::disable(){
+void Texture::disable(){
 	glDisable(target);
 }
 
-void texture::unbind(){
+void Texture::unbind(){
 	//glBindTexture(target, 0);
 	glDisable(target);
 	glActiveTextureARB(GL_TEXTURE0_ARB);
 }
 
-void texture::bind(){
+void Texture::bind(int slot ){
+	glActiveTextureARB(GL_TEXTURE0_ARB + slot);
 	glEnable(target);
 	GLfloat parm;
 	glGetTexParameterfv(target, GL_TEXTURE_WRAP_S, &parm);
@@ -57,11 +58,11 @@ void texture::bind(){
 	glBindTexture(target, id);
 }
 
-void texture::unload(){
+void Texture::unload(){
 	glDeleteTextures(1, &id);
 }
 
-bool texture::load(char* filename, int target, int format, int internalformat, int flags){
+bool Texture::load(std::string& filename, int target, int format, int internalformat, int flags){
 	this->flags = flags;
 	this->target = target;
 	
@@ -200,8 +201,9 @@ bool texture::load(char* filename, int target, int format, int internalformat, i
 		};
 		char *facenames[] = {"posx", "negx", "posy", "negy", "posz", "negz" };
 		for (int i = 0; i < 6; i++){
-			sprintf(buff, filename, facenames[i]);
-			img = loadImage(buff);
+			sprintf(buff, filename.c_str(), facenames[i]);
+			std::string s(buff);
+			img = loadImage(s);
 			width = img->getWidth();
 			height = img->getHeight();
 			glTexImage2D(facetargets[i],0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);

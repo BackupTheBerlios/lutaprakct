@@ -1,19 +1,19 @@
 
 #include "glslShader.h"
 
-glslShader::glslShader(){
+GlslShader::GlslShader(){
 }
 
-glslShader::glslShader(const char* vertexSource, const char* fragmentSource){
+GlslShader::GlslShader(const char* vertexSource, const char* fragmentSource){
 	initialize(vertexSource, fragmentSource);
 }
 
-glslShader::~glslShader(){
+GlslShader::~GlslShader(){
 	kill();
 }
 
 //TODO checar erros de compilacao e de linkagem
-bool glslShader::initialize(const char* vertexSource, const char* fragmentSource){
+bool GlslShader::initialize(const char* vertexSource, const char* fragmentSource){
 
 	if (vertexSource || fragmentSource)
 		program = glCreateProgramObjectARB();
@@ -40,7 +40,7 @@ bool glslShader::initialize(const char* vertexSource, const char* fragmentSource
 	
 }
 
-void glslShader::kill(){
+void GlslShader::kill(){
 	
 	glDeleteObjectARB(vertex);
 	glDeleteObjectARB(fragment);
@@ -48,15 +48,15 @@ void glslShader::kill(){
 	
 }
 
-void glslShader::bind(){
+void GlslShader::bind(){
 	glUseProgramObjectARB(program);	
 }
 
-void glslShader::unbind(){
+void GlslShader::unbind(){
 	glUseProgramObjectARB(0);
 }
 
-GLcharARB* glslShader::getCompilerLog(){
+GLcharARB* GlslShader::getCompilerLog(){
 	
 	int infologlen = 0;
 	int charswritten = 0;

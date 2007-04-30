@@ -8,17 +8,26 @@
 /* TODO implementar metodo write
  */
 
-class tgaimage : public image{
+class TgaImage : public Image{
 	
 public:
 
-	tgaimage(){ imagedata = NULL; type = TGA; palette = NULL; };
-	tgaimage(const char *filename){ imagedata = NULL; type = TGA; load(filename); };
-	~tgaimage(){ if (imagedata){ delete imagedata; imagedata = NULL; delete palette; palette = NULL;} };
+	TgaImage(){ imagedata = NULL; type = TGA; palette = NULL; };
+	TgaImage(std::string& filename){ imagedata = NULL; palette = NULL; type = TGA; load(filename); };
+	~TgaImage(){ 
+		if (imagedata){ 
+			delete imagedata; 
+			imagedata = NULL;
+		}
+		if (palette){
+			delete palette; 
+			palette = NULL;
+		} 
+	};
 	
-	bool load(const char* filename, int loadingflags = 0);
+	bool load(std::string& filename, int loadingflags = 0);
 	bool loadPalette();
-	bool write(const char* filename, short int width, short int height, unsigned char depth,
+	bool write(std::string& filename, short int width, short int height, unsigned char depth,
 						unsigned char* data);
 	
 private:

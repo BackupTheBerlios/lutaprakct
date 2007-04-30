@@ -25,7 +25,7 @@ const char* cloudFragmentSource =
 "}																									\n\0";
 
 
-void cloudShader::setInitialParameters(){
+void CloudShader::setInitialParameters(){
 
 	animation[0] = 0.0;
 	animation[1] = 0.0;
@@ -50,7 +50,7 @@ void cloudShader::setInitialParameters(){
 	
 }
 
-void cloudShader::setLoopParameters(){
+void CloudShader::setLoopParameters(){
 
 
 	

@@ -13,7 +13,7 @@ class Font{
 		Font(std::string filename);
 		virtual ~Font();
 		
-		bool initialize(std::string filename);
+		bool initialize(std::string& filename);
 		void shutdown();
 		
 		void print(int x, int y, const char* text, ... );
@@ -27,7 +27,7 @@ class Font{
 		
 	private:
 		
-		texture* fontTexture;
+		Texture* fontTexture;
 		float color[4];
 		float scale[3];
 		float width, height;

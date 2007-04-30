@@ -16,23 +16,23 @@
 /* TODO fazer o metodo free() que libera so uma textura X
  */
 
-class textureManager{
+class TextureManager{
 private:
 
-	std::map<std::string, texture*> ids;
+	std::map<std::string, Texture*> ids;
 	int flags;
 	
 public:
 
- 	textureManager() { };
-	~textureManager() {};
-	texture* load(char *name, int target, int format, int internalformat, int flag );
+ 	TextureManager() { };
+	~TextureManager() {};
+	Texture* load(std::string& filename, int target, int format, int internalformat, int flag );
 	void setDefaultFlags();//default flags for texture loading
 	int getFlags(){return flags; };
 	void free(char *name);
 	void freeAll();
 };
 
-typedef singleton<textureManager> TEXTUREMANAGER;
+typedef Singleton<TextureManager> TEXTUREMANAGER;
 
 #endif //_TEXTUREMANAGER_H_

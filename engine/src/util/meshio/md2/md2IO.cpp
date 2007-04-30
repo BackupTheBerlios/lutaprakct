@@ -87,7 +87,7 @@ bool MD2Obj::load(const char *filename){
 	memcpy(&Head, data, 68);
  
 
-	cout<<"ID - "<<data[0]<<data[1]<<data[2]<<data[3]<<"\n";
+/*	cout<<"ID - "<<data[0]<<data[1]<<data[2]<<data[3]<<"\n";
 	cout<<"Version - "<<Head.version<<"\n";   
 	cout<<"Tex Width - "<<Head.texWidth<<"\n";
 	cout<<"Tex Height - "<<Head.texHeight<<"\n";
@@ -104,7 +104,7 @@ bool MD2Obj::load(const char *filename){
 	cout<<"Frame Offset - "<<Head.frameOffset<<"\n";
 	cout<<"GL Offset - "<<Head.GLCmdOffset<<"\n";
 	cout<<"Filesize - "<<Head.EOFOffset<<"\n";
- 
+ */
  
   //testa se ? um md2
 	if(Head.id != 844121161) 
@@ -166,7 +166,6 @@ bool MD2Obj::load(const char *filename){
   // le o nome da textura
 	if(Head.numberTextures>0){
 		memcpy(texName, &data[Head.texOffset], 64);
-		cout<<"Texture Name - "<<texName<<"\n";
 	}
  
   // le as faces

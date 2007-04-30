@@ -1,7 +1,9 @@
 #ifndef _IMAGE_H_
 #define _IMAGE_H_
 
- #include <GL/gl.h>
+#include <cstdlib>
+#include <string>
+ //#include <GL/gl.h>
 
 /* interface da image, todos os outros formatos herdam desse: jpgimage, pngimage, tgaimage, etc
  */
@@ -15,19 +17,19 @@ enum imagetype{
 	DDS
 };
 
-class image{
+class Image{
 	
 public:
 
-	image(){imagedata = NULL;};
-	virtual ~image(){};
+	Image(){imagedata = NULL;};
+	virtual ~Image(){};
 	
 	
-	virtual bool load(const char* filename, int loadingflags = 0)=0;
-	virtual bool write(const char* filename, short int width, short int height, unsigned char depth,
+	virtual bool load(std::string& filename, int loadingflags = 0)=0;
+	virtual bool write(std::string& filename, short int width, short int height, unsigned char depth,
 						unsigned char* data)=0;
 	
-	GLubyte *imagedata;
+	unsigned char* imagedata;
 	
 	int getWidth(){ return width; }
 	int getHeight(){ return height; }
@@ -42,6 +44,6 @@ protected:
 
 //funcao de carregar imagem:
 
-image* loadImage(const char* filename);
+Image* loadImage(std::string& filename);
 
 #endif //_IMAGE_H_

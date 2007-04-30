@@ -22,6 +22,6 @@ class Logger  {
 		void write(char* logfilename, unsigned long msgID, ...);
 };
 
-typedef singleton<Logger> LOGGER;
+typedef Singleton<Logger> LOGGER;
 
 #endif /*LOGGER_H_*/

@@ -2,11 +2,11 @@
 #include "videosystem.h"
 #include "sdlvideo/sdlvideo.h"
 
-videoSystem* initializeVideo(int videoType){
+VideoSystem* initializeVideo(int videoType){
 	
-	if (videoType == videoSystem::VIDEO_SDL){
-		videoSystem *aux;
-		aux = new sdlVideo();
+	if (videoType == VideoSystem::VIDEO_SDL){
+		VideoSystem *aux;
+		aux = new SdlVideo();
 		return aux;
 	}
 	

@@ -10,8 +10,26 @@ Heightmap::~Heightmap(){
 	}
 }
 
-void Heightmap::saveTga(std::string filename, short int sizex, short int sizey, short int depth){
-	tgaimage* tga = new tgaimage();
+bool Heightmap::load(std::string& filename){
+	
+	TgaImage* tga = new TgaImage(filename);
+	sizex = tga->getWidth();
+	sizey = tga->getHeight();
+	
+	data = new unsigned char[sizex * sizey];
+	
+	int j = 0;
+	for (int i = 0; i < sizex*sizey; i++){
+		(data[i]) = (tga->imagedata[j]);
+		j += 3;
+	}
+	
+	delete tga;
+	return true;
+}
+
+void Heightmap::save(std::string& filename){
+	TgaImage* tga = new TgaImage();
 	unsigned char* greyToRGBData = new unsigned char[sizex * sizey * 3];
 	
 	int j = 0;
@@ -20,7 +38,7 @@ void Heightmap::saveTga(std::string filename, short int sizex, short int sizey, 
 		greyToRGBData[j++] = data[i];
 		greyToRGBData[j++] = data[i];
 	}
-	tga->write(filename.c_str(), sizex, sizey, depth, greyToRGBData);
+	tga->write(filename, sizex, sizey, 24, greyToRGBData);
 	delete []greyToRGBData;
 	delete tga;
 }

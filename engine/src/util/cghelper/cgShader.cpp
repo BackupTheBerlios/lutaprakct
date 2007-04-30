@@ -2,7 +2,7 @@
 #include "cgShader.h"
 #include <iostream>
 
-void cgShader::kill(){
+void CgShader::kill(){
 	
 	if (hasvertex)
 		cgDestroyProgram(vertexprogram);
@@ -12,7 +12,7 @@ void cgShader::kill(){
 	
 }
 
-void cgShader::bind(){
+void CgShader::bind(){
 
 	if (hasvertex){
 		cgGLEnableProfile(vertexprofile);
@@ -26,7 +26,7 @@ void cgShader::bind(){
 	
 }
 
-void cgShader::unbind(){
+void CgShader::unbind(){
 
 	if(hasvertex){
 		cgGLDisableProfile(vertexprofile);
@@ -38,7 +38,7 @@ void cgShader::unbind(){
 	
 }
 
-void cgShader::compile(){
+void CgShader::compile(){
 	
 	if (hasvertex){
 		if (!cgIsProgramCompiled(vertexprogram)){
@@ -56,7 +56,7 @@ void cgShader::compile(){
 	
 }
 
-bool cgShader::initialize(char* vertexfile, int vertex, char * fragmentfile, int fragment, int flags){
+bool CgShader::initialize(char* vertexfile, int vertex, char * fragmentfile, int fragment, int flags){
 
 	context = cgCreateContext();
 	

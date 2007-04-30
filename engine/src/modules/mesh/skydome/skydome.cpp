@@ -4,7 +4,7 @@
 #include <cmath>
 #include "skydome.h"
 #include "../../renderer/camera/camera.h"
-
+#include <iostream>
 
 const char* cloudVertexSource2 =
 "//varying float intensity_sq, intensity;													\n"
@@ -127,18 +127,21 @@ void Skydome::load(std::string filename, int sides, int slices, float radius, in
 	}
 
 	if (flags &STATIC_CLOUDS)
-		skytexture = TEXTUREMANAGER::getInstance().load((char*)filename.c_str(), texture::TEXTURE_2D, texture::RGB, texture::RGB8, texture::ANISOTROPIC_4);
+		skytexture = TEXTUREMANAGER::getInstance().load(filename, Texture::TEXTURE_2D, Texture::RGB, Texture::RGB8, Texture::ANISOTROPIC_4);
 	
 	if (flags &ANIMATED_CLOUDS){
-		nuvem = TEXTUREMANAGER::getInstance().load("clouds.tga", texture::TEXTURE_2D, texture::RGB, texture::RGB8, 0 );
-		cshader = new cloudShader(cloudVertexSource2, cloudFragmentSource2);
+		std::string cloudsstr("clouds.tga");
+		nuvem = TEXTUREMANAGER::getInstance().load(cloudsstr, Texture::TEXTURE_2D, Texture::RGB, Texture::RGB8, 0 );
+		cshader = new CloudShader(cloudVertexSource2, cloudFragmentSource2);
 		cshader->setInitialParameters();
 	}
 	
 	if (flags &SKY_ELEMENTS){
 		
-		sun = TEXTUREMANAGER::getInstance().load("flare0.tga", texture::TEXTURE_2D, texture::RGB, texture::RGBA8, 0);
-		moon = TEXTUREMANAGER::getInstance().load("moon.tga", texture::TEXTURE_2D, texture::RGBA, texture::RGBA8, 0);
+		std::string sunstr("flare0.tga");
+		std::string moonstr("moon.tga");
+		sun = TEXTUREMANAGER::getInstance().load(sunstr, Texture::TEXTURE_2D, Texture::RGB, Texture::RGBA8, 0);
+		moon = TEXTUREMANAGER::getInstance().load(moonstr, Texture::TEXTURE_2D, Texture::RGBA, Texture::RGBA8, 0);
 	
 		starsNum = 1000;
 		stars = new vec3[starsNum];
@@ -216,17 +219,17 @@ void Skydome::update(float deltatime){
 
 void Skydome::draw(){
 	
-	glPushMatrix();
+//	glPushMatrix();
 	
-	if (flags &SKY_ELEMENTS){
+	/*if (flags &SKY_ELEMENTS){
 		glDisable(GL_DEPTH_TEST);
 		drawElements(true); 
 		glEnable(GL_DEPTH_TEST);
 	}
-	
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	*/
+	//glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+    //glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
@@ -241,10 +244,10 @@ void Skydome::draw(){
 		nuvem->bind();
 		cshader->bind();
 	}
-	if ( flags & COLORED_SKY ){
-		glEnableClientState(GL_COLOR_ARRAY);
-		glColorPointer(4, GL_FLOAT, 0, &colors[0]);
-	}
+	//if ( flags & COLORED_SKY ){
+	//	glEnableClientState(GL_COLOR_ARRAY);
+	//	glColorPointer(4, GL_FLOAT, 0, &colors[0]);
+	//}
     
 	for(int i = 0; i < slices; i++)
 		glDrawElements(GL_TRIANGLE_STRIP, (sides + 1) * 2, GL_UNSIGNED_SHORT, &indices[i * (sides + 1) * 2]);
@@ -259,20 +262,20 @@ void Skydome::draw(){
 		cshader->unbind();
 		nuvem->unbind();
 	}
-	if ( flags &COLORED_SKY )
-		glDisableClientState(GL_COLOR_ARRAY);
+	//if ( flags &COLORED_SKY )
+	//	glDisableClientState(GL_COLOR_ARRAY);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	/*reseta a cor pro default 1, 1, 1, 1 ou todos os objetos vao ficar com
 	 * a ultima cor usada pelo skydome */ 	
-	glDisable(GL_BLEND);
-	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
+	//glDisable(GL_BLEND);
+	//glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
 	
-	if (flags &SKY_ELEMENTS){
+	/*if (flags &SKY_ELEMENTS){
 		glDisable(GL_DEPTH_TEST);
 		drawElements(false);  
 		glEnable(GL_DEPTH_TEST);
-	}
+	}*/
 	
 	glPopMatrix();
 }

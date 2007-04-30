@@ -20,7 +20,7 @@
 # image descriptor (unsigned char)
  */
 
-bool tgaimage::processHeader(){
+bool TgaImage::processHeader(){
 	
 	short ColMapStart,ColMapLen;
 	short x1,y1,x2,y2;
@@ -80,14 +80,14 @@ bool tgaimage::processHeader(){
 	return true;
 }
 
-bool tgaimage::load(const char *filename, int loadingflags){
+bool TgaImage::load(std::string& filename, int loadingflags){
 
 	std::ifstream fin;
 	unsigned long filesize;
 	if (imagedata)
 		delete [] imagedata;
 	
-	fin.open(filename, std::ios::binary);
+	fin.open(filename.c_str(), std::ios::binary);
     
 	if(fin == NULL){
 		std::cout << "no such file " << filename  << std::endl;
@@ -180,7 +180,7 @@ bool tgaimage::load(const char *filename, int loadingflags){
 	
 }
 
-bool tgaimage::loadRaw(){
+bool TgaImage::loadRaw(){
 	short offset;
     unsigned char *auxdata;
  
@@ -204,7 +204,7 @@ bool tgaimage::loadRaw(){
 	
 }
 
-void tgaimage::BGRtoRGB(){
+void TgaImage::BGRtoRGB(){
 
 	unsigned long index, numPixels;
 	unsigned char *current;
@@ -228,7 +228,7 @@ void tgaimage::BGRtoRGB(){
 	
 }
 
-bool tgaimage::write(const char* filename, short int width, short int height, unsigned char depth,
+bool TgaImage::write(std::string& filename, short int width, short int height, unsigned char depth,
 						unsigned char* data){
 	
 							
@@ -237,7 +237,7 @@ bool tgaimage::write(const char* filename, short int width, short int height, un
 	int i;
 	FILE *file;
 
-	file = fopen(filename, "wb");
+	file = fopen(filename.c_str(), "wb");
 	if (file == NULL) {
 		return false;
 	}
@@ -274,14 +274,13 @@ bool tgaimage::write(const char* filename, short int width, short int height, un
 			data[i+2] = aux;
 		}
 	}
-
 	// salva a imagem toda
 	fwrite(data, sizeof(unsigned char), width * height * mode, file);
 	fclose(file);
 	return true;
 }
 
-bool tgaimage::loadPalette(){
+bool TgaImage::loadPalette(){
 
 	unsigned char bTemp;
 	short iIndex,iPalPtr;

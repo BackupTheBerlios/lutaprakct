@@ -8,17 +8,17 @@
  
  
 template <class T>
-class singleton{
+class Singleton{
 public:
 	static T& getInstance() {
 		static T instance;
 		return instance;
 	}
 private:
-	singleton();
-	~singleton();
-	singleton(singleton const&);
-	singleton& operator=(singleton const&);
+	Singleton();
+	~Singleton();
+	Singleton(Singleton const&);
+	Singleton& operator=(Singleton const&);
 };
 
 #endif //_SNGLETON_H_

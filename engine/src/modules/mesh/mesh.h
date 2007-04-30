@@ -3,7 +3,8 @@
 
 #include "../../util/math/algebra.h"
 #include "meshData.h"
-#include "meshRenderer.h"
+#include "meshrenderer/meshRenderer.h"
+#include "../material/material.h"
 #include <string>
 
 /* mesh eh formado por mesh data (info geometrica do modelo) + renderer (de acordo
@@ -27,6 +28,8 @@ public:
 	
 	bool initialize(std::string filename, int flags = 0);
 	
+	void setMaterial(Material* m){meshMaterial = m;}
+	
 	//as funcoes abaixo modificam a matriz do objeto
 	void rotate(float angle, float x, float y, float z);
 	void rotate(float angle, vec3 axis);
@@ -45,6 +48,9 @@ public:
 	void draw(int frame);
 	void draw(float elapsedTime, int startframe, int endframe);
 
+	void update();
+	void update(float elapsedTime);
+
 private:
 
 	int discoverRenderType();
@@ -52,7 +58,9 @@ private:
 	MeshData* meshdata;
 	MeshRenderer* renderer;
 	mat4 modelview;
+	Material* meshMaterial;
 	
+	float time;
 };
 
 

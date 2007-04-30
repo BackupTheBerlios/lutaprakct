@@ -1,7 +1,7 @@
 
 #include <GL/gl.h>
 #include "objRenderer.h"
-#include "../../util/meshio/obj/objData.h"
+#include "../../../util/meshio/obj/objData.h"
 
 void ObjRenderer::draw(MeshData* data){
 	

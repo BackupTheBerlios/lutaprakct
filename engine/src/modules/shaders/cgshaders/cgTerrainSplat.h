@@ -3,16 +3,16 @@
 
 #include "../../../util/cghelper/cgShader.h"
 
-class cgTerrainSplat : public cgShader{
+class CgTerrainSplat : public CgShader{
 	
 	public:
 	
-	cgTerrainSplat(){};
-	cgTerrainSplat(char *vertexfile, int vertex, char * fragmentfile, int fragment, int flags ) { initialize(vertexfile,  vertex,  fragmentfile,  fragment, flags); };
-	virtual ~cgTerrainSplat(){kill();};
+	CgTerrainSplat(){};
+	CgTerrainSplat(char *vertexfile, int vertex, char * fragmentfile, int fragment, int flags ) { initialize(vertexfile,  vertex,  fragmentfile,  fragment, flags); };
+	virtual ~CgTerrainSplat(){kill();};
 
-	virtual void setInitialParameters(materialData *config){};
-	virtual void setLoopParameters(materialData *config){};
+	virtual void setInitialParameters(void* config){};
+	virtual void setLoopParameters(void* config){};
 	
 	
 };

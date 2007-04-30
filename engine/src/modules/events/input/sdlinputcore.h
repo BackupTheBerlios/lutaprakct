@@ -4,6 +4,7 @@
 #include "../eventhandler.h"
 //#include "../../../util/patterns/singleton.h"
 #include "../../core/task.h"
+#include <list>
 
 /**outro singleton do sistema de eventos. esse eh o responsavel por pegar o input do SDL
  * com a funcao update() e enviar pro eventdispatcher que sua vez envia para todos os outros
@@ -14,7 +15,7 @@
  * OBS.: o input precisa saber o tamanho da janela pra calcular quanto o mouse se moveu.
  */
 
-class SdlInputCore : public eventHandler , public Task{
+class SdlInputCore : public EventHandler , public Task{
 	
 public:
 
@@ -27,8 +28,10 @@ public:
 	void update(void* data);
 	void stop(void* data);
 	
-	void informWindowSize(unsigned int x, unsigned int y);
+	void setWindowSize(unsigned int x, unsigned int y);
 	void setMouseVelocity(float v);
+	
+	float getMouseVelocity(){ return mouseVelocity; }
 	
 	AUTO_SIZE;
 private:
@@ -36,9 +39,12 @@ private:
 	void emulateAditionalEvents();
 	long int nextEvent;
 
-	unsigned int winheight, winwidth;
+	unsigned int winHeight, winWidth;
 	unsigned int widthMiddle, heightMiddle;
 	float mouseVelocity;
+	
+	std::list<std::string> automaticEvents;
+	std::list<int> eventParams;
 	
 };
 

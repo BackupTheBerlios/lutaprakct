@@ -3,13 +3,13 @@
 
 #include "../../../util/glhelper/glslShader.h"
 
-class cloudShader : public glslShader{
+class CloudShader : public GlslShader{
 	
 	public:
 	
-		cloudShader(){};
-		cloudShader(const char* vertexSource, const char* fragmentSource){ initialize(vertexSource, fragmentSource);};
-		~cloudShader(){kill();};
+		CloudShader(){};
+		CloudShader(const char* vertexSource, const char* fragmentSource){ initialize(vertexSource, fragmentSource);};
+		~CloudShader(){kill();};
 		
 		void setInitialParameters();
 		void setLoopParameters();

@@ -2,7 +2,7 @@
 #include "basicLightMaterial.h"
 #include <iostream>
 
-basicLightMaterial::~basicLightMaterial(){
+BasicLightMaterial::~BasicLightMaterial(){
 	
 	if (shader)
 		shader->kill();
@@ -11,10 +11,10 @@ basicLightMaterial::~basicLightMaterial(){
 		delete materialConfig;
 }
 
-void basicLightMaterial::initialize(std::string file){
+void BasicLightMaterial::initialize(std::string& file){
 	
 	if (!materialConfig)
-		materialConfig = new materialData;
+		materialConfig = new MaterialData;
 	/* le o file e seta os valores no materialConfig */
 	
 	materialConfig->shininess = 0.8;
@@ -33,19 +33,19 @@ void basicLightMaterial::initialize(std::string file){
 	
 	int flags = AUTOCOMPILE_MANUAL; 
 	
-	shader = new pixelLightShader("perpixellightv.cg" ,  PROFILE_ARBVP1, "perpixellightf.cg",  PROFILE_ARBFP1, flags);
+	shader = new PixelLightShader("perpixellightv.cg" ,  PROFILE_ARBVP1, "perpixellightf.cg",  PROFILE_ARBFP1, flags);
 	shader->setInitialParameters(materialConfig);
 	
 }
 
-void basicLightMaterial::bind(){
+void BasicLightMaterial::bind(){
 
 	shader->setLoopParameters(materialConfig);
 	shader->bind();	
 	
 }
 
-void basicLightMaterial::unbind(){
+void BasicLightMaterial::unbind(){
 	
 	shader->unbind();
 	

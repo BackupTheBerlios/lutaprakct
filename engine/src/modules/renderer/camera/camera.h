@@ -13,7 +13,7 @@
  /** TODO rotatearound e positioncamera ?
   */
  
-class Camera : public eventHandler {
+class Camera : public EventHandler {
  	
 public:
 
@@ -44,6 +44,6 @@ public:
  	
 };
 
-typedef singleton<Camera> CAMERA;
+typedef Singleton<Camera> CAMERA;
 
 #endif //_CAMERA_H_

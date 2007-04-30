@@ -2,10 +2,13 @@
 #include "pixelLightShader.h"
 #include "../../renderer/camera/camera.h"
 #include "../../../util/math/algebra.h"
+#include "../../material/materialData.h"
 
 #include <iostream>
 
-void pixelLightShader::setInitialParameters(materialData *config){
+void PixelLightShader::setInitialParameters(void* config){
+	
+	MaterialData* mat = (MaterialData*)config;
 	
     ModelViewProj = cgGetNamedParameter(vertexprogram, "modelViewProj");
 	globalAmbient = cgGetNamedParameter(fragmentprogram, "globalAmbient");
@@ -57,16 +60,16 @@ void pixelLightShader::setInitialParameters(materialData *config){
 	
 	/*material parameters */
 	cgGLSetParameter3f(globalAmbient, 1.0, 1.0, 1.0);
-	cgGLSetParameter3f(ka, config->kAmbient[0], config->kAmbient[1], config->kAmbient[2]);
-	cgGLSetParameter3f(kd, config->kDiffuse[0], config->kDiffuse[1], config->kDiffuse[2]);
-	cgGLSetParameter3f(ks, config->kSpecular[0], config->kSpecular[1], config->kSpecular[2]);
-	cgGLSetParameter1f(shininess, config->shininess);
+	cgGLSetParameter3f(ka, mat->kAmbient[0], mat->kAmbient[1], mat->kAmbient[2]);
+	cgGLSetParameter3f(kd, mat->kDiffuse[0], mat->kDiffuse[1], mat->kDiffuse[2]);
+	cgGLSetParameter3f(ks, mat->kSpecular[0], mat->kSpecular[1], mat->kSpecular[2]);
+	cgGLSetParameter1f(shininess, mat->shininess);
 	
 	compile();
 	
 }
 
-void pixelLightShader::setLoopParameters(materialData *config){
+void PixelLightShader::setLoopParameters(void* config){
 
 	vec3 pos; //= CAMERA::getInstance().getPosition();
 	cgGLSetParameter3f(eyePosition, pos.x, pos.y, pos.z );

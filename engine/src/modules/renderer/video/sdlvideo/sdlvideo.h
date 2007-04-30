@@ -11,16 +11,16 @@
   * da janela sao feito aqui.
 */  
 
-class sdlVideo : public videoSystem{
+class SdlVideo : public VideoSystem{
 
 public:
 
-	sdlVideo();
-	~sdlVideo(){};
+	SdlVideo();
+	~SdlVideo(){};
 
 	bool initialize(int flags);
 	void shutdown();
-	void setWindowTitle(char* title);
+	void setWindowTitle(const char* title);
 	void lock();
 	void unlock();
  
@@ -33,6 +33,9 @@ private:
  
 	SDL_Surface *screen;
 	int height, width, bpp, flags;
+	float clearcolor[4];
+	
+	float fovy, znear, zfar;
 };
 
 #endif //_VIDEOSYSTEM_H_

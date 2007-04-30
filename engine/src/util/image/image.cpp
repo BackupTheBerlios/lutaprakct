@@ -3,13 +3,13 @@
 #include "image.h"
 #include "tgaimage.h"
 
-image* loadImage(const char* filename){
+Image* loadImage(std::string& filename){
 
-	char* aux = strchr (filename, '.');
+	char* aux = strchr (filename.c_str(), '.');
 	aux++;
-	image *ret;
+	Image *ret;
 	if ((strcmp (aux, "TGA") == 0) || (strcmp (aux, "tga") == 0)){
-        ret = new tgaimage(filename);
+        ret = new TgaImage(filename);
         return ret;
 	}
 	return NULL;

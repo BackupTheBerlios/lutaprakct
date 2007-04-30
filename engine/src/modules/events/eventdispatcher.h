@@ -11,18 +11,18 @@
  * eh apenas interna do sistema de eventos.
  */
 
-class eventDispatcher{
+class EventDispatcher{
 	
 public:
 
-  void addHandler(eventHandler *device);
+  void addHandler(EventHandler *device);
 
   void sendEvent(int eventType, int arg1 = 0, int arg2 = 0);
 
 private:
-  std::list<eventHandler*> handlers;
+  std::list<EventHandler*> handlers;
 };
 
-typedef singleton<eventDispatcher> EventDispatcher;
+typedef Singleton<EventDispatcher> EVENTDISPATCHER;
 
 #endif //_EVENTDISPATCHER_H_

@@ -15,8 +15,10 @@ class WindowImage : public GuiComponent{
 		bool initialize(int height, int width, int x, int y, bool useAlpha);
 		void shutdown();
 		
-		void setTexture(std::string filename);
-		void setBorder(std::string toptex, std::string bottomtex, std::string righttex, std::string lefttex, std::string toprightex, std::string toplefttex, std::string bottomrighttex, std::string bottomlefttex, int bordersize);
+		void setTexture(std::string& filename);
+		void setBorder(std::string& toptex, std::string& bottomtex, std::string& righttex, 
+		std::string& lefttex, std::string& toprightex, std::string& toplefttex, 
+		std::string& bottomrighttex, std::string& bottomlefttex, int bordersize);
 		
 		void draw();
 	
@@ -34,15 +36,15 @@ class WindowImage : public GuiComponent{
 		bool alpha;
 		int width, height;
 		int bordersize;
-		texture* tex;
-		texture* toptex;
-		texture* bottomtex;
-		texture* righttex;
-		texture* lefttex;
-		texture* toprightex;
-		texture* toplefttex;
-		texture* bottomrighttex;
-		texture* bottomlefttex;
+		Texture* tex;
+		Texture* toptex;
+		Texture* bottomtex;
+		Texture* righttex;
+		Texture* lefttex;
+		Texture* toprightex;
+		Texture* toplefttex;
+		Texture* bottomrighttex;
+		Texture* bottomlefttex;
 	
 };
 

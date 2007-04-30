@@ -2,7 +2,7 @@
 #define OBJRENDERER_H_
 
 #include "meshRenderer.h"
-#include "meshData.h"
+#include "../meshData.h"
 
 class ObjRenderer : public MeshRenderer{
 	

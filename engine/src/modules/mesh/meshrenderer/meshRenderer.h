@@ -1,7 +1,7 @@
 #ifndef MESHRENDERER_H_
 #define MESHRENDERER_H_
 
-#include "meshData.h"
+#include "../meshData.h"
 
 /*mesh renderer ? uma interface pro tipo de renderer, que pode variar
  * de acordo com o tipo de modelo e como ele vai ser desenhado

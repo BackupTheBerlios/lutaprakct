@@ -6,7 +6,7 @@
 /**interface padrao para todos os tipos de video
  */
 
-class videoSystem  {
+class VideoSystem  {
 	
 public:
 	
@@ -23,10 +23,6 @@ public:
   RESIZABLE    = 1 << 10,
   NOFRAME      = 1 << 11,
   
-  RES_640x480  = 1 << 12,
-  RES_800x600  = 1 << 13,
-  RES_1024x768 = 1 << 14,
-  
   BPP_8        = 1 << 15,
   BPP_16       = 1 << 16,
   BPP_24       = 1 << 17
@@ -36,11 +32,11 @@ public:
  	VIDEO_SDL = 1
  };
 	
- videoSystem(){};
- virtual ~videoSystem(){};
+ VideoSystem(){};
+ virtual ~VideoSystem(){};
  
  virtual bool initialize(int flags)=0;
- virtual void setWindowTitle(char* title)=0;
+ virtual void setWindowTitle(const char* title)=0;
  virtual void lock()=0;
  virtual void unlock()=0;
  
@@ -54,6 +50,6 @@ protected:
 	
 };
 
-videoSystem* initializeVideo(int videoType);
+VideoSystem* initializeVideo(int videoType);
 
 #endif //_VIDEOSYSTEM_H_

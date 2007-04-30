@@ -1,9 +1,8 @@
 #ifndef TERRAIN_H_
 #define TERRAIN_H_
 
-#include "../../../util/structures/octree.h"
 #include "../../material/textures/texturemanager.h"
-
+#include "../../material/material.h"
 #include "heightmaps/hillsheightmap.h"
 
 #define MAX_TILES 5
@@ -17,6 +16,7 @@ class Terrain{
 
 		bool loadMap(char *filename, int detailRepeats);
 		bool saveMap(char *filename);
+		
 		void createTerrainMesh();
 
 		void setHeightScale(float val);
@@ -29,6 +29,20 @@ class Terrain{
                         unsigned int z, float &tu, float &tv);
 
 		void shutDown();
+
+		void bindMaterial(){
+			if (terrainMaterial)
+				terrainMaterial->bind();
+		}
+		
+		void unbindMaterial(){
+			if (terrainMaterial)
+				terrainMaterial->unbind();
+		}
+
+		void setMaterial(Material* m){ 
+			terrainMaterial = m;
+		}
 
 		HillsHeightmap* heightMap;
 		float heightScale;
@@ -43,8 +57,10 @@ class Terrain{
 		int totalTriangles;
 		int numRepeats;
 
-      // Octree to store the entire terrain.
-		Octree *rootNode;
+	private:
+	
+		Material* terrainMaterial;
+
 };
 
 #endif /*TERRAIN_H_*/

@@ -9,9 +9,6 @@
 #include <GL/glext.h>
 
 
-/** esses sao os ponteiros pras extensions do opengl.
-*nao tem nada a v com o glext.h do opengl
-*/
 
 /**
  * Esse arquivo contem a inicializa?ao das extensions do OpenGL
@@ -19,12 +16,11 @@
  * a fun?ao que inicializa o video (no caso do sdl a initializa
  * (pois eh chamado sdlInit nela) e entao eh so utilizalas normalmente.
  * 
- * TODO adicionar suporte das extensions pra MAC OS
  */
 
 
 
-void initializeExtensions();
+void initializeExtension(const char* extension);
 
 bool haveExtension(const char* extension);
 
@@ -35,6 +31,43 @@ bool haveExtension(const char* extension);
 #define COMPRESSED_RGBA_S3TC_DXT1_EXT	0x83F1
 #define COMPRESSED_RGBA_S3TC_DXT3_EXT	0x83F2
 #define COMPRESSED_RGBA_S3TC_DXT5_EXT	0x83F3
+
+//arb e nv program
+extern PFNGLGENPROGRAMSARBPROC glGenProgramsARB;
+extern PFNGLBINDPROGRAMARBPROC glBindProgramARB;
+extern PFNGLPROGRAMSTRINGARBPROC glProgramStringARB;
+extern PFNGLDELETEPROGRAMSARBPROC glDeleteProgramsARB;
+extern PFNGLPROGRAMENVPARAMETER4FVARBPROC glProgramEnvParameter4fvARB;
+extern PFNGLPROGRAMLOCALPARAMETER4FVARBPROC glProgramLocalParameter4fvARB;
+
+extern PFNGLGENPROGRAMSNVPROC glGenProgramsNV;
+extern PFNGLBINDPROGRAMNVPROC glBindProgramNV;
+extern PFNGLDELETEPROGRAMSNVPROC glDeleteProgramsNV;
+extern PFNGLLOADPROGRAMNVPROC glLoadProgramNV; 
+extern PFNGLPROGRAMNAMEDPARAMETER4FVNVPROC glProgramNamedParameter4fvNV;
+
+//arb_imaging
+extern PFNGLBLENDCOLORPROC glBlendColor;
+
+//framebuffer
+extern PFNGLISRENDERBUFFEREXTPROC glIsRenderbufferEXT;
+extern PFNGLBINDRENDERBUFFEREXTPROC glBindRenderbufferEXT;
+extern PFNGLDELETERENDERBUFFERSEXTPROC glDeleteRenderbuffersEXT;
+extern PFNGLGENRENDERBUFFERSEXTPROC  glGenRenderbuffersEXT;
+extern PFNGLRENDERBUFFERSTORAGEEXTPROC glRenderbufferStorageEXT;
+extern PFNGLGETRENDERBUFFERPARAMETERIVEXTPROC glGetRenderbufferParameterivEXT;
+extern PFNGLISFRAMEBUFFEREXTPROC glIsFramebufferEXT;
+extern PFNGLBINDFRAMEBUFFEREXTPROC glBindFramebufferEXT;
+extern PFNGLDELETEFRAMEBUFFERSEXTPROC glDeleteFramebuffersEXT;
+extern PFNGLGENFRAMEBUFFERSEXTPROC glGenFramebuffersEXT;
+extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT;
+extern PFNGLFRAMEBUFFERTEXTURE1DEXTPROC glFramebufferTexture1DEXT;
+extern PFNGLFRAMEBUFFERTEXTURE2DEXTPROC glFramebufferTexture2DEXT;
+extern PFNGLFRAMEBUFFERTEXTURE3DEXTPROC glFramebufferTexture3DEXT;
+extern PFNGLFRAMEBUFFERRENDERBUFFEREXTPROC glFramebufferRenderbufferEXT;
+extern PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVEXTPROC glGetFramebufferAttachmentParameterivEXT;
+extern PFNGLGENERATEMIPMAPEXTPROC glGenerateMipmapEXT;
+
 
 //point sprite
 extern PFNGLPOINTPARAMETERFARBPROC  glPointParameterfARB;
@@ -94,6 +127,7 @@ extern PFNGLUNIFORM4IVARBPROC glUniform4ivARB;
 extern PFNGLUNIFORMMATRIX2FVARBPROC glUniformMatrix2fvARB;
 extern PFNGLUNIFORMMATRIX3FVARBPROC glUniformMatrix3fvARB;
 extern PFNGLUNIFORMMATRIX4FVARBPROC glUniformMatrix4fvARB;
+
 
 extern PFNGLENABLEVERTEXATTRIBARRAYARBPROC glEnableVertexAttribArrayARB;
 extern PFNGLDISABLEVERTEXATTRIBARRAYARBPROC glDisableVertexAttribArrayARB;

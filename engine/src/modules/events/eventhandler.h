@@ -7,12 +7,12 @@
  * implementa o handleEvent da sua maneira, para tratar seus eventos.
  */
 
-class eventHandler{
+class EventHandler{
 
 public:
 
-    eventHandler();
-    virtual ~eventHandler(){};
+    EventHandler();
+    virtual ~EventHandler(){};
 	virtual void handleEvent(const event &e) = 0; 
 	
 protected:

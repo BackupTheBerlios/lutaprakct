@@ -4,12 +4,12 @@
 #include <GL/gl.h>
 #include "../../util/glhelper/glextensions.h"
 
-class glslShader{
+class GlslShader{
 	
 	public: 
-		glslShader();
-		glslShader(const char* vertexSource, const char* fragmentSource);
-		virtual ~glslShader();
+		GlslShader();
+		GlslShader(const char* vertexSource, const char* fragmentSource);
+		virtual ~GlslShader();
 	
 		bool initialize(const char* vertexSource,const char* fragmentSource);
 		void kill();

@@ -13,7 +13,8 @@ Terrain::Terrain(){
 	totalVerts = 0;
 	totalTriangles = 0;
 	numRepeats = 1;
-	rootNode = NULL;
+	heightMap = NULL;
+	terrainMaterial = NULL;
 }
 
 
@@ -28,14 +29,13 @@ bool Terrain::loadMap(char *filename, int detailRepeats){
 		return false;
 
 	heightMap = new HillsHeightmap();
-	heightMap->generate(256, 256, 0.0, 40.0, 1200, 1);
-	//heightMap->generate(256, 256, 0.0, 0.0, 1, 1);
-	heightMap->saveTga("hills4.tga", 256, 256, 24);
+	//heightMap->generate(256, 256, 0.0, 40.0, 1200, 1);
+	std::string file(filename);
+	heightMap->load(file);
 	heightScale = 0.1;
 
 	numRepeats = detailRepeats;
 	createTerrainMesh();
-	//delete heightMap;
 
 	return true;
 }
@@ -144,49 +144,15 @@ void Terrain::createTerrainMesh(){
 		}
 	}
 
-	std::cout << "total triangles " << totalTriangles << std::endl;
+	std::cout << "Total terrain triangles: " << totalTriangles << std::endl;
 
-	if(rootNode) { 
-		rootNode->shutdown(); 
-		delete rootNode; 
-	}
 
-	rootNode = new Octree();
-	rootNode->initialize(vertex, totalVerts, texCoords, texCoords2, 5, 1000);
-
-   // dados ja estao na octree
-	delete[] vertex; 
-	vertex = NULL;
-	delete[] texCoords; 
-	texCoords = NULL;
-	delete[] texCoords2; 
-	texCoords2 = NULL;
 }
 
 
 bool Terrain::saveMap(char *filename){
-	
-	/*FILE *fp;
-
-   // Error Checking...
-	if(heightMap.data == 0) return false;
-	if(filename == 0) return false;
-
-	// Open the file to write it out as an text file.
-	fp = fopen(filename, "wb");
-	
-   // Error checking.
-	if(fp == 0) return false;
-
-   // Write out the size and scale values.
-	fwrite(&heightMap.getSizeX(), 1, sizeof(heightMap.getSizeX()), fp);
-	fwrite(&heightScale, 1, sizeof(heightScale), fp);
-
-	// Write out all of the data in one big write.
-	fwrite(heightMap.data, 1, heightMap.getSizeX() * heightMap.getSizeX(), fp);
-	
-	// Close the file.
-	fclose(fp);*/
+	std::string file(filename);
+	heightMap->save(file);
 	return true;
 }
 
@@ -287,7 +253,6 @@ void Terrain::getTexCoords(unsigned int texWidth, unsigned int texHeight,
 }
 
 void Terrain::shutDown(){
-	heightScale = 0.0f;
    
 	if(vertex){
 		delete[] vertex;
@@ -309,15 +274,4 @@ void Terrain::shutDown(){
 		texCoords2 = NULL;
 	}
 
-	//if(heightMap.data){
-	//	delete[] heightMap.data;
-	//	heightMap.data = NULL;
-	//	heightMap.getSizeX() = 0;
-	//}
-
-	if(rootNode){
-		rootNode->shutdown();
-		delete rootNode;
-		rootNode = NULL;
-	}
 }

@@ -5,16 +5,16 @@
 #include <cstdio>
 
 
-class pixelLightShader : public cgShader {
+class PixelLightShader : public CgShader {
 	
 public:
 
-	pixelLightShader(){};
-	pixelLightShader(char *vertexfile, int vertex, char * fragmentfile, int fragment, int flags ) { initialize(vertexfile,  vertex,  fragmentfile,  fragment, flags); };
-	virtual ~pixelLightShader(){kill();};
+	PixelLightShader(){};
+	PixelLightShader(char *vertexfile, int vertex, char * fragmentfile, int fragment, int flags ) { initialize(vertexfile,  vertex,  fragmentfile,  fragment, flags); };
+	virtual ~PixelLightShader(){kill();};
 
-	virtual void setInitialParameters(materialData *config);
-	virtual void setLoopParameters(materialData *config);
+	virtual void setInitialParameters(void* config);
+	virtual void setLoopParameters(void* config);
 	
 private:
 	
