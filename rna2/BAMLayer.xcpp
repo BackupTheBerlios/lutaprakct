@@ -1,0 +1,139 @@
+#include "bamlayer.h"
+
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <iostream>
+
+BAMLayer::BAMLayer() { 
+     prevLayer = NULL; 
+     nextLayer = NULL; 
+} 
+
+void BAMLayer::initialize(int NumNodes, BAMLayer* parent, BAMLayer* child) { 
+
+     // Aloca memoria
+     neuronValues = (int*) malloc(sizeof(int) * totalNeurons);  
+     
+     if(parent) 
+     	prevLayer = parent; 
+     	
+     if(child) { //se tem uma proxima camada, entao aloca os pesos
+          nextLayer = child; 
+          weights = (int**) malloc(sizeof(int*) *  totalNeurons);  
+          
+          for(int i = 0; i<totalNeurons; i++) { 
+               weights[i] = (int*) malloc(sizeof(int) * totalNextNeurons);  
+          }  
+          
+     } else {  //se nao tem proxima camada entao eh saida. sem pesos e bias
+          weights = NULL; 
+     } 
+     
+     // zera tudo
+	for(int i=0; i<totalNeurons; i++) { 
+		neuronValues[i] = 0; 
+		for(int j=0; j<totalNextNeurons; j++)  
+			weights[i][j] = 0; 
+	}
+		 
+} 
+
+/*
+ * deleta o espao alocado
+ */
+void BAMLayer::shutdown(void) { 
+
+     free(neuronValues); 
+     if(weights) { 
+          for(int i = 0; i<totalNeurons; i++) { 
+               free(weights[i]);  
+          } 
+          free(weights); 
+     } 
+} 
+
+/*
+ * escolhe um valor entre -1 e 1 para cada peso. o mesmo para os biasweight
+ * chamado apenas 1 vez no inicio do treinamento.
+ */
+void BAMLayer::randomizeWeights(void) { 
+      
+     for(int i=0; i<totalNeurons; i++) { 
+          for(int j=0; j<totalNextNeurons; j++) { 
+               weights[i][j] = 0.0; 
+          } 
+     } 
+     
+} 
+
+/* calcula o input de cada neuronio e depois usa a funao de ativaao para calcular
+ * o valor final
+ */
+
+void BAMLayer::calculateNeuronValues(void) { 
+
+     double x; 
+     if(prevLayer) { 
+          for(int j=0; j<totalNeurons; j++) { 
+               x = 0; 
+               for(int i=0; i<totalPrevNeurons; i++) { 
+                    x += prevLayer->neuronValues[i] * prevLayer->weights[i][j]; 
+               }
+               x += prevLayer->biasValues[j] * prevLayer->biasWeights[j]; 
+               
+               if((nextLayer == NULL) && useLinearOutput) 
+                    neuronValues[j] = x; 
+               else //aplica sigmoide se nao for linear
+                    neuronValues[j] = 1.0f/(1+exp(-x)); 
+          } 
+     } 
+}
+
+
+
+void BAMLayer::calculateErrors(void) { 
+
+     double sum; 
+     if(nextLayer == NULL){ //se for a camada de saida
+          for(int i=0; i<totalNeurons; i++) 
+                 errors[i] = (desiredValues[i] - neuronValues[i]) * neuronValues[i] *  (1.0f - neuronValues[i]);  
+     } else if(prevLayer == NULL) { // se for a camada de entrada 
+          for(int i=0; i<totalNeurons; i++)  
+               errors[i] = 0.0f; 
+     } else { //se for uma camada interna 
+          for(int i=0; i<totalNeurons; i++) { 
+               sum = 0; 
+               for(int j=0; j<totalNextNeurons; j++) {
+                    sum += nextLayer->errors[j] * weights[i][j]; 
+               }
+               
+               errors[i] = sum * neuronValues[i] * (1.0f - neuronValues[i]); 
+          } 
+     } 
+} 
+
+void BAMLayer::adjustWeights(void) { 
+	
+     double dw; 
+     if(nextLayer) { 
+          for(int i=0; i<totalNeurons; i++) { 
+               for(int j=0; j<totalNextNeurons; j++) { 
+                    dw = learningRate * nextLayer->errors[j] * 
+                          neuronValues[i]; 
+                    if(useMomentum){ 
+                         weights[i][j] += dw + momentumFactor * weightChanges[i][j]; 
+                         weightChanges[i][j] = dw; 
+                    } else { 
+                             weights[i][j] += dw; 
+                    } 
+               } 
+          } 
+          for(int j=0; j<totalNextNeurons; j++)  
+               biasWeights[j] += learningRate * nextLayer->errors[j] * biasValues[j]; 
+           
+     } 
+} 
+
+
+
