@@ -39,6 +39,9 @@ public:
  
 	int getWidth();
 	int getHeight();
+	float getFovy();
+	float getZnear();
+	float getZfar();
 	
 	void showCursor(bool value);
 	

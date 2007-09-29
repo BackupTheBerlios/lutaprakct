@@ -14,6 +14,7 @@ class Engine{
 		
 		bool isRunning();
 		void stop();
+		void shutdown();
 		
 	private:
 	

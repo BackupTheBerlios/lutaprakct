@@ -170,6 +170,18 @@ int Video::getHeight(){
  return height;
 }
 
+float Video::getFovy(){
+ return fovy;
+}
+
+float Video::getZnear(){
+ return znear;
+}
+
+float Video::getZfar(){
+ return zfar;
+}
+
 void Video::showCursor(bool value){
 	if (value)
 		SDL_ShowCursor(1);

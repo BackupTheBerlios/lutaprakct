@@ -1,0 +1,4 @@
+- A classe Renderer contem toda a geometria que a engine vai renderizar. Antes de
+desenhar ela chama o metodo Projection que atualiza a projection matrix, depois
+chama o metodo View que atualiza a view com base na configuracao atual da camera.
+Depois antes de cada objeto ser desenhado ele chama a sua propria View.

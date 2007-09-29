@@ -81,6 +81,11 @@ void Engine::stop(){
 	running = false;
 }
 
+//TODO deletar o que foi instanciado
+void Engine::shutdown(){
+	
+}
+
 int main(int argc, char *argv[]){
 	
 	Engine eng;
@@ -88,6 +93,7 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 	eng.mainLoop();
+	eng.shutdown();
 	return 0;
 	
 }

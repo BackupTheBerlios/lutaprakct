@@ -22,6 +22,9 @@ class Renderer : public EventHandler{
 		void draw();
 		void beginDraw();
 		void endDraw();
+		
+		void setupViewMatrix();
+		void setupProjectionMatrix();
 };
 
 typedef Singleton<Renderer> RENDERER;

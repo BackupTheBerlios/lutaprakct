@@ -1,0 +1,151 @@
+------------------------------------------------------------------------------                                                                     
+Author: Marcos Slomp                                                                     
+                                                                     
+                                             
+-------------------------------------------------------------------------------
+
+DESCRIPTION
+
+This document shows how to properly setting your own View and Model transforms
+in OpenGL, using the information provided by the CPivot<T> class. Note that no
+call to OpenGL but glMatrixMode, glLoadMatrix and glMultMatrix is used.
+
+-------------------------------------------------------------------------------
+
+SUMMARY
+
+   I - THE STANDARD MATH AND THE OPENGL MATH
+
+   II - SETTING THE VIEW MATRIX IN OPENGL
+
+   III - SETTING THE MODEL MATRIX IN OPENGL
+
+-------------------------------------------------------------------------------
+
+I - THE STANDARD MATH AND THE OPENGL MATH
+
+In OpenGL, matrices are column-major order; in Math, the standard is row-major
+order. To transform a row-major order into a column-major order, or vice-versa,
+just transpose the matrices.
+
+Standard Math
+(row-major order)
+
+   View Matrix                Model Matrix
+   | Ux Uy Uz -C*U |          | Ux Vx Nx Tx | 
+   | Vx Vy Vz -C*V |          | Uy Vy Ny Ty |
+   | Nx Ny Nz -C*N |          | Uz Vz Nz Tz |
+   |  0  0  0    1 |          |  0  0  0  1 |
+
+OpenGL Math
+(column-major order, row-major order transposed)
+
+   View Matrix                Model Matrix
+   |   Ux   Vx   Nx  0 |      | Ux Uy Uz  0 | 
+   |   Uy   Vy   Ny  0 |      | Vx Vy Vz  0 |
+   |   Uz   Vz   Nz  0 |      | Nx Ny Nz  0 |
+   | -C*U -C*V -C*N  1 |      | Tx Ty Tz  1 |
+
+Note that the model matrix may also include a scale/shear. But this will not
+change the way we put the rotation vectors within the matrix...
+
+-------------------------------------------------------------------------------
+
+II - SETTING THE VIEW MATRIX IN OPENGL
+
+// Retreive camera information.
+CPivotf camera;
+
+// Retreive camera position.
+CVector3f C;
+camera.GetPosition(C);
+
+// Retreive camera orientation (rotation).
+CQuaternionf R;
+camera.GetRotation(R);
+
+// Retreive camera basis vectors.
+CVector3f U, V, N;
+R.ToMatrix(U, V, N);
+
+// In OpenGL, the camera points to World's Z negative axis.
+// This also forces the use of a negative U vector to correct the coordinates system.
+U *= -1.0f;
+N *= -1.0f;
+
+// Create the View Matrix.
+float M [16];
+// Rotation vector U
+M[ 0] = U[0];
+M[ 4] = U[1];
+M[ 5] = U[2];
+// Rotation vector V
+M[ 1] = V[0];
+M[ 5] = V[1];
+M[ 9] = V[2];
+// Rotation vector N
+M[ 2] = N[0];
+M[ 6] = N[1];
+M[10] = N[2];
+// Translation
+M[12] = -C*U;
+M[13] = -C*V;
+M[14] = -C*N;
+// Homogeneous coordinates
+M[ 3] = 0.0f;
+M[ 7] = 0.0f;
+M[11] = 0.0f;
+M[15] = 1.0f;
+
+// Load the generated View Matrix in OpenGL state machine.
+glMatrixMode(GL_MODELVIEW_MATRIX);
+glLoadMatrixf(M);
+
+-------------------------------------------------------------------------------
+
+III - SETTING THE MODEL MATRIX IN OPENGL
+
+// Retreive model information.
+CPivotf model;
+
+// Retreive model position.
+CVector3f T;
+model.GetPosition(T);
+
+// Retreive model orientation (rotation).
+CQuaternionf R;
+model.GetRotation(R);
+
+// Retreive model basis vectors.
+CVector3f U, V, N;
+R.ToMatrix(U, V, N);
+
+// Create the Model Matrix.
+float M [16];
+// Rotation vector U
+M[ 0] = U[0];
+M[ 1] = U[1];
+M[ 2] = U[2];
+// Rotation vector V
+M[ 4] = V[0];
+M[ 5] = V[1];
+M[ 6] = V[2];
+// Rotation vector N
+M[ 8] = N[0];
+M[ 9] = N[1];
+M[10] = N[2];
+// Translation
+M[12] = T;
+M[13] = T;
+M[14] = T;
+// Homogeneous coordinates
+M[ 3] = 0.0f;
+M[ 7] = 0.0f;
+M[11] = 0.0f;
+M[15] = 1.0f;
+
+// Multiply the generated Model Matrix with the current OpenGL ModelView Matrix.
+glMatrixMode(GL_MODELVIEW_MATRIX);
+glMultMatrixf(M);
+
+-------------------------------------------------------------------------------

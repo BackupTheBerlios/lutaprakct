@@ -2,6 +2,8 @@
 #include <GL/glu.h>
 #include <SDL/SDL.h>
 #include "Renderer.h"
+#include "QuatCamera.h"
+#include "../video/Video.h"
 
 Renderer::Renderer(){
 }
@@ -26,6 +28,17 @@ void Renderer::update(){
 }
 
 void Renderer::draw(){
+}
+
+void Renderer::setupViewMatrix(){
+	QUATCAMERA::getInstance().setupViewMatrix();
+}
+
+void Renderer::setupProjectionMatrix(){
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	const float fAspect = (float)VIDEO::getInstance().getWidth() / (float) VIDEO::getInstance().getHeight();// (const float) (g_nWinWidth) / (const float) (g_nWinHeight);
+	gluPerspective(VIDEO::getInstance().getFovy(), fAspect, VIDEO::getInstance().getZnear(), VIDEO::getInstance().getZfar());
 }
 
 void Renderer::beginDraw(){
