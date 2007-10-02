@@ -7,3 +7,4 @@ shaders
 mesh*
 frustum*
 octree*
+gui

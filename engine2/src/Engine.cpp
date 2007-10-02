@@ -28,6 +28,7 @@ bool Engine::initialize(){
 	videoConfig.fovy = 45.0; videoConfig.zfar = 6000.0; videoConfig.znear = 1.0;
 	videoConfig.showCursor = false;
 	videoConfig.windowTitle = "Engine";
+	videoConfig.flags = Video::OPENGL | Video::BPP_24;
 	videoConfig.glExtensions.push_back("GL_ARB_vertex_program");
 	videoConfig.glExtensions.push_back("GL_NV_vertex_program");
 	videoConfig.glExtensions.push_back("GL_ARB_imaging");

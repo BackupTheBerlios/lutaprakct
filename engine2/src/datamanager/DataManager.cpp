@@ -45,6 +45,7 @@ bool DataManager::unload(std::string filename){
 	return true;
 }
 
+//TODO checar se eh textura
 bool DataManager::unloadAll(){
 	
 	 std::map<std::string, DataReference>::iterator iter;
