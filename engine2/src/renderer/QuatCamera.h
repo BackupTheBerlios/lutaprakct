@@ -3,7 +3,7 @@
 
 #include "../util/math/Pivot.h"
 #include "../events/eventhandler.h"
-#include "../util/patterns/singleton.h"
+#include "../util/patterns/Singleton.h"
 
  /** TODO rotatearound e positioncamera ?
   */

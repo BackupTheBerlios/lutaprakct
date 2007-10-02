@@ -1,8 +1,10 @@
 
 #include "QuatCamera.h"
 #include <GL/gl.h>
+#include <iostream>
 
 void QuatCamera::handleEvent(const event &e){
+
 
 	switch (e.type){
 		case E_KEY_UP:         pivot.moveRelativeAxisN(1.0); break;
@@ -18,9 +20,9 @@ void QuatCamera::handleEvent(const event &e){
 		    						float deltax = (e.arg1 - 400)/800.0;
 		    						float deltay = (e.arg2 - 300)/600.0;
 		    						  
-		    						pivot.rotateRelativeAxisU(deltay);
-		    						//pivot.RotateRelativeAxisV(deltay);
-		    						pivot.rotateRelativeAxis(0.0, 1.0, 0.0, deltax);
+		    						pivot.rotateRelativeAxisU(-deltay);
+		    						//pivot.rotateRelativeAxisV(deltay);
+		    						pivot.rotateRelativeAxis(0.0, 1.0, 0.0, -deltax);
 		    						break;
 	    						}
 	}	
