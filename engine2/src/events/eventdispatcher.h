@@ -3,7 +3,7 @@
 
 #include <list>
 #include "eventhandler.h"
-#include "../util/patterns/singleton.h"
+#include "../util/Singleton.h"
 
 /** eventdispatcher eh um singleton que recebe os eventos do eventcore, e envia para todas as classes
  * que herdaram de eventhandler (ou seja todos da lista handlers)

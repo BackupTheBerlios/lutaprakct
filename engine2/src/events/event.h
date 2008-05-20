@@ -1,6 +1,8 @@
 #ifndef _EVENT_H_
 #define _EVENT_H_
 
+#include <cstring>
+
 /** apenas a definicao da enum dos eventos, sempre que for adicionar um event novo
  * modifique esta enum.
  * a struct event eh simples e talvez nunca precise de alteracao.
@@ -33,5 +35,7 @@ struct event {
   int type;
   int arg1, arg2;
 };
+
+int translateEvent(const char* eventname);
 
 #endif //_EVENT_H_

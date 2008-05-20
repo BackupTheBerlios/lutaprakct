@@ -1,0 +1,31 @@
+Objetivos:
+
+Collada eh um formato de dados padrao para empresas de software 3d. Todas as grandes ferramentas 
+possuem plugins que salvam nesse formato. O que o formato faz é armazenar de maneira generica o
+conteudo, por exemplo ele guarda a lista de vertices, de normais, todas as informações sobre o
+material de um objeto, etc.
+Depois desses dados serem lidos, pode-se utilizar o opengl para renderiza-los.
+
+A idéia seria fazer um loader simples pro collada, utilizando a lib collada-dom [1] e deixar os
+artistas fazerem o cenário e os personagens. A engine entao apenas iria ler os modelos do cenario
+e carrega-los. a função dela seria desenhar os colladas, pegar o input, fazer o movimento dos personagens.
+e tesar a fisica com colisões. Para a fisica usaremos a lib collada-bullet [2] que integra a fisica no
+formato collada.
+
+Os passos seriam:
+- desenhar a geometria basica do collada, so os vertices, normais e informações geometricas.
+- carregar o material do collada e o tipo de luz que esta usada nele. isso pode requerer shaders.
+- implementar um algoritmo de sombras no opengl pra caso tenha sombras no collada. Ou usar a lib colladaFX [1]
+que implementa alguns shaders via Cg language. (melhor)
+- implementar algoritmos de culling (pelo menos frustum)
+- implementar a fisica.
+- implementar um formato de "level" que vai definir o cenario no formato do game, por exemplo: "no local
+x y z tem um sanduiche que cura 10 de life"
+- um ultimo problema seria a gui do game. poderia ser feita por nos ou usando uma lib como a cegui.
+
+Metodologia: 
+As reuniões serão realizadas toda segunda feira, para discutir os avanços.
+
+Referencias
+[1] www.collada.org
+[2] http://www.bulletphysics.com/Bullet/wordpress/  

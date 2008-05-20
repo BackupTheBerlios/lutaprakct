@@ -1,9 +1,9 @@
 
 #include "Engine.h"
-#include "timer/Timer.h"
+#include "util/Timer.h"
 #include "events/input/sdlinputcore.h"
-#include "video/Video.h"
 #include "renderer/Renderer.h"
+#include "util/tinyxml/tinyxml.h"
 #include <iostream>
 
 Engine::Engine(){
@@ -23,12 +23,12 @@ bool Engine::initialize(){
 	VideoConfig videoConfig; 
 	videoConfig.alphaBits = videoConfig.redBits = videoConfig.blueBits = videoConfig.greenBits = videoConfig.stencilBits = 8;
 	videoConfig.depthBits = 24;
-	videoConfig.clearColor[0] = 1.0; videoConfig.clearColor[1] = 1.0; videoConfig.clearColor[2] = 1.0;
+	videoConfig.clearColor[0] = 0.6; videoConfig.clearColor[1] = 0.6; videoConfig.clearColor[2] = 0.6;
 	videoConfig.width = 800; videoConfig.height = 600;
 	videoConfig.fovy = 45.0; videoConfig.zfar = 6000.0; videoConfig.znear = 1.0;
 	videoConfig.showCursor = false;
 	videoConfig.windowTitle = "Engine";
-	videoConfig.flags = Video::OPENGL | Video::BPP_24;
+	videoConfig.bpp =  24;
 	videoConfig.glExtensions.push_back("GL_ARB_vertex_program");
 	videoConfig.glExtensions.push_back("GL_NV_vertex_program");
 	videoConfig.glExtensions.push_back("GL_ARB_imaging");
@@ -38,9 +38,9 @@ bool Engine::initialize(){
 	videoConfig.glExtensions.push_back("GL_ARB_multitexture");
 	videoConfig.glExtensions.push_back("GL_EXT_texture3D");
 	videoConfig.glExtensions.push_back("GL_ARB_shading_language_100");
-	
-	if (!VIDEO::getInstance().initialize(videoConfig)){ //inicializa o sdl, a janela e o opengl
-		std::cout << "Nao foi possivel inicializar o video." << std::endl;
+
+	if (!RENDERER::getInstance().initialize(videoConfig)){
+		std::cout << "Nao foi possivel inicializar o renderer." << std::endl;
 		return false;
 	}
 	
@@ -50,13 +50,8 @@ bool Engine::initialize(){
 	}
 	
 	//inicializa o sdl input, pega a dimensao da janela
-	if (!INPUT::getInstance().initialize(VIDEO::getInstance().getWidth(), VIDEO::getInstance().getHeight())){
+	if (!INPUT::getInstance().initialize(videoConfig.width, videoConfig.height)){
 		std::cout << "Nao foi possivel inicializar o input." <<std::endl;
-		return false;
-	}
-	
-	if (!RENDERER::getInstance().initialize()){
-		std::cout << "Nao foi possivel inicializar o renderer." << std::endl;
 		return false;
 	}
 	

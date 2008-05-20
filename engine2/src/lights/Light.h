@@ -4,7 +4,7 @@
 class Light{
 
 	public:
-		Light(){};
+		Light(){canCastShadows = false;};
 		virtual ~Light(){};
 		
 		//antes de chamar o initialize tem q setar os parametros
@@ -27,15 +27,27 @@ class Light{
 		}
 	
 		unsigned int getId(){return id; };
+		
+		bool castShadows(){return canCastShadows; };
+		void setShadowStatus(bool a){ canCastShadows = a;};
 	
 	protected:
 	
 		float position[4];
 		float ambient[4];
 		float diffuse[4];
+		float specular[4];
+		float itensity;
+		float linear;
+		float quadratic;
 		unsigned int id;
 		
-	
+		bool canCastShadows;
+		bool attenuate;
+		bool on;
+		
+		float exponent;
+		float angle;
 };
 
 

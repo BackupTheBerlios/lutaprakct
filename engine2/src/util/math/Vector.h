@@ -12,41 +12,42 @@
 template<typename T, int K>
 class Vector
 {
-protected:
-  T values [K];
 
 public:
-  inline Vector();
-  inline Vector(const double first, ...); // WORKS ONLY WITH T=FLOAT/DOUBLE !!!
-  inline Vector(const Vector<T,K>& v);
-  inline VDCTOR ~Vector();
 
-  inline const int getDimension();
-  inline const T getLength();
-  inline void normalize();
+	T values [K];
+
+	inline Vector();
+	inline Vector(const double first, ...); // WORKS ONLY WITH T=FLOAT/DOUBLE !!!
+	inline Vector(const Vector<T,K>& v);
+	inline VDCTOR ~Vector();
+
+	inline const int getDimension();
+	inline const T getLength();
+	inline void normalize();
 
 	inline const bool operator == (const Vector<T,K>& v);
 	inline const bool operator != (const Vector<T,K>& v);
 
-  inline Vector<T,K>& operator = (const Vector<T,K>& v);
+	inline Vector<T,K>& operator = (const Vector<T,K>& v);
 
-  inline T& operator [] (const int i);
-  inline const T& operator [] (const int i) const;
+	inline T& operator [] (const int i);
+	inline const T& operator [] (const int i) const;
 
-  inline const T operator * (const Vector<T,K>& v2) const;
-  inline const Vector<T,K> operator % (const Vector<T,K>& v2) const;
+	inline const T operator * (const Vector<T,K>& v2) const;
+	inline const Vector<T,K> operator % (const Vector<T,K>& v2) const;
 
-  inline const Vector<T,K> operator - () const;
+	inline const Vector<T,K> operator - () const;
 
-  inline const Vector<T,K> operator + (const Vector<T,K>& v2) const;
-  inline const Vector<T,K> operator - (const Vector<T,K>& v2) const;
-  inline const Vector<T,K> operator * (const T s) const;
-  inline const Vector<T,K> operator / (const T s) const;
+	inline const Vector<T,K> operator + (const Vector<T,K>& v2) const;
+	inline const Vector<T,K> operator - (const Vector<T,K>& v2) const;
+	inline const Vector<T,K> operator * (const T s) const;
+	inline const Vector<T,K> operator / (const T s) const;
 
-  inline Vector<T,K>& operator += (const Vector<T,K>& v2);
-  inline Vector<T,K>& operator -= (const Vector<T,K>& v2);
-  inline Vector<T,K>& operator *= (const T s);
-  inline Vector<T,K>& operator /= (const T s);
+	inline Vector<T,K>& operator += (const Vector<T,K>& v2);
+	inline Vector<T,K>& operator -= (const Vector<T,K>& v2);
+	inline Vector<T,K>& operator *= (const T s);
+	inline Vector<T,K>& operator /= (const T s);
 };
 
 template<typename T, int K>

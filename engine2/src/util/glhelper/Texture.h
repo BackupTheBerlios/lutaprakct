@@ -1,7 +1,7 @@
 #ifndef _TEXTURE_H_
 #define _TEXTURE_H_
 
-#include "../image/image.h"
+#include "../Image.h"
 #include <GL/gl.h>
 #include <GL/glext.h>
 

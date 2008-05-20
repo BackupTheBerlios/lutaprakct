@@ -179,13 +179,13 @@ bool Texture::load(std::string& filename, int target, int format, int internalfo
 		glTexParameteri(this->target, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16);
 	
 	if (target == TEXTURE_1D){
-		img = loadImage(filename);
+		img->load(filename.c_str());
 		width = img->getWidth();
 		height = 0;
 		glTexImage1D(this->target, 0, this->internalformat, img->getWidth(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
 	}
 	else if ( (target == TEXTURE_2D) || (target == TEXTURE_RECTANGLE) || (target == TEXTURE_RECTANGLENV) ){
-		img = loadImage(filename);
+		img->load(filename.c_str());
 		width = img->getWidth();
 		height = img->getHeight();
 		glTexImage2D(this->target, 0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
@@ -203,7 +203,10 @@ bool Texture::load(std::string& filename, int target, int format, int internalfo
 		for (int i = 0; i < 6; i++){
 			sprintf(buff, filename.c_str(), facenames[i]);
 			std::string s(buff);
-			img = loadImage(s);
+			img = NULL;
+			img->load(s.c_str());
+			if (!img)
+				std::cout << "nao achou img " << s << std::endl;
 			width = img->getWidth();
 			height = img->getHeight();
 			glTexImage2D(facetargets[i],0, this->internalformat, img->getWidth(), img->getHeight(), 0, this->format, GL_UNSIGNED_BYTE, img->imagedata);
@@ -216,8 +219,8 @@ bool Texture::load(std::string& filename, int target, int format, int internalfo
 	glDisable(target);
 	//depois libera a memoria deletando a img
 	if(img){
-		//delete img;
-		//img = NULL;
+		delete img;
+		img = NULL;
 	}
 	return id;
 }

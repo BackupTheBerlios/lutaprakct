@@ -1,13 +1,13 @@
 #ifndef ENTITY_H_
 #define ENTITY_H_
 
+#include <vector>
 #include "../util/math/Pivot.h"
-#include <string>
 
 enum{
-	STATIC = 1,
-	SKINNED = 2,
-	KEYFRAMED = 3
+	STATICMESH = 1,
+	SKINNEDMESH = 2,
+	KEYFRAMEDMESH = 3
 };
 
 class Entity{
@@ -17,14 +17,14 @@ class Entity{
 		Entity(){};
 		virtual ~Entity(){};
 		
-		virtual bool initialize(std::string, int type) = 0;
+		virtual bool initialize(char*) = 0;
 		
-		void update(float elapsedTime);
+		void update(float elapsedTime){};
 		
 		virtual void draw() = 0;
 		 
-		void beginDraw();
-		void endDraw();
+		void beginDraw(){};
+		void endDraw(){};
 		
 	protected:
 	
@@ -32,6 +32,7 @@ class Entity{
 		float time;
 		
 		int type;
+		
 	
 };
 

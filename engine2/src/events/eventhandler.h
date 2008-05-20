@@ -14,8 +14,6 @@ public:
     EventHandler();
     virtual ~EventHandler(){};
 	virtual void handleEvent(const event &e) = 0; 
-	
-protected:
 
     void sendEvent(int eventType, int arg1 = 0, int arg2 = 0);
 	

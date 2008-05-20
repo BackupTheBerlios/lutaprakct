@@ -2,7 +2,7 @@
 #define _SDLINPUTCORE_H_
 
 #include "../eventhandler.h"
-#include "../../util/patterns/Singleton.h"
+#include "../../util/Singleton.h"
 #include <list>
 
 /**outro singleton do sistema de eventos. esse eh o responsavel por pegar o input do SDL
