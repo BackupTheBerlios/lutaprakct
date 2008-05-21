@@ -19,46 +19,8 @@ Renderer::Renderer(){
 Renderer::~Renderer(){
 }
 
-void Renderer::handleEvent(const event& e){
-	switch (e.type){
-		case E_KEY_F1:{
-				//unsigned char idteste = '1';
-				int viewport[4];
-				glGetIntegerv(GL_VIEWPORT, viewport);
-				unsigned char* data = NULL;
-				data =  new unsigned char[3 * viewport[2] * viewport[3]];
-				glPixelStorei(GL_PACK_ALIGNMENT,1);
-				glReadBuffer(GL_FRONT);
-				glReadPixels(0,0, viewport[2], viewport[3], GL_RGB, GL_UNSIGNED_BYTE, data);
-			//	TgaImage img;
-				char filename[50];
-				if (screenShotNumber < 10)
-					sprintf(filename, "img_00%d.tga", screenShotNumber );
-				else if (screenShotNumber <= 99 )
-					sprintf(filename, "img_0%d.tga", screenShotNumber );
-				else
-					sprintf(filename, "img_%d.tga", screenShotNumber );
-				std::string file(filename);
-				//img.write(file, viewport[2], viewport[3], 24, data);
-				screenShotNumber++;
-				
-				delete data;
-			break;
-		}
-	}
-}
-
-unsigned int vbid, vbib;
-
 bool Renderer::initialize(VideoConfig& config){
-	//if (!light.initialize(1))
-	//	std::cout << "nao luz" << std::endl;
-	//if (!shadows.initialize())
-	//	std::cout << "Sombras nao foram inicializadas." << std::endl;
-		
-	//duck = new StaticEntity;
-	//if (duck->initialize("duck_triangulate_deindexer.dae") == false)
-	//	std::cout << "duck_triangulate_deindexer.dae not found." << std::endl;
+
 	initializeSdl(config);
 	initializeOpenGl();
 	
@@ -77,6 +39,12 @@ void Renderer::update(){
 void Renderer::draw(){
 }
 
+void Renderer::beginDraw(){
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	setupProjectionMatrix();
+	setupViewMatrix();
+}
+
 void Renderer::setupViewMatrix(){
 	QUATCAMERA::getInstance().setupViewMatrix();
 }
@@ -86,12 +54,6 @@ void Renderer::setupProjectionMatrix(){
 	glLoadIdentity();
 	const float fAspect = (float)width / (float) height;
 	gluPerspective(fovy, fAspect, znear, zfar);
-}
-
-void Renderer::beginDraw(){
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	setupProjectionMatrix();
-	setupViewMatrix();
 }
 
 void Renderer::endDraw(){
@@ -197,4 +159,33 @@ int Renderer::initializeOpenGl(){
 	
 	return 0;
 
+}
+
+void Renderer::handleEvent(const event& e){
+	switch (e.type){
+		case E_KEY_F1:{
+				//unsigned char idteste = '1';
+				int viewport[4];
+				glGetIntegerv(GL_VIEWPORT, viewport);
+				unsigned char* data = NULL;
+				data =  new unsigned char[3 * viewport[2] * viewport[3]];
+				glPixelStorei(GL_PACK_ALIGNMENT,1);
+				glReadBuffer(GL_FRONT);
+				glReadPixels(0,0, viewport[2], viewport[3], GL_RGB, GL_UNSIGNED_BYTE, data);
+			//	TgaImage img;
+				char filename[50];
+				if (screenShotNumber < 10)
+					sprintf(filename, "img_00%d.tga", screenShotNumber );
+				else if (screenShotNumber <= 99 )
+					sprintf(filename, "img_0%d.tga", screenShotNumber );
+				else
+					sprintf(filename, "img_%d.tga", screenShotNumber );
+				std::string file(filename);
+				//img.write(file, viewport[2], viewport[3], 24, data);
+				screenShotNumber++;
+				
+				delete data;
+			break;
+		}
+	}
 }
