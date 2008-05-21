@@ -1,10 +1,9 @@
-particulas
-fog
-luz
-sombras
-materials
-shaders
-mesh*
-frustum*
-octree*
-gui
+- desenhar a geometria basica do collada, so os vertices, normais e informações geometricas.
+- carregar o material do collada e o tipo de luz que esta usada nele. isso pode requerer shaders.
+- implementar um algoritmo de sombras no opengl pra caso tenha sombras no collada. Ou usar a lib colladaFX [1]
+que implementa alguns shaders via Cg language. (melhor)
+- implementar algoritmos de culling (pelo menos frustum)
+- implementar a fisica.
+- implementar um formato de "level" que vai definir o cenario no formato do game, por exemplo: "no local
+x y z tem um sanduiche que cura 10 de life"
+- um ultimo problema seria a gui do game. poderia ser feita por nos ou usando uma lib como a cegui.
