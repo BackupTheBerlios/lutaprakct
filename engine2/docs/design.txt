@@ -1,4 +1,40 @@
-- A classe Renderer contem toda a geometria que a engine vai renderizar. Antes de
-desenhar ela chama o metodo Projection que atualiza a projection matrix, depois
-chama o metodo View que atualiza a view com base na configuracao atual da camera.
-Depois antes de cada objeto ser desenhado ele chama a sua propria View.
+Código:
+- glhelper:
+glhelper: tam algumas classes que abstraem algumas funcionalidades do opengl como as extensions,
+texturas e outras coisas. Precisa apagar umas coisas inuteis.
+
+- math
+Possui algumas funções pra mexer com matrizes, vetores e quaternions.
+
+- tinyxml:
+A lib de xml usada na engine. Por enquanto nada usa ela.
+
+- events: 
+Pasta que faz o input. Basta herdar de EventHandler e implementar o handleEvent() para uma classe
+poder receber o teclado ou mouse.
+
+-renderer:
+Inicializa o opengl, sdl, possui todos os dados que vao ser renderizados, define o que vai ser renderizado.
+
+- entities:
+Classes que lidam com as abtrações sobre as entidades da engine, vai ser removido em beve, pois sera
+utilizado um scenegraph estilo o do collada.
+
+- lights:
+Classes que cuidam da luz, vai ser removida em breve pois usaremos um outro sistema de luz e material.
+
+Singleton.h:
+Um template de um singleton, utilizado pelo renderer, input e timer.
+
+Image.h:
+Classe responsável por ler as imagens, so le tga por enquanto.
+
+Timer.h:
+Classe responsavel por contar o tempo entre os frames. Use ela se quiser saber esse tempo.
+
+VideoConfig.h
+Uma struct que tem os dados de configuraçao do sdl e opengl na inicializaçao.
+
+DataManager.h
+Classe que le os meshes e imagens. Por enquanto so imagens. A ideia é que sempre que precisar ler
+algo do hd, usar essa classe.
