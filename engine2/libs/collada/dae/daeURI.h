@@ -66,7 +66,7 @@ class DAE;
 class DLLSPEC daeURI
 {
 private:
-	void internalResolveElement();
+	daeElement* internalResolveElement() const;
 	
 public:
 	/**
@@ -127,14 +127,8 @@ private:
 	std::string _query;
 	/** fragment component */
 	std::string _fragment;
-	/** Reference to the element that the URI resolves to in memory */
-	daeElement* element;
 	/** Pointer to the element that owns this URI */
 	daeElement* container;
-	/** Current resolver state of the URI */
-	ResolveState state;
-	/** Flag for if this URI references an external element. */
-	daeBool external;
 	
 public:
 	/**
@@ -265,29 +259,12 @@ public:
 	 * Gets the element that this URI resolves to in memory.
 	 * @return Returns a ref to the element.
 	 */
-	daeElementRef getElement();
+	daeElementRef getElement() const;
+
+	// Returns the document that this URI references, or null if the document
+	// hasn't been loaded yet.
+	daeDocument* getReferencedDocument() const;
 	
-	/** 
-	 * Sets the element that this URI resolves to in memory.
-	 * @param newref A ref to the element.
-	 */
-	inline void setElement(daeElement* newref){element=newref;};
-
-	/**
-	 * Gets the resolve state of the URI.
-	 * @return Returns the current state.
-	 * @note This is pretty much entirely useless now. Just use the various accessors
-	 * to query the state of the uri.
-	 */
-	inline ResolveState getState() const {return(state);};
-
-	/** 
-	 * Sets the resolve state of the URI.
-	 * @param newState The new state.
-	 * @note This will be removed when daeURI starts managing its state internally.
-	 */
-	inline void setState(ResolveState newState){state=newState;};
-
 	/**
 	 * Gets a pointer to the @c daeElement that contains this URI.
 	 * @return Returns the pointer to the containing daeElmement.
@@ -304,21 +281,14 @@ public:
 	 * Gets if this URI resolves to an element that is not contained in the same document as the URI.
 	 * @return Returns true if the URI references an external element. False otherwise.
 	 */
-	daeBool isExternalReference() const { return external; }
+	daeBool isExternalReference() const;
 	 
-	/**
-	 * Configures the <tt><i>uriString</i></tt> for this @c daeURI based on the element set in <tt><i>element.</i></tt> 
-	 * Uses the element's base URI and ID information to configure
-	 * the URI string.
-	 */
-	void resolveURI();
-
 	/**
 	 * Copies the URI specified in <tt><i>from</i></tt> into @c this.
 	 * Performs a simple copy without validating the URI.
 	 * @param from URI to copy from.
 	 */
-	void copyFrom(daeURI& from);
+	void copyFrom(const daeURI& from);
 
 	/**
 	 * Outputs all components of this URI to stderr.
@@ -341,18 +311,14 @@ public:
 		return uriString == other.uriString;
 	}
 
-	daeURI &operator=(const daeURI& other) {
-		set(other.originalURIString);
-		element = other.element;
-		state = other.state;
-		return *this;
-	}
-
+	daeURI& operator=(const daeURI& other);
 	daeURI& operator=(const std::string& uri);
 
 	// These methods are deprecated.
 	void resolveElement(); // Call getElement directly.
 	void validate(const daeURI* baseURI = NULL); // Shouldn't ever need to call this.
+	ResolveState getState() const; 	// Call getElement to see if resolving succeeded.
+	void setState(ResolveState newState); // Don't call this.
 
 private:
 	/**
@@ -384,7 +350,7 @@ typedef daeTArray<daeURIResolver*> daeURIResolverPtrArray;
  * The list is ordered on a first come, first serve basis, and resolution
  * terminates after any resolver instance resolves the URI.
  */
-class daeURIResolver
+class DLLSPEC daeURIResolver
 {
 public:
 	/**
@@ -417,10 +383,10 @@ public:
 	/**
 	 * Provides an abstract interface for converting a @c daeURI into a @c daeElement
 	 * @param uri @c daeURI to resolve.
-	 * @return Returns true if the @c daeURIResolver successfully resolved the URI,
+	 * @return Returns the resolved element, or null if resolving failed.
 	 * returns false otherwise.
 	 */
-	virtual daeBool resolveElement(daeURI& uri) = 0;
+	virtual daeElement* resolveElement(const daeURI& uri) = 0;
 
 	/**
 	 * Gets the name of this resolver.
@@ -435,13 +401,13 @@ protected:
 
 
 // This is a container class for storing a modifiable list of daeURIResolver objects.
-class daeURIResolverList {
+class DLLSPEC daeURIResolverList {
 public:
 	daeURIResolverList();
 	~daeURIResolverList();
 
 	daeTArray<daeURIResolver*>& list();
-	void resolveElement(daeURI& uri);
+	daeElement* resolveElement(const daeURI& uri);
 
 private:
 	// Disabled copy constructor/assignment operator
@@ -492,12 +458,6 @@ namespace cdom {
 	// returned. If an absolute path is given, a relative URI reference containing 
 	// a fully specified path is returned. Spaces are encoded as %20. The 'type'
 	// parameter indicates the format of the nativePath.
-	//
-	// Windows-specific note: Special care must be taken to handle paths of the form 
-	// "\myFolder\myFile.dae". This specifies an absolute path on the current drive.
-	// In order for the DOM's URI resolver to resolve this type of URI correctly,
-	// the nativePathToUri function returns a full URI of the form "file:////myFolder/myFile.dae"
-	// instead of "/myFolder/myFile.dae". UNC paths are handled similarly.
 	//
 	// Examples - Windows
 	//   nativePathToUri("C:\myFolder\myFile.dae") --> "/C:/myFolder/myFile.dae"
