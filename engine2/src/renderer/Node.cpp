@@ -1,6 +1,7 @@
 #include "Node.h"
 #include <iostream>
 #include <cstdlib>
+#include <dae/daeURI.h>
 
 template<typename MyType, typename DomType>
 MyType& lookup(DomType& domObject) {

@@ -24,7 +24,7 @@ bool Renderer::initialize(VideoConfig& config){
 	initializeOpenGl();
 	
 	Scene n;
-	n.initialize("duck_triangulate_deindexer.dae");
+	n.initialize("data/duck_triangulate_deindexer.dae");
 	
 	return true;
 }
