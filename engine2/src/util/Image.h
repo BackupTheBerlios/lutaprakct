@@ -33,14 +33,14 @@ public:
 	~Image(){ delete imagedata; delete palette; };
 	
 	
-	int load(char* filename);
+	int load(const char* filename);
 	int write(char* filename, short int width, short int height, unsigned char depth,
 						unsigned char* data);
 	
 	int getWidth(){ return width; }
 	int getHeight(){ return height; }
 
-	int loadTga(char* filename);
+	int loadTga(const char* filename);
 	int loadRawTga();
 	void BgrtoRgb();
 	int writeTga( char* filename,short int width, short int height, unsigned char depth,
