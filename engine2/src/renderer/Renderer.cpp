@@ -7,9 +7,8 @@
 #include "Renderer.h"
 #include "QuatCamera.h"
 #include "../util/DataManager.h"
-#include "../entities/StaticEntity.h"
 
-#include "../lights/ShLight.h"
+#include "Node.h"
 
 
 Renderer::Renderer(){
@@ -23,6 +22,9 @@ bool Renderer::initialize(VideoConfig& config){
 
 	initializeSdl(config);
 	initializeOpenGl();
+	
+	Scene n;
+	n.initialize("duck_triangulate_deindexer.dae");
 	
 	return true;
 }
