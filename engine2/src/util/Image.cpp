@@ -3,7 +3,7 @@
 #include "Image.h"
 #include <fstream>
 
-int Image::load(char* filename){
+int Image::load(const char* filename){
 
 	char* aux = strchr (filename, '.');
 	aux++;
@@ -30,7 +30,7 @@ int Image::write(char* filename, short int width, short int height, unsigned cha
 }
 
 //TODO usar file com C e nao com c++
-int Image::loadTga(char* filename) {
+int Image::loadTga(const char* filename) {
 
 	std::ifstream fin;
 	unsigned long filesize;
