@@ -28,7 +28,6 @@ public:
 	void readLibraryLights(domLibrary_lights* lib);
 	
 	void readGeometry(domGeometry* geo);
-	//void readLight(domLight* light);
 	
 	std::list<Node*> nodes;
 	

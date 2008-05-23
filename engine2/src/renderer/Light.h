@@ -4,8 +4,12 @@
 #include <dom/domLight.h>
 #include <dom/domTargetableFloat3.h>
 #include <dae.h>
+
+
 enum LightType { AMBIENT, POINT, DIRECTIONAL, SPOT };
 
+
+//TODO ajeitar encapsulamento e definir valores default pra fallOffExponent e fallOffAngle
 class Light {
 public:
 	Light(domLight* lightTag);
@@ -16,7 +20,7 @@ public:
 	float constantAttenuation;
 	float linearAttenuation;
 	float quadraticAttenuation;
-	
+
 	LightType lType;
 };
 

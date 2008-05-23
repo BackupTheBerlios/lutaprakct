@@ -1,5 +1,5 @@
 #include "Light.h"
-#include <iostream>
+
 Light::Light(domLight* lightTag)
 {
 	domLight::domTechnique_common* techCommon = lightTag->getTechnique_common();
@@ -12,7 +12,8 @@ Light::Light(domLight* lightTag)
 	domLight::domTechnique_common::domDirectional* directional_Light = techCommon->getDirectional();
 	domLight::domTechnique_common::domPoint* point_Light = techCommon->getPoint();
 	domLight::domTechnique_common::domSpot* spot_Light = techCommon->getSpot();
-
+	
+	
 	if (ambient_Light){
 		lType = AMBIENT;
 		domTargetableFloat3Ref colorTarg = ambient_Light->getColor();
@@ -20,8 +21,6 @@ Light::Light(domLight* lightTag)
 		r = (float) color[0];
 		g = (float) color[1];
 		b = (float) color[2];
-		std::cout << "Luz: " << lType << std::endl;
-		std::cout << "r: " << r << "g: " << g << "b: " << b << std::endl;
 	} else if (directional_Light) {
 		lType = DIRECTIONAL;
 		domTargetableFloat3Ref colorTarg = directional_Light->getColor();

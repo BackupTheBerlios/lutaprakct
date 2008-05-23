@@ -18,7 +18,7 @@ int Scene::initialize(char* filename){
 	for (size_t i = 0; i < light_array.getCount(); i++) {
 		readLibraryLights(light_array[i]);
 	}
-		
+	
 	
 	//TODO ler as varias scenes
 /*	domVisual_scene* visualScene = daeSafeCast<domVisual_scene>(root->getDescendant("visual_scene"));
@@ -56,13 +56,5 @@ void Scene::readLibraryLights(domLibrary_lights* lib ){
 	for(size_t i = 0; i < lightArray.getCount(); i++){
 		Light* l = new Light(lightArray[i]);
 		lights.push_back(l);
-		//readLight(lightArray[i]);
 	}
 }
-
-/*void Scene::readLight(domLight* light) {
-	//cada luz só tem um ambient, um directional, um spot, etc?
-	if (light->getTechnique_common()->getAmbient()) {
-		
-	}
-}*/
