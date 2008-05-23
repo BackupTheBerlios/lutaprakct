@@ -8,6 +8,7 @@
 #include <dom/domCOLLADA.h>
 #include "Node.h"
 #include "Mesh.h"
+#include "Light.h"
 #include <map>
 #include <string>
 
@@ -24,12 +25,16 @@ public:
 	void readLibraryLights();
 	void readLibraryMaterials();
 	void readLibraryGeometries(domLibrary_geometries* lib);
+	void readLibraryLights(domLibrary_lights* lib);
 	
 	void readGeometry(domGeometry* geo);
+	//void readLight(domLight* light);
 	
 	std::list<Node*> nodes;
 	
 	std::map<std::string, Mesh*> instancedMeshes;
+	
+	std::list<Light*> lights;
 	
 };
 
