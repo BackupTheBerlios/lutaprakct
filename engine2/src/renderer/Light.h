@@ -2,11 +2,13 @@
 #define LIGHT_H_
 
 #include <dom/domLight.h>
+#include <dom/domTargetableFloat3.h>
+#include <dae.h>
 enum LightType { AMBIENT, POINT, DIRECTIONAL, SPOT };
 
 class Light {
 public:
-	Light(domLight* light);
+	Light(domLight* lightTag);
 
 	float r, g, b;
 	float fallOffAngle;
