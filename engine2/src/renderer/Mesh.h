@@ -7,6 +7,8 @@
 struct Triangles{
 	unsigned int count;
 	unsigned int* triangles;
+	float* vertices;
+	unsigned int verticesCount;
 	Material* material;
 };
 
