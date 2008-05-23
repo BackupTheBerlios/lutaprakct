@@ -13,6 +13,11 @@ int Scene::initialize(char* filename){
 	for (size_t i = 0; i < geometry_array.getCount(); i++){
 		readLibraryGeometries(geometry_array[i]);
 	}
+	
+	domLibrary_lights_Array light_array = root->getLibrary_lights_array();
+	for (size_t i = 0; i < light_array.getCount(); i++) {
+		readLibraryLights(light_array[i]);
+	}
 		
 	
 	//TODO ler as varias scenes
@@ -45,3 +50,19 @@ void Scene::readGeometry(domGeometry* geo){
 	}
 	
 }
+
+void Scene::readLibraryLights(domLibrary_lights* lib ){
+	domLight_Array lightArray = lib->getLight_array();
+	for(size_t i = 0; i < lightArray.getCount(); i++){
+		Light* l = new Light(lightArray[i]);
+		lights.push_back(l);
+		//readLight(lightArray[i]);
+	}
+}
+
+/*void Scene::readLight(domLight* light) {
+	//cada luz só tem um ambient, um directional, um spot, etc?
+	if (light->getTechnique_common()->getAmbient()) {
+		
+	}
+}*/
