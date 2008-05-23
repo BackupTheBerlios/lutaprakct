@@ -32,7 +32,7 @@ public:
 	
 	std::list<Node*> nodes;
 	
-	std::map<std::string, Mesh*> instancedMeshes;
+	std::map<std::string, std::list<Mesh*> > instancedMeshes;
 	
 	std::list<Light*> lights;
 	

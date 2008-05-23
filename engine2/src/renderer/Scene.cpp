@@ -46,7 +46,7 @@ void Scene::readGeometry(domGeometry* geo){
 	//cada tag geometry tem apenas uma tag <mesh> ou <spline> so nos interessa a <mesh>
 	if (geo->getMesh()){ //se tem <mesh>
 		Mesh* m = new Mesh(geo->getMesh());
-		instancedMeshes[geo->getID()] = m;
+		instancedMeshes[geo->getID()].push_back(m);
 	}
 	
 }
