@@ -51,23 +51,10 @@ Node::Node(domNode& node) {
 		domInstance_geometry* instanceGeom = node.getInstance_geometry_array()[i];
 		domGeometry* geom = daeSafeCast<domGeometry>(instanceGeom->getUrl().getElement());
 		
-		domMesh* mesh = geom->getMesh(); //so tem um mesh sempre?
+		domMesh* meshTag = geom->getMesh(); //so tem um mesh sempre?
+		Mesh* mesh = new Mesh(meshTag);
+		meshes.push_back(mesh);
 		
-		//pega todos os triangles
-		for(size_t k = 0; k < mesh->getTriangles_array().getCount(); k++){
-			domTriangles* triangles = mesh->getTriangles_array()[i];
-			//triangles->getInput_array();
-			
-			Triangles* tri = new Triangles;
-			tri->count = atoi(triangles->getAttribute("count").c_str());
-			tri->triangles = new unsigned int[tri->count];
-			domP* p = triangles->getP();
-			std::cout << p->getCharData() << std::endl;
-			
-			std::cout << triangles->getAttribute("material") << std::endl;
-		}
-		
-
 		// Lookup the material that we should apply to the <geometry>. In a real app
 		// we'd need to worry about having multiple <instance_material>s, but in this
 		// test let's just convert the first <instance_material> we find.

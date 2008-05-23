@@ -9,33 +9,12 @@
 #include <vector>
 #include <list>
 
+#include "Mesh.h"
+
 enum{
 	DAE_FILE_NOT_FOUND = -1
 };
 
-class Material {
-public:
-	std::vector<float> diffuseColor;
-	char* diffuseTexture;
-	// ... and lots of other parameters
-	
-	Material(domMaterial& mtl) {
-		// Grab the <effect> from the <material> and initalize the parameters
-	}
-};
-
-struct Triangles{
-	unsigned int count;
-	unsigned int* triangles;
-	Material* material;
-};
-
-class Mesh {
-public:
-
-	std::list<Triangles*> tris;
-
-};
 
 class Node{
 
