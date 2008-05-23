@@ -31,7 +31,7 @@ int Scene::initialize(char* filename){
 void Scene::readLibraryGeometries(domLibrary_geometries* lib){
 	
 	domGeometry_Array geoArray = lib->getGeometry_array();
-	for (size_t i = 0; geoArray.getCount(); i++ )
+	for (size_t i = 0; i < geoArray.getCount(); i++ )
 		readGeometry(geoArray[i]);
 	
 }

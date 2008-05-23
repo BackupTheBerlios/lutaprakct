@@ -7,11 +7,11 @@
 #include "Mesh.h"
 #include "../util/StringTokenizer.h"
 
+//duvidas: um triangles pode ter mais de uma tag input com mesma semantic? os vertices tbm?
 Mesh::Mesh(domMesh* meshTag){
 	
-	daeDatabase* db = meshTag->getDAE()->getDatabase();
 	
-	//pega todos os triangles
+	//pega todos os triangles TODO pegar lines, polys, tristrips e trifans tbm
 	for(size_t k = 0; k < meshTag->getTriangles_array().getCount(); k++){
 		domTriangles* triangles = meshTag->getTriangles_array()[k];
 		Triangles* tri = new Triangles;
@@ -38,7 +38,7 @@ Mesh::Mesh(domMesh* meshTag){
 						domSource* positions = (domSource*) (domElement*) vertexInput->getSource().getElement();
 						domFloat_array* values = positions->getFloat_array();
 						tri->verticesCount = values->getCount();
-						std::cout << tri->verticesCount << std::endl;
+						//std::cout << tri->verticesCount << std::endl;
 						tri->vertices = new float[tri->verticesCount];
 						StringTokenizer tokenizer(values->getCharData(), " ");
 						for(size_t n = 0; n < tri->verticesCount; n++){
@@ -52,8 +52,23 @@ Mesh::Mesh(domMesh* meshTag){
 				}
 			}else if (semantic == "NORMAL"){
 				
-			}
+				domSource* normals = (domSource*) (domElement*)input->getSource().getElement();
+				domFloat_array* values = normals->getFloat_array();
+				tri->normalsCount = values->getCount();
+				tri->normals = new float[tri->normalsCount];
+				StringTokenizer tokenizer(values->getCharData(), " ");
+				for(size_t n = 0; n < tri->normalsCount; n++){
+					std::string token;
+					tokenizer.nextToken(token);
+					//std::cout << atof(token.c_str()) << std::endl;
+					tri->normals[n] = atof(token.c_str());
+					//std::cout << tri->vertices[n] << std::endl;
+				}				
+			}else if (semantic == "TEXCOORD"){
+			
 				
+				
+			}	
 		}
 		
 		
