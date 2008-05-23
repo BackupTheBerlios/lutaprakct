@@ -11,10 +11,6 @@
 
 #include "Mesh.h"
 
-enum{
-	DAE_FILE_NOT_FOUND = -1
-};
-
 
 class Node{
 
@@ -27,16 +23,5 @@ public:
 	Node(domNode& node);
 };
 
-class Scene{
-	
-public:
-	
-	int initialize(char* filename);
-	
-	std::list<Node*> nodes;
-	
-};
-
-void initializeNode();
 
 #endif /*NODE_H_*/

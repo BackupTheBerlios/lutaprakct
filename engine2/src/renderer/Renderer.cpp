@@ -8,7 +8,7 @@
 #include "QuatCamera.h"
 #include "../util/DataManager.h"
 
-#include "Node.h"
+#include "Scene.h"
 
 
 Renderer::Renderer(){

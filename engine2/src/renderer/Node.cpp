@@ -11,26 +11,6 @@ MyType& lookup(DomType& domObject) {
 }
 
 
-
-int Scene::initialize(char* filename){
-	
-	DAE dae;
-	domCOLLADA* root = dae.open(filename);
-	if (!root)
-		return DAE_FILE_NOT_FOUND;
-	
-	//TODO ler as varias scenes
-	domVisual_scene* visualScene = daeSafeCast<domVisual_scene>(root->getDescendant("visual_scene"));
-	
-	domNode_Array& nodes = visualScene->getNode_array(); //todos os nodes da scena
-	for (size_t i = 0; i < nodes.getCount(); i++){
-		Node* n = new Node(*nodes[i]);
-		this->nodes.push_back(n);
-	}
-	
-	return 0;
-}
-
 Node::Node(domNode& node) {
 	// Recursively convert all child nodes. First iterate over the <node> elements.
 	for (size_t i = 0; i < node.getNode_array().getCount(); i++){
