@@ -3,9 +3,24 @@
 
 class Material {
 public:
-	std::vector<float> diffuseColor;
-	char* diffuseTexture;
-	// ... and lots of other parameters
+	
+	int type;
+	float	emission[3];
+	float	ambient[3];
+	float	diffuse[3];
+	float	specular[3];
+	float	shininess;
+	float	transparency;
+
+	float	reflective[3];
+	float	transparent[3];
+	float	absorption[3];
+	float	reflectivity;
+	float	refractiveIndex;
+	
+ 
+	int		numTextures; 
+	int		idx; 
 	
 	Material(domMaterial& mtl) {
 		// Grab the <effect> from the <material> and initalize the parameters

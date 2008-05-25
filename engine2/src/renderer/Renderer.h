@@ -2,6 +2,7 @@
 #define RENDERER_H_
 
 #include <SDL/SDL.h>
+#include "Cg.h"
 #include "../events/eventhandler.h"
 #include "../util/Singleton.h"
 #include "../util/VideoConfig.h"
@@ -31,6 +32,8 @@ class Renderer : public EventHandler{
 	
 		
 	private:
+		
+		Cg CgManager;
 		
 		int screenShotNumber;
 		

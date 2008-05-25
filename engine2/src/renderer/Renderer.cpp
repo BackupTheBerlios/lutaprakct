@@ -20,8 +20,12 @@ Renderer::~Renderer(){
 
 bool Renderer::initialize(VideoConfig& config){
 
-	initializeSdl(config);
-	initializeOpenGl();
+	if (initializeSdl(config) < 0)
+		return false;
+	if (initializeOpenGl() < 0)
+		return false;
+	if (CgManager.initialize() < 0)
+		return false;
 	
 	Scene n;
 	n.initialize("data/duck_triangulate_deindexer.dae");
@@ -119,7 +123,7 @@ int Renderer::initializeSdl(VideoConfig& config){
 		std::cout << "ERRO: Nao foi possivel inicializar o video." << std::endl;
 		return -1;
 	}
-	return 0;
+	return 1;
 
 }
 
@@ -159,7 +163,7 @@ int Renderer::initializeOpenGl(){
 		i++;
 	}*/
 	
-	return 0;
+	return 1;
 
 }
 
