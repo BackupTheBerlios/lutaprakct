@@ -1,5 +1,7 @@
 
 #include "Scene.h"
+#include "Cg.h"
+#include <cfxLoader.h>
 
 int Scene::initialize(char* filename){
 	
@@ -19,6 +21,7 @@ int Scene::initialize(char* filename){
 		readLibraryLights(light_array[i]);
 	}
 	
+	readCfxMaterials(&dae);
 	
 	//TODO ler as varias scenes
 /*	domVisual_scene* visualScene = daeSafeCast<domVisual_scene>(root->getDescendant("visual_scene"));
@@ -57,4 +60,22 @@ void Scene::readLibraryLights(domLibrary_lights* lib ){
 		Light* l = new Light(lightArray[i]);
 		lights.push_back(l);
 	}
+}
+
+void Scene::readCfxMaterials(DAE* dae){
+	
+	cfxLoader::loadMaterialsAndEffects(dae, cfxMaterials, cfxEffects, CG::getInstance().cgContext);
+	
+}
+
+void Scene::readLibraryEffects(domLibrary_effects* lib){
+
+	domEffect_Array fxArray = lib->getEffect_array();
+	for (size_t i = 0; i < fxArray.getCount(); i++ )
+		readEffect(fxArray[i]);
+	
+	
+}
+
+void Scene::readEffect(domEffect* fx){
 }

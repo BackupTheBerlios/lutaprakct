@@ -5,6 +5,7 @@
 #include <iostream>
 #include <float.h>
 #include "Renderer.h"
+#include "Cg.h"
 #include "QuatCamera.h"
 #include "../util/DataManager.h"
 
@@ -24,7 +25,7 @@ bool Renderer::initialize(VideoConfig& config){
 		return false;
 	if (initializeOpenGl() < 0)
 		return false;
-	if (CgManager.initialize() < 0)
+	if (CG::getInstance().initialize() < 0)
 		return false;
 	
 	Scene n;
