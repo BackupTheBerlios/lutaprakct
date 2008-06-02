@@ -1,0 +1,15 @@
+Reunião - 02/06/08
+
+Presentes: Abner e Caio
+
+-Durante a semana o Abner trabalhou com os materials (desenhar) e o Caio ficou com a parte dos VBO, porém os tópicos não foram concluidos
+e ficarão para esta semana
+
+-O tópico 3 (Carregar Animações) da semana passada ficará para depois.
+
+*Para esta semana deve ser feito:
+	1. VBOs
+	2. Terminar materials
+	3. Ler os nodes
+
+**Caio fará o item 1 e o Abner os itens 2 e 3

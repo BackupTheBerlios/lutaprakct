@@ -1,13 +1,13 @@
-Reunião - 26/05
+Reunião - 26/05/2008
 
 -Presentes: Abner e Caio
 
 -Durante a semana foram feitas as partes para leitura de light, geometries e materials nos arquivos .dae
 
 *Para esta semana deve ser feito:
-  1. Ver como funcionam os materials.
-  2. Desenhar as geometrias com materials e luz (o que é carregado, até então).
-  3. Carregar animações
+ 	1. Ver como funcionam os materials.
+ 	2. Desenhar as geometrias com materials e luz (o que é carregado, até então).
+	3. Carregar animações
 
 **O Caio deve começar a fazer o item 2, enquanto o Abner faz o item 1.
 **A metodologia para fazer o item 3 será decidida durante a semana, entre o Caio e o Abner, provavelmente quando acabarem os itens 1 e 2
