@@ -4,6 +4,8 @@
 #include <SDL/SDL.h>
 #include <iostream>
 #include <float.h>
+#include "../util/glhelper/glext.h"
+#include "../util/glhelper/glextensions.h"
 #include "Renderer.h"
 #include "Cg.h"
 #include "QuatCamera.h"
@@ -44,6 +46,7 @@ void Renderer::update(){
 }
 
 void Renderer::draw(){
+
 }
 
 void Renderer::beginDraw(){
@@ -153,6 +156,9 @@ int Renderer::initializeOpenGl(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_ARRAY_BUFFER_ARB);
+	
 	//inicializa as opengl extensions
 /*	int i = 0;
 	while(i < config.glExtensions.size()){
@@ -163,7 +169,6 @@ int Renderer::initializeOpenGl(){
 			std::cout << "OpenGL extension not found: " << config.glExtensions[i] << std::endl;			
 		i++;
 	}*/
-	
 	return 1;
 
 }
@@ -195,4 +200,30 @@ void Renderer::handleEvent(const event& e){
 			break;
 		}
 	}
+}
+
+unsigned int Renderer::initializeVBO(unsigned int size, const void* data) {
+	//INICIALIZAR VBOS
+	unsigned int vboID;
+	glGenBuffersARB(1, &vboID);
+	glBindBufferARB(GL_ARRAY_BUFFER, vboID);
+	
+	glBufferDataARB(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+	
+	return vboID;
+}
+
+void Renderer::killVBO(unsigned int vboID) {
+	glDeleteBuffersARB(1, &vboID);
+}
+
+void Renderer::drawVBO(unsigned int vertexID, const void* vertexData, unsigned int vertexCount,
+							unsigned int normalID, const void* normalData) {
+	glBindBufferARB(GL_ARRAY_BUFFER, vertexID);
+	glBindBufferARB(GL_ARRAY_BUFFER, normalID);
+	
+	glVertexPointer(3, GL_FLOAT, 0, vertexData);
+	glNormalPointer(GL_FLOAT, 0, normalData);
+	
+	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 }

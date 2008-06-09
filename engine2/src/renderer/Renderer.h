@@ -28,8 +28,11 @@ class Renderer : public EventHandler{
 		void stop();
 		
 		void handleEvent(const event &e);
-	
 		
+		unsigned int initializeVBO(unsigned int size, const void* data);
+		void killVBO(unsigned int vboID);
+		void drawVBO(unsigned int vertexID, const void* vertexData, unsigned int vertexCount, 
+							unsigned int normalID, const void* normalData);
 	private:
 		
 		int screenShotNumber;

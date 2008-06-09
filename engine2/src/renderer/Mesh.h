@@ -11,7 +11,7 @@ struct TexCoord{
 };
 
 struct Triangles{
-	
+
 	unsigned int count;
 	unsigned int* triangles;
 	
@@ -24,7 +24,12 @@ struct Triangles{
 	std::list<TexCoord*> texCoords;
 	
 	Material* material;
+	
+	//IDS dos VBOs
+	unsigned int vertexID;
+	unsigned int normalID;
 };
+
 
 class Mesh {
 public:
@@ -34,6 +39,10 @@ public:
 	
 	std::list<Triangles*> tris;
 
+	void createVBO();
+	void destroyVBO();
+	void drawVBO();
+	
 };
 
 #endif /*MESH_H_*/

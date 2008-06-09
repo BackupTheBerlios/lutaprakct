@@ -6,6 +6,7 @@
 #include <dom/domCOLLADA.h>
 #include "Mesh.h"
 #include "../util/StringTokenizer.h"
+#include "Renderer.h"
 
 //duvidas: um triangles pode ter mais de uma tag input com mesma semantic? os vertices tbm?
 Mesh::Mesh(domMesh* meshTag){
@@ -77,4 +78,30 @@ Mesh::Mesh(domMesh* meshTag){
 	}
 	
 	
+}
+
+void Mesh::createVBO() {
+	std::list<Triangles*>::iterator i;
+	for (i = tris.begin(); i != tris.end(); i++) {
+		(*i)->vertexID = RENDERER::getInstance().initializeVBO((*i)->verticesCount*sizeof(float), (*i)->vertices);
+		(*i)->normalID = RENDERER::getInstance().initializeVBO((*i)->normalsCount*sizeof(float), (*i)->normals);
+	}
+}
+
+void Mesh::destroyVBO() {
+	std::list<Triangles*>::iterator i;
+	for (i = tris.begin(); i != tris.end(); i++){
+		RENDERER::getInstance().killVBO((*i)->vertexID);
+		RENDERER::getInstance().killVBO((*i)->normalID);
+	}
+}
+
+void Mesh::drawVBO(){
+	std::list<Triangles*>::iterator i;
+	
+	while (tris.size() > 0) {
+		for (i = tris.begin(); i != tris.end(); i++)
+			RENDERER::getInstance().drawVBO((*i)->vertexID, (*i)->vertices, (*i)->verticesCount, (*i)->normalID,
+												(*i)->normals);
+	}
 }
