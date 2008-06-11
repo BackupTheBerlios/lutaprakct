@@ -101,7 +101,6 @@ void Mesh::drawVBO(){
 	
 	while (tris.size() > 0) {
 		for (i = tris.begin(); i != tris.end(); i++)
-			RENDERER::getInstance().drawVBO((*i)->vertexID, (*i)->vertices, (*i)->verticesCount, (*i)->normalID,
-												(*i)->normals);
+			RENDERER::getInstance().drawVBO((*i)->vertexID,(*i)->normalID, (*i)->triangles, (*i)->count);
 	}
 }

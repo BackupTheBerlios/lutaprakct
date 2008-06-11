@@ -217,13 +217,13 @@ void Renderer::killVBO(unsigned int vboID) {
 	glDeleteBuffersARB(1, &vboID);
 }
 
-void Renderer::drawVBO(unsigned int vertexID, const void* vertexData, unsigned int vertexCount,
-							unsigned int normalID, const void* normalData) {
+void Renderer::drawVBO(unsigned int vertexID, unsigned int normalID,const void* trianglesData, 
+								unsigned int trianglesCount) {
 	glBindBufferARB(GL_ARRAY_BUFFER, vertexID);
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+	
 	glBindBufferARB(GL_ARRAY_BUFFER, normalID);
+	glNormalPointer(GL_FLOAT, 0, 0);
 	
-	glVertexPointer(3, GL_FLOAT, 0, vertexData);
-	glNormalPointer(GL_FLOAT, 0, normalData);
-	
-	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	glDrawElements(GL_FLOAT, trianglesCount, GL_TRIANGLES, trianglesData);
 }

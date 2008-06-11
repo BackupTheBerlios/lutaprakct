@@ -1,0 +1,15 @@
+Reunião - 10/06/2008
+
+Presentes: Abner e Caio
+
+-A reunião desta semana foi na terça, já que não foi possível realizá-la na segunda-feira (dia 09/06)
+
+-Durante a semana o Abner terminou os materials e fez parte dos nodes, que deve concluir essa semana. O Caio fez o VBO.
+
+-Durante a reunião foi comentado quais seriam os próximos passos. O Abner indicou os temas:
+	1. Terminar nodes
+	2. Algoritmos de culling (Frustum e Occlusion)
+	3. Animação
+	
+--Para a próxima semana o Caio fará o item 2 (somente Frustum) e o Abner concluirá o item 1. Se sobrar tempo, o 
+Abner começará o item 3.
