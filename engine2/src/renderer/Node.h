@@ -10,17 +10,23 @@
 #include <list>
 
 #include "Mesh.h"
-
+#include "Light.h"
+#include "Material.h"
+#include "SceneData.h"
 
 class Node{
 
 public:
 	
-	std::list<Mesh*> meshes;
+	std::list<Mesh*>  meshes;
 	std::list<Node*> childNodes;
+	std::list<Light*> lights;
+	//std::list<InstancedMaterial*> instancedMaterials;
 
 	Node(){};
-	Node(domNode& node);
+	Node(domNode& node, SceneData* data);
+	
+	void render();
 };
 
 

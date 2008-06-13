@@ -42,6 +42,7 @@ public:
 	void createVBO();
 	void destroyVBO();
 	void drawVBO();
+	void render();
 	
 };
 

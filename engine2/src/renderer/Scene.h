@@ -13,6 +13,7 @@
 #include "Light.h"
 #include <map>
 #include <string>
+#include "SceneData.h"
 
 enum{
 	DAE_FILE_NOT_FOUND = -1
@@ -23,6 +24,8 @@ class Scene{
 public:
 	
 	int initialize(char* filename);
+	
+	void render();
 	
 	void readLibraryLights();
 	void readLibraryGeometries(domLibrary_geometries* lib);
@@ -37,10 +40,9 @@ public:
 	void readEffect(domEffect* fx);
 	
 	std::list<Node*> nodes;
+	Node* root;
 	
-	std::map<std::string, std::list<Mesh*> > instancedMeshes;
-	std::map<std::string, cfxMaterial*>		cfxMaterials;
-	std::map<std::string, cfxEffect*>		cfxEffects;
+	SceneData sceneData;
 	
 	std::list<Light*> lights;
 	

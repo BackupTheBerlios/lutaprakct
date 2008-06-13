@@ -13,6 +13,7 @@
 
 #include "Scene.h"
 
+Scene n;
 
 Renderer::Renderer(){
 	screenShotNumber = 0;
@@ -30,7 +31,6 @@ bool Renderer::initialize(VideoConfig& config){
 	if (CG::getInstance().initialize() < 0)
 		return false;
 	
-	Scene n;
 	n.initialize("data/duck_triangulate_deindexer.dae");
 	
 	return true;
@@ -47,6 +47,7 @@ void Renderer::update(){
 
 void Renderer::draw(){
 
+	n.render();
 }
 
 void Renderer::beginDraw(){
@@ -160,15 +161,16 @@ int Renderer::initializeOpenGl(){
 	glEnableClientState(GL_ARRAY_BUFFER_ARB);
 	
 	//inicializa as opengl extensions
-/*	int i = 0;
-	while(i < config.glExtensions.size()){
-		if (haveExtension(config.glExtensions[i].c_str())){
-			std::cout << "Inicializando extension: " << config.glExtensions[i] << std::endl;
-			initializeExtension(config.glExtensions[i].c_str());
-		}else
-			std::cout << "OpenGL extension not found: " << config.glExtensions[i] << std::endl;			
-		i++;
-	}*/
+	initializeExtension("GL_ARB_vertex_program");
+	//initializeExtension("GL_NV_vertex_program");
+	//initializeExtension("GL_ARB_imaging");
+	initializeExtension("GL_ARB_point_parameters");
+	initializeExtension("GL_EXT_framebuffer_object");
+	initializeExtension("GL_ARB_vertex_buffer_object");
+	initializeExtension("GL_ARB_multitexture");
+	initializeExtension("GL_EXT_texture3D");
+	initializeExtension("GL_ARB_shading_language_100");
+	
 	return 1;
 
 }

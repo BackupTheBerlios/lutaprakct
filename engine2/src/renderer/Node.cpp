@@ -10,11 +10,22 @@ MyType& lookup(DomType& domObject) {
 	return *(MyType*)(domObject.getUserData());
 }
 
+void Node::render(){
+	
+	//push na matrix
+	//multi na matrix pela matrix do node
+	std::list<Mesh*>::iterator iter;
+	
+	for(iter = meshes.begin(); iter != meshes.end(); iter++){
+		(*iter)->render();
+	}
+	
+}
 
-Node::Node(domNode& node) {
+Node::Node(domNode& node, SceneData *scenedata) {
 	// Recursively convert all child nodes. First iterate over the <node> elements.
 	for (size_t i = 0; i < node.getNode_array().getCount(); i++){
-		Node* n = new Node(*node.getNode_array()[i]);
+		Node* n = new Node(*node.getNode_array()[i], scenedata);
 		childNodes.push_back(n);
 	}
 
@@ -29,11 +40,25 @@ Node::Node(domNode& node) {
 	// Iterate over all the <instance_geometry> elements
 	for (size_t i = 0; i < node.getInstance_geometry_array().getCount(); i++) {
 		domInstance_geometry* instanceGeom = node.getInstance_geometry_array()[i];
-		domGeometry* geom = daeSafeCast<domGeometry>(instanceGeom->getUrl().getElement());
 		
-		domMesh* meshTag = geom->getMesh(); //so tem um mesh sempre?
-		Mesh* mesh = new Mesh(meshTag);
-		meshes.push_back(mesh);
+		
+		//std::cout << "url " << instanceGeom->getUrl().id() << std::endl;
+		std::string a = instanceGeom->getUrl().id();
+		if (scenedata->instancedMeshes[a].size() > 0 ){
+			std::cout << "adicionado mesh" << std::endl;
+			std::list<Mesh*>::iterator iter;
+			for (iter = scenedata->instancedMeshes[a].begin(); iter != scenedata->instancedMeshes[a].end(); iter++ ){
+				meshes.push_back(*iter);
+			}
+		}
+			//std::cout << "Tem o mesh" << std::endl;
+		
+		//domGeometry* geom = daeSafeCast<domGeometry>(instanceGeom->getUrl().getElement());
+		//domMesh* meshTag = geom->getMesh(); //so tem um mesh sempre?
+		
+		//std::cout << "mesh url " << meshTag->getID() << std::endl; 
+		//Mesh* mesh = new Mesh(meshTag);
+		//meshes.push_back(mesh);
 		
 		// Lookup the material that we should apply to the <geometry>. In a real app
 		// we'd need to worry about having multiple <instance_material>s, but in this

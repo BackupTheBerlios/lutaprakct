@@ -5,6 +5,7 @@
 
 int Scene::initialize(char* filename){
 	
+	root = NULL;
 	DAE dae;
 	domCOLLADA* root = dae.open(filename);
 	if (!root)
@@ -24,17 +25,25 @@ int Scene::initialize(char* filename){
 	readCfxMaterials(&dae);
 	
 	//TODO ler as varias scenes
-/*	domVisual_scene* visualScene = daeSafeCast<domVisual_scene>(root->getDescendant("visual_scene"));
+	domVisual_scene* visualScene = daeSafeCast<domVisual_scene>(root->getDescendant("visual_scene"));
 	
 	domNode_Array& nodes = visualScene->getNode_array(); //todos os nodes da scena
 	for (size_t i = 0; i < nodes.getCount(); i++){
-		Node* n = new Node(*nodes[i]);
+		Node* n = new Node(*nodes[i], &sceneData);
 		this->nodes.push_back(n);
-	}*/
+	}
 	
 	return 0;
 }
 
+void Scene::render(){
+	
+	std::list<Node*>::iterator iter;
+	for (iter = nodes.begin(); iter != nodes.end(); iter++){
+		(*iter)->render();
+	}
+	
+}
 
 void Scene::readLibraryGeometries(domLibrary_geometries* lib){
 	
@@ -49,7 +58,7 @@ void Scene::readGeometry(domGeometry* geo){
 	//cada tag geometry tem apenas uma tag <mesh> ou <spline> so nos interessa a <mesh>
 	if (geo->getMesh()){ //se tem <mesh>
 		Mesh* m = new Mesh(geo->getMesh());
-		instancedMeshes[geo->getID()].push_back(m);
+		sceneData.instancedMeshes[geo->getID()].push_back(m);
 	}
 	
 }
@@ -64,7 +73,7 @@ void Scene::readLibraryLights(domLibrary_lights* lib ){
 
 void Scene::readCfxMaterials(DAE* dae){
 	
-	cfxLoader::loadMaterialsAndEffects(dae, cfxMaterials, cfxEffects, CG::getInstance().cgContext);
+	cfxLoader::loadMaterialsAndEffects(dae, sceneData.cfxMaterials, sceneData.cfxEffects, CG::getInstance().cgContext);
 	
 }
 

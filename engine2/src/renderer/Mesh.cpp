@@ -77,6 +77,13 @@ Mesh::Mesh(domMesh* meshTag){
 		
 	}
 	
+	createVBO();
+	
+}
+
+void Mesh::render(){
+	
+	drawVBO();
 	
 }
 
@@ -99,8 +106,8 @@ void Mesh::destroyVBO() {
 void Mesh::drawVBO(){
 	std::list<Triangles*>::iterator i;
 	
-	while (tris.size() > 0) {
+	//while (tris.size() > 0) {
 		for (i = tris.begin(); i != tris.end(); i++)
 			RENDERER::getInstance().drawVBO((*i)->vertexID,(*i)->normalID, (*i)->triangles, (*i)->count);
-	}
+	//}
 }
