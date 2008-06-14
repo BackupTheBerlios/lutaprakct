@@ -22,7 +22,7 @@ int Scene::initialize(char* filename){
 		readLibraryLights(light_array[i]);
 	}
 	
-	readCfxMaterials(&dae);
+	readCfxMaterials(filename);
 	
 	//TODO ler as varias scenes
 	domVisual_scene* visualScene = daeSafeCast<domVisual_scene>(root->getDescendant("visual_scene"));
@@ -57,7 +57,7 @@ void Scene::readGeometry(domGeometry* geo){
 	
 	//cada tag geometry tem apenas uma tag <mesh> ou <spline> so nos interessa a <mesh>
 	if (geo->getMesh()){ //se tem <mesh>
-		Mesh* m = new Mesh(geo->getMesh());
+		Mesh* m = new Mesh(geo->getMesh(), & (sceneData.cfxMaterials));
 		sceneData.instancedMeshes[geo->getID()].push_back(m);
 	}
 	
@@ -71,20 +71,10 @@ void Scene::readLibraryLights(domLibrary_lights* lib ){
 	}
 }
 
-void Scene::readCfxMaterials(DAE* dae){
+void Scene::readCfxMaterials(std::string filename){
 	
-	cfxLoader::loadMaterialsAndEffects(dae, sceneData.cfxMaterials, sceneData.cfxEffects, CG::getInstance().cgContext);
-	
-}
-
-void Scene::readLibraryEffects(domLibrary_effects* lib){
-
-	domEffect_Array fxArray = lib->getEffect_array();
-	for (size_t i = 0; i < fxArray.getCount(); i++ )
-		readEffect(fxArray[i]);
-	
+	cfxLoader::loadMaterialsAndEffectsFromFile(filename, sceneData.cfxMaterials, sceneData.cfxEffects, CG::getInstance().cgContext);
 	
 }
 
-void Scene::readEffect(domEffect* fx){
-}
+

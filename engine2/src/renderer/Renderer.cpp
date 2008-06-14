@@ -158,6 +158,7 @@ int Renderer::initializeOpenGl(){
 
 	
 	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_ARRAY_BUFFER_ARB);
 	
 	//inicializa as opengl extensions
@@ -219,13 +220,22 @@ void Renderer::killVBO(unsigned int vboID) {
 	glDeleteBuffersARB(1, &vboID);
 }
 
-void Renderer::drawVBO(unsigned int vertexID, unsigned int normalID,const void* trianglesData, 
+void Renderer::drawVBO(unsigned int vertexID, unsigned int normalID, const unsigned int indicesID, 
 								unsigned int trianglesCount) {
-	glBindBufferARB(GL_ARRAY_BUFFER, vertexID);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
+	if (normalID){
+		glBindBufferARB(GL_ARRAY_BUFFER, vertexID);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+	}
 	
-	glBindBufferARB(GL_ARRAY_BUFFER, normalID);
-	glNormalPointer(GL_FLOAT, 0, 0);
+	if (vertexID){
+		glBindBufferARB(GL_ARRAY_BUFFER, normalID);
+		glNormalPointer(GL_FLOAT, 0, NULL);
+	}
+
+	if (indicesID){
+		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER, indicesID);
+		glDrawElements(GL_TRIANGLES, trianglesCount, GL_UNSIGNED_INT, NULL);
+	}
 	
-	glDrawElements(GL_FLOAT, trianglesCount, GL_TRIANGLES, trianglesData);
+	glBindBufferARB(GL_ARRAY_BUFFER, 0); //reseta
 }

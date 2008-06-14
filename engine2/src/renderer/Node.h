@@ -11,7 +11,6 @@
 
 #include "Mesh.h"
 #include "Light.h"
-#include "Material.h"
 #include "SceneData.h"
 
 class Node{

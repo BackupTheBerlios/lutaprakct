@@ -20,6 +20,11 @@ void Node::render(){
 		(*iter)->render();
 	}
 	
+	std::list<Node*>::iterator iter2;
+	for (iter2 = childNodes.begin(); iter2 != childNodes.end(); iter++) {
+		(*iter)->render();
+	} 
+	
 }
 
 Node::Node(domNode& node, SceneData *scenedata) {
@@ -41,35 +46,14 @@ Node::Node(domNode& node, SceneData *scenedata) {
 	for (size_t i = 0; i < node.getInstance_geometry_array().getCount(); i++) {
 		domInstance_geometry* instanceGeom = node.getInstance_geometry_array()[i];
 		
-		
-		//std::cout << "url " << instanceGeom->getUrl().id() << std::endl;
 		std::string a = instanceGeom->getUrl().id();
 		if (scenedata->instancedMeshes[a].size() > 0 ){
-			std::cout << "adicionado mesh" << std::endl;
 			std::list<Mesh*>::iterator iter;
 			for (iter = scenedata->instancedMeshes[a].begin(); iter != scenedata->instancedMeshes[a].end(); iter++ ){
 				meshes.push_back(*iter);
 			}
 		}
-			//std::cout << "Tem o mesh" << std::endl;
-		
-		//domGeometry* geom = daeSafeCast<domGeometry>(instanceGeom->getUrl().getElement());
-		//domMesh* meshTag = geom->getMesh(); //so tem um mesh sempre?
-		
-		//std::cout << "mesh url " << meshTag->getID() << std::endl; 
-		//Mesh* mesh = new Mesh(meshTag);
-		//meshes.push_back(mesh);
-		
-		// Lookup the material that we should apply to the <geometry>. In a real app
-		// we'd need to worry about having multiple <instance_material>s, but in this
-		// test let's just convert the first <instance_material> we find.
-		//domInstance_material* instanceMtl = daeSafeCast<domInstance_material>(
-		//	instanceGeom->getDescendant("instance_material"));
-		//domMaterial* mtl = daeSafeCast<domMaterial>(instanceMtl->getTarget().getElement());
-		//Material& convertedMtl = lookup<Material, domMaterial>(*mtl);
-
-
-		//meshes.push_back(&lookup<Mesh, domGeometry>(*geom));
-		//meshes.back()->mtl = &convertedMtl;
 	}
+	
+	
 }

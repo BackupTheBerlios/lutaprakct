@@ -31,7 +31,7 @@ class Renderer : public EventHandler{
 		
 		unsigned int initializeVBO(unsigned int size, const void* data);
 		void killVBO(unsigned int vboID);
-		void drawVBO(unsigned int vertexID, unsigned int normalID,const void* trianglesData, 
+		void drawVBO(unsigned int vertexID, unsigned int normalID,const unsigned int indicesID, 
 								unsigned int trianglesCount);
 	private:
 		
