@@ -1,0 +1,14 @@
+Reunião - 16/06/2008
+
+Presentes: Abner e Caio
+
+-Na reunião foi discutida possibilidade de se usar somente Cg na engine. Foram levantados algumas vantagens
+e desvantagens dessa abordagem. O Abner ficou de ver como seria isso (procurar também sobre como seria a luz em Cg). 
+
+-Durante a semana o Abner terminou os nodes e fez os materials, mas eles funcionam apenas com Cg.
+
+-Durante a reunião foi comentado quais seriam os próximos passos. O Abner indicou os temas:
+	1. Testar o materials com Cg
+	2. Algoritmos de culling (Frustum e Occlusion)
+	
+--Para a próxima semana o Caio continuará com o item 2 e o Abner fará o item 1.
